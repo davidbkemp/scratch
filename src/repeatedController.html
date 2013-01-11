@@ -5,21 +5,18 @@
     <script src="repeatedController.js"></script>
   </head>
   <body>
-    <div ng-controller="TabController">
+    <div ng-controller="MainController">
         <ul>
-            <li ng-repeat="tab in tabs">
-                {{tab.title}} <button ng-click="deleteTab(tab)">Delete</button>
-                <ul ng-controller="FruitController">
-                    <li ng-repeat="aFruit in fruit"><button ng-click="deleteFruit(aFruit)">Delete</button>
-                        <input ng-model='aFruit.price'/>: {{aFruit.name}}
-                    </li>
-                </ul>
+            <li ng-repeat="anItem in items" ng-controller="ItemController">
+                <button ng-click="moveUp()">Move Up</button>
+                <button ng-click="moveDown()">Move Down</button>
+                <button ng-click="deleteItem()">Delete</button>
+                <input ng-model='item.amount'/>: {{item.name}}
             </li>
         </ul>
-        <button ng-click="addFruit()">Add Wednesday</button>
-        <button ng-click="deleteTuesday()">Delete Tuesday</button>
+        <button ng-click="addItem()">Add</button>
         <div>
-            Total: {{totalPrice()}}
+            Total: {{total()}}
         </div>
     </div>
   </body>

@@ -1,50 +1,57 @@
 
 
-var TabController = function ($scope) {
-    $scope.tabs = [
-        {title: "Monday", fruit: [{name: 'apple', price: 3}, {name: 'banana', price: 77}]},
-        {title: "Tuesday", fruit: [{name: 'pear', price: 5}, {name: 'peach', price: 20}]}
+var MainController = function ($scope) {
+    $scope.items = [
+        {name: "Apple", amount: 3},
+        {name: "Banana", amount: 7}
     ];
 
-    $scope.addFruit = function () {
-      this.tabs.push({title: "Wednesday", fruit: [{name: 'lemon', price: 22}, {name: 'lime', price: 1}]});
-    };
-
-    $scope.deleteTab = function (tabToDelete) {
-        $scope.tabs.forEach(function (tab, index) {
-            if (tab === tabToDelete) {
-                $scope.tabs.splice(index, 1)
-            }
-        });
-    };
-
-    $scope.deleteTuesday = function () {
-        $scope.tabs.forEach(function (tab, index) {
-            if (tab.title === "Tuesday") {
-                $scope.tabs.splice(index, 1)
-            }
-        });
-    };
-
-    $scope.totalPrice = function () {
+    $scope.total = function () {
         var total = 0;
-        this.tabs.forEach( function (tab) {
-            tab.fruit.forEach(function (fruit){
-                total += parseInt(fruit.price, 10);
-            });
+        this.items.forEach( function (item) {
+            total += parseInt(item.amount, 10);
         });
         return total;
     };
+
+    $scope.addItem = function () {
+        var name = prompt("Item Name:");
+        this.items.push({name: name, amount: 0});
+    };
 }
 
-var FruitController = function ($scope) {
-    $scope.fruit = $scope.tabs[$scope.$index].fruit;
+var ItemController = function ($scope) {
+    $scope.item = $scope.items[$scope.$index];
 
-    $scope.deleteFruit = function(fruitToDelete) {
-        $scope.fruit.forEach(function (fruit, index) {
-            if(fruit === fruitToDelete) {
-                $scope.fruit.splice(index, 1);
+    // NOTE: Cannot rely on $index as items can be deleted and inserted into the middle of the array.
+
+    var itemIndex = function () {
+        var index;
+        for (index = 0; index < $scope.items.length; index++) {
+            if ($scope.items[index] === $scope.item) {
+                return index;
             }
-        });
+        };
+        throw "Can't find the item??";
     };
+
+    $scope.deleteItem = function () {
+        $scope.items.splice(itemIndex(), 1);
+    };
+
+    $scope.moveUp = function () {
+        var currentIndex = itemIndex();
+        if (currentIndex == 0) return;
+        $scope.items.splice(currentIndex, 1);
+        $scope.items.splice(currentIndex - 1, 0, this.item);
+    };
+
+    $scope.moveDown = function () {
+        var currentIndex = itemIndex();
+        if (currentIndex == $scope.items.length) return;
+        console.log('moving down')
+        $scope.items.splice(currentIndex, 1);
+        $scope.items.splice(currentIndex + 1, 0, this.item);
+    };
+
 }
