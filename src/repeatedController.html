@@ -1,0 +1,27 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <script src="angular.js"></script>
+    <script src="repeatedControllers.js"></script>
+  </head>
+  <body>
+    <div ng-controller="TabController">
+        <ul>
+            <li ng-repeat="tab in tabs">
+                {{tab.title}} <button ng-click="deleteTab(tab)">Delete</button>
+                <ul ng-controller="FruitController">
+                    <li ng-repeat="aFruit in fruit"><button ng-click="deleteFruit(aFruit)">Delete</button>
+                        <input ng-model='aFruit.price'/>: {{aFruit.name}}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <button ng-click="addFruit()">Add Wednesday</button>
+        <button ng-click="deleteTuesday()">Delete Tuesday</button>
+        <div>
+            Total: {{totalPrice()}}
+        </div>
+    </div>
+  </body>
+
+</html>
