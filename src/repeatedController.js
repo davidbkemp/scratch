@@ -54,4 +54,7 @@ var ItemController = function ($scope) {
         $scope.items.splice(currentIndex + 1, 0, this.item);
     };
 
+    $scope.showFoo = function () {
+        alert("Foo is: " + ($scope.foo ? "checked" : "not checked") + ". Note foo is kept directly on the controller.");
+    }
 }
