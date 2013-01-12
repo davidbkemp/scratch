@@ -19,13 +19,13 @@
       <div ng-switch-when="contactUs" ng-controller="tabbed.contactUsController">
         <h2>Contacts:</h2>
         <ul class="leaders">
-          <li ng-repeat="contact in contacts($parent.$index)"><span>{{contact.name}}</span><span>{{contact.phone}}</span></li>
+          <li ng-repeat="contact in contacts()"><span>{{contact.name}}</span><span>{{contact.phone}}</span></li>
         </ul>
       </div>
       <div ng-switch-when="locateUs" ng-controller="tabbed.locateUsController">
         <h2>Find us at:</h2>
         <ul class="location">
-          <li ng-repeat="location in locations($parent.$index)">
+          <li ng-repeat="location in locations()">
             {{location.street}}, <span class="suburb">{{location.suburb}}</span> <span class="postcode">{{location.postcode}}</span>
           </li>
         </ul>

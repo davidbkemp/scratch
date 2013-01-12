@@ -66,13 +66,13 @@ tabbed.tabController = function ($scope) {
 }
 
 tabbed.contactUsController = function ($scope) {
-  $scope.contacts = function (tabIndex) {
-    return tabbed.model.tabs[tabIndex].content
+  $scope.contacts = function () {
+    return $scope.tab.content;
   };
 };
 
 tabbed.locateUsController = function ($scope) {
   $scope.locations = function (tabIndex) {
-    return tabbed.model.tabs[tabIndex].content
+    return $scope.tab.content;
   };
 };
