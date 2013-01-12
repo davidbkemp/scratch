@@ -8,15 +8,15 @@
     <div ng-controller="MainController">
         <ul>
             <li ng-repeat="item in items" ng-controller="ItemController">
-                <button ng-click="moveUp()">Move Up</button>
-                <button ng-click="moveDown()">Move Down</button>
+                <button ng-click="moveUp()" ng-disabled="$first">Move Up</button>
+                <button ng-click="moveDown()" ng-disabled="$last">Move Down</button>
                 <button ng-click="deleteItem()">Delete</button>
                 <input type="checkbox" ng-model="foo" />
                 <button ng-click="showFoo()">foo</button>
                 <input ng-model='item.amount'/>: {{item.name}}
             </li>
         </ul>
-        <button ng-click="addItem()">Add</button>
+        <button ng-click="addItem()">Add New Item</button>
         <div>
             Total: {{total()}}
         </div>

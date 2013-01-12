@@ -2,6 +2,8 @@
 var MainController = function ($scope) {
     $scope.items = [
         {name: "Apple", amount: 3},
+        {name: "Orange", amount: 32},
+        {name: "Lemon", amount: 77},
         {name: "Banana", amount: 7}
     ];
 
