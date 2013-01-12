@@ -1,3 +1,21 @@
+var draggedScope;
+
+angular.module('repeatedController', [])
+    .directive('myDraggable', function () {
+        return function(scope, element, attrs) {
+            element.attr('draggable', 'true');
+            element.on('dragstart', function(){
+                draggedScope = scope;
+            });
+            element.on('dragover', function(e){
+                e.preventDefault();
+            });
+            element.on('drop', function () {
+                scope.moveItem(draggedScope.$index, scope.$index);
+            });
+        }
+    });
+
 
 var MainController = function ($scope) {
     $scope.items = [
@@ -18,6 +36,14 @@ var MainController = function ($scope) {
     $scope.addItem = function () {
         var name = prompt("Item Name:");
         this.items.push({name: name, amount: 0});
+    };
+
+    $scope.moveItem = function (source, dest) {
+        var itemToMove = $scope.items[source];
+        var offset = source < dest ? 0 : 1;
+        $scope.items.splice(source, 1);
+        $scope.items.splice(dest + offset, 0, itemToMove);
+        $scope.$digest();
     };
 }
 

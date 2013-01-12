@@ -1,13 +1,14 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="repeatedController">
   <head>
+    <script src="jquery-1.8.3.js"></script>
     <script src="angular.js"></script>
     <script src="repeatedController.js"></script>
   </head>
   <body>
     <div ng-controller="MainController">
         <ul>
-            <li ng-repeat="item in items" ng-controller="ItemController">
+            <li ng-repeat="item in items" ng-controller="ItemController" my-draggable>
                 <button ng-click="moveUp()" ng-disabled="$first">Move Up</button>
                 <button ng-click="moveDown()" ng-disabled="$last">Move Down</button>
                 <button ng-click="deleteItem()">Delete</button>
