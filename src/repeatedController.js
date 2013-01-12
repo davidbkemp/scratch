@@ -1,17 +1,17 @@
-var draggedScope;
 
 angular.module('repeatedController', [])
     .directive('myDraggable', function () {
+        var indexOfItemBeingDragged;
         return function(scope, element, attrs) {
             element.attr('draggable', 'true');
             element.on('dragstart', function(){
-                draggedScope = scope;
+                indexOfItemBeingDragged = scope.$index;
             });
             element.on('dragover', function(e){
                 e.preventDefault();
             });
             element.on('drop', function () {
-                scope.moveItem(draggedScope.$index, scope.$index);
+                scope.moveItem(indexOfItemBeingDragged, scope.$index);
             });
         }
     });
