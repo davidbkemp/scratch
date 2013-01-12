@@ -1,5 +1,4 @@
 
-
 var MainController = function ($scope) {
     $scope.items = [
         {name: "Apple", amount: 3},
@@ -21,8 +20,9 @@ var MainController = function ($scope) {
 }
 
 var ItemController = function ($scope) {
-    $scope.item = $scope.items[$scope.$index];
 
+    // NOTE: This controller is assumed to be used within an "item in items()" repeat
+    // The ng-repeat will ensure that $scope.item exists.
 
     $scope.deleteItem = function () {
         $scope.items.splice($scope.$index, 1);
@@ -31,13 +31,13 @@ var ItemController = function ($scope) {
     $scope.moveUp = function () {
         if ($scope.$index == 0) return;
         $scope.items.splice($scope.$index, 1);
-        $scope.items.splice($scope.$index - 1, 0, this.item);
+        $scope.items.splice($scope.$index - 1, 0, $scope.item);
     };
 
     $scope.moveDown = function () {
         if ($scope.$index == $scope.items.length) return;
         $scope.items.splice($scope.$index, 1);
-        $scope.items.splice($scope.$index + 1, 0, this.item);
+        $scope.items.splice($scope.$index + 1, 0, $scope.item);
     };
 
     $scope.showFoo = function () {
