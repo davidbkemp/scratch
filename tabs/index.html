@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tabs angular example</title>
+    <script src="angular.js"></script>
+    <script src="tabs.js"></script>
+    <link href="tabs.css" rel="stylesheet" type="text/css" >
+</head>
+<body ng-app>
+<article id="main" ng-controller="tabbed.entityController">
+  <nav>
+    <ul ng-controller="tabbed.tabController">
+      <li ng-repeat="tab in tabs()" ng-class="isSelected(tab.id)" ng-click="select(tab.id)">{{tab.title}}</li>
+    </ul>
+  </nav>
+  <h1>{{name()}}</h1>
+  <section ng-controller="tabbed.tabController">
+    <article ng-repeat="tab in tabs()" ng-switch on="tab.type" ng-show="isSelected(tab.id)">
+      <div ng-switch-when="contactUs" ng-controller="tabbed.contactUsController">
+        <h2>Contacts:</h2>
+        <ul class="leaders">
+          <li ng-repeat="contact in contacts($parent.$index)"><span>{{contact.name}}</span><span>{{contact.phone}}</span></li>
+        </ul>
+      </div>
+      <div ng-switch-when="locateUs" ng-controller="tabbed.locateUsController">
+        <h2>Find us at:</h2>
+        <ul class="location">
+          <li ng-repeat="location in locations($parent.$index)">
+            {{location.street}}, <span class="suburb">{{location.suburb}}</span> <span class="postcode">{{location.postcode}}</span>
+          </li>
+        </ul>
+      </div>
+    </article>
+  </section>
+</article>
+</body>
+</html>

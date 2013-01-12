@@ -1,0 +1,100 @@
+body {
+    background-color: #e6f3f3;
+}
+
+article#main {
+  font-family: sans-serif;
+}
+
+nav {
+  padding: 3em 1em 0 1em;
+}
+
+nav ul li {
+  float: left;
+  border-top-left-radius: 0.75em;
+  border-top-right-radius: 0.75em;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  margin-right: 0.2em;
+  padding: 0.6em 0.8em 0.4em 0.8em;
+  background-color: #efefef;
+  font-size: 0.9em;
+  color: #ccc;
+  cursor: pointer;
+}
+
+nav ul li.selected {
+  background-color: #bad;
+  color: #333;
+}
+
+
+h1 {
+  clear: both;
+  #border-bottom: 3px solid #999;
+  font-size: 1.5em;
+  background-image: -webkit-linear-gradient(top, #bad, #dab);
+  padding: 0.3em 1em 0.3em 1em;
+  font-weight: bold;
+  color: #555;
+  text-shadow: 0.1em 0.1em 0.3em #999;
+}
+
+
+section {
+  margin: 1em;
+}
+
+section article ul li {
+  margin: 0.25em 0 0 1em;
+}
+
+section article ul li:nth-child(odd) {
+  background-color: #ddd;
+}
+
+section article ul li span.postcode {
+  font-size: 0.5em;
+  font-style: italic;
+}
+
+
+ul.leaders {
+  max-width: 20em;
+  padding: 0;
+  overflow-x: hidden;
+  list-style: none;
+}
+ul.leaders li:before {
+  float: left;
+  width: 0;
+  white-space: nowrap;
+  content:
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . "
+ ". . . . . . . . . . . . . . . . . . . . ";
+}
+ul.leaders span:first-child {
+  padding-right: 0.33em;
+  background: #e6f3f3;
+}
+ul.leaders span + span {
+  float: right;
+  padding-left: 0.33em;
+  font-weight: bold;
+  background: #e6f3f3;
+}
+ul.leaders li:nth-child(odd) span:first-child, ul.leaders li:nth-child(odd) span + span {
+  background: #ddd;
+}
+
+ul.location {
+  width: 20em;
+}
+
+span.suburb {
+  font-weight: bold;
+}
