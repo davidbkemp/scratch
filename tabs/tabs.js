@@ -1,3 +1,4 @@
+
 var tabbed = {};
 
 tabbed.model = {
@@ -45,7 +46,35 @@ tabbed.model = {
 
 tabbed.selectedId = tabbed.model.tabs[0].id;
 
-angular.module("tabbedData", []);
+angular.module("tabbedData", [])
+    .directive('rearrangable', function () {
+        var indexOfItemBeingDragged;
+        return function(scope, element, attrs) {
+            element.attr('draggable', 'true');
+            element.on('dragstart', function(e) {
+                indexOfItemBeingDragged = scope.$index;
+            });
+            element.on('dragover', function(e){
+                e.preventDefault();
+                return false;
+            });
+            element.on('drop', function () {
+                element.removeClass('current-target');
+                if (indexOfItemBeingDragged !== scope.$index) {
+                    scope.moveItem(indexOfItemBeingDragged, scope.$index);
+                }
+            });
+            element.on('dragenter', function () {
+                if (indexOfItemBeingDragged !== scope.$index) {
+                    element.addClass('current-target');
+                }
+            });
+            element.on('dragleave', function () {
+                element.removeClass('current-target');
+            });
+        }
+    });
+
 
 tabbed.entityController = function ($scope) {
   $scope.name = function () {
@@ -60,9 +89,17 @@ tabbed.tabController = function ($scope) {
   $scope.isSelected = function (tabId) {
     return tabId === tabbed.selectedId ? 'selected' : '';
   };
-  $scope.tabs = function() {
+  $scope.tabs = function () {
     return tabbed.model.tabs;
   };
+  $scope.moveItem = function (source, dest) {
+    var tabs = $scope.tabs();
+    var itemToMove = tabs[source];
+    var offset = source < dest ? 0 : 1;
+    $scope.tabs().splice(source, 1);
+    $scope.tabs().splice(dest + offset, 0, itemToMove);
+    $scope.$digest();
+    };
 }
 
 tabbed.contactUsController = function ($scope) {
