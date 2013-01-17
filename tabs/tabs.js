@@ -84,8 +84,12 @@ angular.module("tabbedData", [])
                 elm.attr('contenteditable', 'true');
 
                 elm.bind('blur', function() {
+                    var text = elm.text();
+                    if (text.length === 0 && attrs.defaultValue) {
+                        text = scope.$eval(attrs.defaultValue);
+                    }
                     scope.$apply(function() {
-                        ctrl.$setViewValue(elm.text());
+                        ctrl.$setViewValue(text);
                     });
                 });
 
@@ -104,6 +108,10 @@ tabbed.entityController = function ($scope) {
 
     $scope.reset = function () {
       tabbed.model = createTestTabData();
+    };
+
+    $scope.businessNamePlaceHolderText = function () {
+      return "Insert business name here..."
     };
 };
 
