@@ -14,7 +14,7 @@
       <li ng-repeat="tab in tabs()" ng-class="isSelected(tab.id)" ng-click="select(tab.id)" rearrangable>{{tab.title}}</li>
     </ul>
   </nav>
-  <h1>{{name()}}</h1>
+  <h1 my-editable ng-model="business().name"></h1>
   <section ng-controller="tabbed.tabController">
     <article ng-repeat="tab in tabs()" ng-switch on="tab.type" ng-show="isSelected(tab.id)">
       <div ng-switch-when="contactUs" ng-controller="tabbed.contactUsController">
@@ -33,6 +33,7 @@
       </div>
     </article>
   </section>
+    <button ng-click="reset()">Reset</button>
 </article>
 </body>
 </html>

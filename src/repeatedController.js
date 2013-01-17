@@ -1,4 +1,6 @@
 
+var modelHandle = {model: { foo: "hello" }};
+
 angular.module('repeatedController', [])
     .directive('myDraggable', function () {
         var indexOfItemBeingDragged;
@@ -14,6 +16,24 @@ angular.module('repeatedController', [])
                 scope.moveItem(indexOfItemBeingDragged, scope.$index);
             });
         }
+    })
+    .directive('myEditable', function() {
+        return {
+            require: 'ngModel',
+            link: function(scope, elm, attrs, ctrl) {
+                elm.attr('contenteditable', 'true');
+
+                elm.bind('blur', function() {
+                    scope.$apply(function() {
+                        ctrl.$setViewValue(elm.text());
+                    });
+                });
+
+                scope.$watch(attrs.ngModel, function(value) {
+                    elm.text(scope.$eval(attrs.ngModel));
+                });
+            }
+        };
     });
 
 
@@ -45,6 +65,8 @@ var MainController = function ($scope) {
         $scope.items.splice(dest + offset, 0, itemToMove);
         $scope.$digest();
     };
+
+    $scope.modelHandle = modelHandle;
 }
 
 var ItemController = function ($scope) {
