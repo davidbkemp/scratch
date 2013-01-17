@@ -84,7 +84,7 @@ angular.module("tabbedData", [])
                 elm.attr('contenteditable', 'true');
 
                 elm.bind('blur', function() {
-                    var text = elm.text();
+                    var text = elm.text().trim();
                     if (text.length === 0 && attrs.defaultValue) {
                         text = scope.$eval(attrs.defaultValue);
                     }
