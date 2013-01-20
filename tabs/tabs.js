@@ -88,14 +88,16 @@ angular.module("tabbedData", [])
                     if (text.length === 0 && attrs.defaultValue) {
                         text = scope.$eval(attrs.defaultValue);
                     }
-                    scope.$apply(function() {
+                    scope.$apply(function () {
                         ctrl.$setViewValue(text);
+                        ctrl.$render();
                     });
                 });
 
-                scope.$watch(attrs.ngModel, function(value) {
-                    elm.text(scope.$eval(attrs.ngModel));
-                });
+                ctrl.$render = function () {
+                    elm.text(ctrl.$modelValue);
+                };
+
             }
         };
     });;
