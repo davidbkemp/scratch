@@ -63,7 +63,6 @@ jQuery(function ($) {
     renderQState("#classical", [ 0, 0, 0, 0, 0, 0, 1, 0 ]);
     renderQState("#quantum", [ 0.75, 0.75, 0, 0, 0.75, 0, 0.75, 0 ]);
 
-
     renderQState("#peek", [ 0.75, 0.75, 0, 0, 0.75, 0, 0.75, 0 ]);
 
     $('#peekButton').click(function () {
@@ -83,8 +82,38 @@ jQuery(function ($) {
             .duration(delay)
             .attr("r", function(d) {
                 return  d * radius;
-            })
-            .attr('fill', '#add8e6');
+            });
+
+        svg.selectAll('.qstate')
+            .data(data)
+            .transition()
+            .duration(delay)
+            .attr('opacity', computeOpacity);
+    });
+
+
+    renderQState("#amplitudes", [ 0, 0.3, 0.75, 0, 0.3, 0, 0.4, 0 ]);
+
+    renderQState("#favouringLargerAmplitudes", [ 0, 0.3, 0.75, 0, 0.3, 0, 0.4, 0 ]);
+
+    $('#favouringLargerAmplitudesPeekButton').click(function () {
+        $('#favouringLargerAmplitudesPeekingEye').show();
+
+        var radius = $('#favouringLargerAmplitudes').data('radius');
+
+        var data = [ 0, 0, 1, 0, 0, 0, 0, 0 ];
+
+        var delay = 2000;
+
+        var svg = d3.select("#favouringLargerAmplitudes");
+
+        svg.selectAll('.amplitude')
+            .data(data)
+            .transition()
+            .duration(delay)
+            .attr("r", function(d) {
+                return  d * radius;
+            });
 
         svg.selectAll('.qstate')
             .data(data)
