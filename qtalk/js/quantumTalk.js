@@ -4,22 +4,27 @@ jQuery(function ($) {
         return paddedString.substr(paddedString.length - length);
     }
 
+    var computeOpacity = function(d) {
+        return (d + 0.25) / 1.25;
+    };
+
     var qStateCalibrationElement = $('#calibration .qstate');
     var textHeight =  qStateCalibrationElement.height();
     var textWidth =  qStateCalibrationElement.width();
 
-    console.log("textHeight: " + textHeight);
-    console.log("textWidth: " + textWidth)
-
     function renderQState(selector, dataset) {
 
         var width = 500;
-        var height = 500;
+        var height = 400;
         var bitCount = dataset.length;
         var diameter = height / bitCount;
         var radius = diameter / 2;
 
+        $(selector).data('bitCount', bitCount);
+        $(selector).data('radius', radius);
+
         var svg = d3.select(selector);
+
         svg.attr('width', width).attr('height', height);
 
         var states = svg.selectAll('.qstate')
@@ -32,9 +37,7 @@ jQuery(function ($) {
             .attr('y', function(d, i) {
                 return i * diameter + radius + (textHeight / 3);
             })
-            .attr('opacity', function(d) {
-                return (d + 1) / 2;
-            })
+            .attr('opacity', computeOpacity)
             .text(function(d, i) {
                 return asBinary(i, 3);
             });
@@ -58,6 +61,36 @@ jQuery(function ($) {
     }
 
     renderQState("#classical", [ 0, 0, 0, 0, 0, 0, 1, 0 ]);
-    renderQState("#quantum", [ 0.5, 0.5, 0, 0, 0.5, 0, 0.5, 0 ]);
+    renderQState("#quantum", [ 0.75, 0.75, 0, 0, 0.75, 0, 0.75, 0 ]);
+
+
+    renderQState("#peek", [ 0.75, 0.75, 0, 0, 0.75, 0, 0.75, 0 ]);
+
+    $('#peekButton').click(function () {
+        $('#peekingEye').show();
+
+        var radius = $('#peek').data('radius');
+
+        var data = [ 0, 0, 0, 0, 0, 0, 1, 0 ];
+
+        var delay = 2000;
+
+        var svg = d3.select("#peek");
+
+        svg.selectAll('.amplitude')
+            .data(data)
+            .transition()
+            .duration(delay)
+            .attr("r", function(d) {
+                return  d * radius;
+            })
+            .attr('fill', '#add8e6');
+
+        svg.selectAll('.qstate')
+            .data(data)
+            .transition()
+            .duration(delay)
+            .attr('opacity', computeOpacity);
+    });
 });
 
