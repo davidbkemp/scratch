@@ -100,17 +100,19 @@ jQuery(function ($) {
             });
 
         phaseLineGroups
-            .append("circle")
+            .append("polygon")
             .attr('class', 'phaseLineEnd')
-            .attr('cx', function(d, i) {
+            .attr('points', function(d, i) {
+                var headLength = amplitudeCircle(maxRadius, d, i).radius/6;
+                console.log("head length: " + headLength)
                 var circleData = amplitudeCircle(maxRadius, d, i);
-                return circleData.cx + circleData.radius;
-            })
-            .attr('cy',  function(d, i) {
-                return amplitudeCircle(maxRadius, d, i).cy;
-            })
-            .attr("r",  function(d, i) {
-                return Math.min(2, amplitudeCircle(maxRadius, d, i).radius/6);
+                var x1 = circleData.cx + circleData.radius - headLength;
+                var y1 = amplitudeCircle(maxRadius, d, i).cy - headLength/2;
+                var x2 = x1;
+                var y2 = y1 + headLength;
+                var x3 = circleData.cx + circleData.radius;
+                var y3 = amplitudeCircle(maxRadius, d, i).cy;
+                return x1 + "," + y1 + " " + x2 + "," + y2 + " " +  x3 + "," + y3
             });
 
     }
