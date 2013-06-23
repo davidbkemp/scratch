@@ -5,14 +5,8 @@ jQuery(function ($) {
         return paddedString.substr(paddedString.length - length);
     }
 
-    function computeOpacity(d) {
-        return (d.magnitude + 0.25) / 1.25;
-    }
-
-    function radiusFunction(maxRadius) {
-        return function(d) {
-            return  d.magnitude * maxRadius;
-        };
+    function computeOpacity(dataElement) {
+        return (dataElement.magnitude + 0.25) / 1.25;
     }
 
     function transformToAmplitudes(data) {
@@ -45,44 +39,58 @@ jQuery(function ($) {
             });
     }
 
+    function amplitudeCircle(maxRadius, dataElement, index) {
+        return {
+            cx: maxRadius + 1.3 * textWidth,
+            cy: maxRadius * (1 + 2 * index),
+            radius: maxRadius * dataElement.magnitude
+        };
+    }
+
     function renderAmplitudeCircles(svgSelector, dataSet) {
         var maxRadius = $(svgSelector).data('maxRadius');
-        var maxDiameter = 2 * maxRadius;
 
-        var amplitudes = d3.select(svgSelector).selectAll('.amplitude')
+        d3.select(svgSelector).selectAll('.amplitude')
             .data(dataSet)
             .enter()
             .append("circle")
             .attr('class', 'amplitude')
-            .attr('cx', maxRadius + 1.3 * textWidth)
-            .attr('cy', function(d, i) {
-                return maxRadius + i * maxDiameter;
+            .attr('cx', function(d, i) {
+                return amplitudeCircle(maxRadius, d, i).cx;
             })
-            .attr("r", radiusFunction(maxRadius))
+            .attr('cy',  function(d, i) {
+                return amplitudeCircle(maxRadius, d, i).cy;
+            })
+            .attr("r",  function(d, i) {
+                return amplitudeCircle(maxRadius, d, i).radius;
+            })
             .attr('fill', '#add8e6');
     }
 
     function renderPhases(svgSelector, dataSet) {
         var maxRadius = $(svgSelector).data('maxRadius');
-        var maxDiameter = 2 * maxRadius;
-        var phaseLines = d3.select(svgSelector).selectAll('.phaseLine')
+        d3.select(svgSelector).selectAll('.phaseLine')
             .data(dataSet)
             .enter()
             .append("line")
             .attr('class', 'phaseLine')
-            .attr('x1', maxRadius + 1.3 * textWidth)
+            .attr('x1', function(d, i) {
+                return amplitudeCircle(maxRadius, d, i).cx;
+            })
             .attr('y1', function(d, i) {
-                return maxRadius + i * maxDiameter;
+                return amplitudeCircle(maxRadius, d, i).cy;
             })
             .attr('x2', function(d, i) {
-                return maxRadius + 1.3 * textWidth + d.magnitude * maxRadius;
+                var circleData = amplitudeCircle(maxRadius, d, i);
+                return circleData.cx + circleData.radius;
             })
             .attr('y2', function(d, i) {
-                return maxRadius + i * maxDiameter;
+                return amplitudeCircle(maxRadius, d, i).cy;
             })
             .attr('transform', function(d, i) {
-                var x = maxRadius + 1.3 * textWidth;
-                var y = maxRadius + i * maxDiameter;
+                var circleData = amplitudeCircle(maxRadius, d, i);
+                var x = circleData.cx;
+                var y = circleData.cy;
                 var degrees = 180 * d.phase / Math.PI;
                 return 'rotate(' + degrees + ',' + x + ',' + y + ')';
             });
@@ -123,7 +131,9 @@ jQuery(function ($) {
             .data(dataSet)
             .transition()
             .duration(delay)
-            .attr("r", radiusFunction(maxRadius));
+            .attr("r", function(d, i) {
+                return amplitudeCircle(maxRadius, d, i).radius;
+            });
 
         svg.selectAll('.qstate')
             .data(dataSet)
