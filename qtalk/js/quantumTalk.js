@@ -63,15 +63,26 @@ jQuery(function ($) {
             })
             .attr("r",  function(d, i) {
                 return amplitudeCircle(maxRadius, d, i).radius;
-            })
-            .attr('fill', '#add8e6');
+            });
     }
 
     function renderPhases(svgSelector, dataSet) {
         var maxRadius = $(svgSelector).data('maxRadius');
-        d3.select(svgSelector).selectAll('.phaseLine')
+
+        var phaseLineGroups = d3.select(svgSelector).selectAll('.phaseLineGroup')
             .data(dataSet)
             .enter()
+            .append("g")
+            .attr('class', 'phaseLineGroup')
+            .attr('transform', function(d, i) {
+                var circleData = amplitudeCircle(maxRadius, d, i);
+                var x = circleData.cx;
+                var y = circleData.cy;
+                var degrees = 180 * d.phase / Math.PI;
+                return 'rotate(' + degrees + ',' + x + ',' + y + ')';
+            });
+
+        phaseLineGroups
             .append("line")
             .attr('class', 'phaseLine')
             .attr('x1', function(d, i) {
@@ -86,14 +97,22 @@ jQuery(function ($) {
             })
             .attr('y2', function(d, i) {
                 return amplitudeCircle(maxRadius, d, i).cy;
-            })
-            .attr('transform', function(d, i) {
-                var circleData = amplitudeCircle(maxRadius, d, i);
-                var x = circleData.cx;
-                var y = circleData.cy;
-                var degrees = 180 * d.phase / Math.PI;
-                return 'rotate(' + degrees + ',' + x + ',' + y + ')';
             });
+
+        phaseLineGroups
+            .append("circle")
+            .attr('class', 'phaseLineEnd')
+            .attr('cx', function(d, i) {
+                var circleData = amplitudeCircle(maxRadius, d, i);
+                return circleData.cx + circleData.radius;
+            })
+            .attr('cy',  function(d, i) {
+                return amplitudeCircle(maxRadius, d, i).cy;
+            })
+            .attr("r",  function(d, i) {
+                return Math.min(2, amplitudeCircle(maxRadius, d, i).radius/6);
+            });
+
     }
 
     function renderAmplitudes(svgSelector, dataSet, options) {
