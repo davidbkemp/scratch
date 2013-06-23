@@ -1,4 +1,9 @@
 
+.reveal h1 {
+    font-size: 3em;
+    margin-bottom: 1em;
+}
+
 .peekingEye {
     position: absolute;
     top: 7em;
@@ -14,4 +19,9 @@
 
 button {
     font-size: 0.8em;
+}
+
+.phaseLine {
+    stroke: red;
+    stroke-width: 1px;
 }
