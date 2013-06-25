@@ -21,13 +21,13 @@ button {
     font-size: 0.8em;
 }
 
-.amplitude {
+.amplitudeCircle {
     fill: #add8e6;
 }
 
 .phaseLine {
     stroke: red;
-    stroke-width: 1px;
+    stroke-width: 2px;
 }
 
 .phaseLineEnd {

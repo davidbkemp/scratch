@@ -95,12 +95,12 @@
                     <h2>Phase</h2>
                     <p>An amplitude has a phase as well as a magnitude</p>
                     <svg width="400" height="400">
-                        <circle class="amplitude" cx="200" cy="200" r="200" />
+                        <circle class="amplitudeCircle" cx="200" cy="200" r="200" />
                         <g transform="rotate(-45,200,200)">
                             <line class="phaseLine" x1="200" y1="200" x2="400" y2="200" />
                             <polygon class="phaseLineEnd" points="390,205 390,195 400,200" />
                         </g>
-                        <line stroke-dasharray="5,5" stroke-width="1" stroke="black" x1="200" y1="200" x2="400" y2="200" />
+                        <line stroke-dasharray="5,5" stroke-width="2" stroke="black" x1="200" y1="200" x2="400" y2="200" />
                         <text x="280" y="100">r</text>
                         <text x="220" y="200">&theta;</text>
                     </svg>
@@ -114,10 +114,6 @@
                     <svg id="phases"></svg>
                 </section>
 
-
-                <section>
-                    <svg id="calibration" width="500" height="500"><text class="qstate" opacity="0.1" y="200">000</text></svg>
-                </section>
 			</div>
 
 		</div>
