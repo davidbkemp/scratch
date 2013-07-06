@@ -9,10 +9,22 @@ jQuery(function ($) {
         return (dataElement.magnitude + 0.25) / 1.25;
     }
 
+    function transformQStateToAmplitudes(qstate) {
+        var result = [];
+        var numberOfBasisStates = 1 << qstate.numBits();
+        for (var i = 0; i < numberOfBasisStates; i++) {
+            var jsqubitsAmplitude = qstate.amplitude(i);
+            var magnitude = jsqubitsAmplitude.magnitude();
+            var phase = jsqubitsAmplitude.phase();
+            result[i] = {magnitude: magnitude, phase: phase};
+        }
+        return result;
+    }
+
     function transformToAmplitudes(data) {
+        if (data instanceof jsqubits.QState) return transformQStateToAmplitudes(data);
         return _.map(data, function(item) {
-            if (item.phase) return item;
-            return {magnitude: item, phase: 0};
+            return (item.phase != null) ? item : {magnitude: item, phase: 0};
         });
     }
 
@@ -34,7 +46,7 @@ jQuery(function ($) {
             })
             .attr('opacity', computeOpacity)
             .text(function(d, i) {
-                return asBinary(i, 3);
+                return asBinary(i, Math.round(Math.log(dataSet.length)/Math.log(2)));
             });
     }
 
@@ -103,8 +115,7 @@ jQuery(function ($) {
     function renderQState(svgSelector, dataSet, options) {
         options = options || {};
         dataSet = transformToAmplitudes(dataSet);
-        var svgWidth = 500;
-        var svgHeight = 400;
+        var svgHeight = options.height != null ? options.height : 400;
         var bitCount = dataSet.length;
         var maxDiameter = svgHeight / bitCount;
         var maxRadius = maxDiameter / 2;
@@ -112,13 +123,11 @@ jQuery(function ($) {
         $(svgSelector).data('bitCount', bitCount);
         $(svgSelector).data('maxRadius', maxRadius);
 
-        d3.select(svgSelector).attr('width', svgWidth).attr('height', svgHeight);
-
         renderStateLabels(svgSelector, dataSet);
         renderAmplitudes(svgSelector, dataSet, options);
     }
 
-    function transitionQState(svgSelector, dataSet) {
+    function transitionQState(svgSelector, dataSet, options) {
         dataSet = transformToAmplitudes(dataSet);
         var maxRadius = $(svgSelector).data('maxRadius');
 
@@ -173,6 +182,61 @@ jQuery(function ($) {
             showPhases: true
         }
     );
+
+    renderQState("#phasesAndMeasurement", [
+        {magnitude: 0.4, phase: Math.PI/4},
+        {magnitude: 0.75, phase: -Math.PI/8},
+        0,
+        0,
+        {magnitude: 0.4, phase: -1},
+        0,
+        {magnitude: 0.4, phase: 3 * Math.PI/4},
+        0 ],
+        {
+            showPhases: true
+        }
+    );
+
+    $('#phasesAndMeasurementPeekButton').click(function () {
+        $('#phasesAndMeasurementPeekingEye').show();
+        transitionQState('#phasesAndMeasurement', [
+            {magnitude: 0, phase: Math.PI / 4},
+            {magnitude: 1, phase: -Math.PI / 8},
+            0,
+            0,
+            {magnitude: 0, phase: -1},
+            0,
+            {magnitude: 0, phase: 3 * Math.PI / 4},
+            0
+        ],
+            {
+                showPhases: true
+            });
+    });
+
+    var notOperatorExampleState = new jsqubits.QState(
+        2, [
+        jsqubits.complex(0,1).multiply(0.7),
+        jsqubits.complex(-1,0),
+        jsqubits.complex(Math.sqrt(0.5),Math.sqrt(0.5)).multiply(0.5),
+        jsqubits.complex(Math.sqrt(0.5),-Math.sqrt(0.5)).multiply(0.8)
+        ]
+    ).normalize();
+
+    renderQState('#notOperator', notOperatorExampleState, { showPhases: true });
+
+    $('#notOperatorBit0').click(function () {
+        notOperatorExampleState = notOperatorExampleState.not(0);
+        transitionQState('#notOperator', notOperatorExampleState, { showPhases: true });
+    });
+
+    $('#notOperatorBit1').click(function () {
+        notOperatorExampleState = notOperatorExampleState.not(1);
+        transitionQState('#notOperator', notOperatorExampleState, { showPhases: true });
+    });
+
+    renderQState("#hadamard0", [ {magnitude: 1, phase: 0}, 0], { showPhases: true, height: 150 });
+    renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: 0}], { showPhases: true, height: 150 });
 
 });
 

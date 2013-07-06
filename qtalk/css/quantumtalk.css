@@ -33,3 +33,8 @@ button {
 .phaseLineEnd {
     fill: red;
 }
+
+.fullSizeDiagram {
+    width: 500px;
+    height: 400px;
+}

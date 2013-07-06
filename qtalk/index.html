@@ -55,19 +55,19 @@
 				<section>
 					<h2>Classical Systems</h2>
                     <p>Can only be in one state at a time</p>
-					<svg id="classical"></svg>
+					<svg id="classical" class='fullSizeDiagram'></svg>
 				</section>
 
 				<section>
 					<h2>Quantum Systems</h2>
                     <p>Can be in several states at once!</p>
-                    <svg id="quantum"></svg>
+                    <svg id="quantum"  class='fullSizeDiagram'></svg>
 				</section>
 
 				<section>
 					<h2>Peeking</h2>
-                    <p>Collapses to single randomly chosen state</p>
-                    <svg id="peek"></svg>
+                    <p>Causes system collapse to a single randomly chosen state</p>
+                    <svg id="peek" class='fullSizeDiagram'></svg>
                     <img id="peekingEye" class="peekingEye" src="eye.jpg">
                     <button id="peekButton">Peek</button>
 				</section>
@@ -75,13 +75,13 @@
 				<section>
 					<h2>Amplitudes</h2>
                     <p>Different states can have different "amplitudes"</p>
-                    <svg id="amplitudes"></svg>
+                    <svg id="amplitudes" class='fullSizeDiagram'></svg>
 				</section>
 
                 <section>
                     <h2>Peeking</h2>
                     <p>Collapse favours larger amplitudes</p>
-                    <svg id="favouringLargerAmplitudes"></svg>
+                    <svg id="favouringLargerAmplitudes" class='fullSizeDiagram'></svg>
                     <img id="favouringLargerAmplitudesPeekingEye" class="peekingEye" src="eye.jpg">
                     <button id="favouringLargerAmplitudesPeekButton">Peek</button>
                 </section>
@@ -111,9 +111,39 @@
                 <section>
                     <h2>Phase</h2>
                     <p>Different amplitudes can have different "phases"</p>
-                    <svg id="phases"></svg>
+                    <svg id="phases" class='fullSizeDiagram'></svg>
                 </section>
 
+                <section>
+                    <h2>Phase &amp; Measurement</h2>
+                    <p>Amplitude phases have no direct effect on measurements</p>
+                    <svg id="phasesAndMeasurement" class='fullSizeDiagram'></svg>
+                    <img id="phasesAndMeasurementPeekingEye" class="peekingEye" src="eye.jpg">
+                    <button id="phasesAndMeasurementPeekButton">Peek</button>
+                </section>
+
+                <section>
+                    <h2>Classical Operators</h2>
+                </section>
+
+                <section>
+                    <h2>"Not" operator</h2>
+                    <svg class='fullSizeDiagram' id="notOperator"></svg>
+                    <button id="notOperatorBit0">Not bit 0</button>
+                    <button id="notOperatorBit1">Not bit 1</button>
+                </section>
+
+                <section>
+                    <h2>Special quantum operators</h2>
+                </section>
+
+                <section>
+                    <h2>Hadamard</h2>
+                    <svg class='fullSizeDiagram'>
+                        <g id="hadamard0"></g>
+                        <g id="hadamardP" transform="translate(250,0)"></g>
+                    </svg>
+                </section>
 			</div>
 
 		</div>
@@ -123,6 +153,7 @@
 		<script src="lib/js/d3.v3.min.js"></script>
 		<script src="lib/js/jquery-2.0.2.min.js"></script>
 		<script src="lib/js/lodash.min.js"></script>
+		<script src="js/jsqubits.js"></script>
 		<script src="js/quantumTalk.js"></script>
 
 		<script>
