@@ -19,7 +19,7 @@ jQuery(function ($) {
             var jsqubitsAmplitude = qstate.amplitude(i);
             var magnitude = jsqubitsAmplitude.magnitude();
             var phase = jsqubitsAmplitude.phase();
-            result[i] = {magnitude: magnitude, phase: phase, key: 'k'+i, basisState: i};
+            result[i] = {magnitude: magnitude, phase: phase, basisState: i};
         }
         return result;
     }
@@ -30,10 +30,23 @@ jQuery(function ($) {
             var result = (item == null || typeof item === 'number') ? {magnitude: item} : _.clone(item);
             result.magnitude = result.magnitude || 0;
             result.phase = result.phase || 0;
-            result.key = result.key || 'k' + index;
             result.basisState = result.basisState || index;
             return result;
         });
+    }
+
+    function addKeysToAmplitudes(data, keys) {
+        keys = keys || [];
+        return _.map(data, function(item, index) {
+            var result = _.clone(item);
+            result.key = keys[item.basisState] || index;
+            return result;
+        });
+    }
+
+    function transformToAmplitudesWithKeys(data, keys) {
+        data = transformToAmplitudes(data);
+        return addKeysToAmplitudes(data, keys);
     }
 
     var textHeight =  42;
@@ -122,7 +135,7 @@ jQuery(function ($) {
 
     function renderQState(svgSelector, dataSet, options) {
         options = options || {};
-        dataSet = transformToAmplitudes(dataSet);
+        dataSet = transformToAmplitudesWithKeys(dataSet, options.keys);
         var svgHeight = options.height != null ? options.height : 400;
         var bitCount = dataSet.length;
         var maxDiameter = svgHeight / bitCount;
@@ -138,7 +151,7 @@ jQuery(function ($) {
     function transitionQState(svgSelector, dataSet, options) {
         options = options || {};
         options.duration = options.duration != null ? options.duration : transitionDurations;
-        dataSet = transformToAmplitudes(dataSet);
+        dataSet = transformToAmplitudesWithKeys(dataSet, options.keys);
         var maxRadius = $(svgSelector).data('maxRadius');
 
         var svg = d3.select(svgSelector);
@@ -157,6 +170,22 @@ jQuery(function ($) {
                 return createTransformString(maxRadius, d);
             });
 
+    }
+
+
+    function determineNewKeyMappingForSingleBitOperator(initialState, initialKeyMapping, operation) {
+        var newKeyMapping = [];
+        var numBits = initialState.numBits();
+        var numberOfBasisStates = 1 << numBits;
+        for (var i = 0; i < numberOfBasisStates; i++) {
+            var isolatedState = [];
+            isolatedState[i] = initialState.amplitude(i);
+            var newState = operation(new jsqubits.QState(numBits, isolatedState));
+            newState.each(function (stateWithAmplitude) {
+                newKeyMapping[stateWithAmplitude.index] = initialKeyMapping[i];
+            });
+        }
+        return newKeyMapping;
     }
 
     renderQState("#classical", [ 0, 0, 0, 0, 0, 0, 1, 0 ]);
@@ -231,52 +260,22 @@ jQuery(function ($) {
         ]
     ).normalize();
 
-    renderQState('#notOperator', notOperatorExampleState, { showPhases: true });
+    var notOperatorExampleKeys = ['k0', 'k1', 'k2', 'k3'];
+
+    renderQState('#notOperator', notOperatorExampleState, { showPhases: true, keys: notOperatorExampleKeys });
 
     $('#notOperatorBit0').click(function () {
-        var result = [];
-        var numBits = notOperatorExampleState.numBits();
-        var numberOfBasisStates = 1 << numBits;
-        for (var i = 0; i < numberOfBasisStates; i++) {
-            var isolatedState = [];
-            isolatedState[i] = notOperatorExampleState.amplitude(i);
-            var newState = new jsqubits.QState(numBits, isolatedState).not(0);
-            newState.each(function (stateWithAmplitude) {
-                var magnitude = stateWithAmplitude.amplitude.magnitude();
-                var phase = stateWithAmplitude.amplitude.phase();
-                var key = 'k' + i;
-                result[stateWithAmplitude.index] = {magnitude: magnitude, phase: phase, key: key};
-            });
-        }
-        transitionQState('#notOperator', result, { showPhases: true });
+        notOperatorExampleKeys =
+            determineNewKeyMappingForSingleBitOperator(notOperatorExampleState, notOperatorExampleKeys, function (state) {return state.not(0);});
         notOperatorExampleState = notOperatorExampleState.not(0);
-        setTimeout(function () {
-            transitionQState('#notOperator', notOperatorExampleState, { showPhases: true, duration: 0 });
-        }, transitionDurations + 500);
-
+        transitionQState('#notOperator', notOperatorExampleState, { showPhases: true, keys: notOperatorExampleKeys });
     });
 
     $('#notOperatorBit1').click(function () {
-        var result = [];
-        var numBits = notOperatorExampleState.numBits();
-        var numberOfBasisStates = 1 << numBits;
-        for (var i = 0; i < numberOfBasisStates; i++) {
-            var isolatedState = [];
-            isolatedState[i] = notOperatorExampleState.amplitude(i);
-            var newState = new jsqubits.QState(numBits, isolatedState).not(1);
-            newState.each(function (stateWithAmplitude) {
-                var magnitude = stateWithAmplitude.amplitude.magnitude();
-                var phase = stateWithAmplitude.amplitude.phase();
-                var key = 'k' + i;
-                result[stateWithAmplitude.index] = {magnitude: magnitude, phase: phase, key: key};
-            });
-        }
-        transitionQState('#notOperator', result, { showPhases: true });
+        notOperatorExampleKeys =
+            determineNewKeyMappingForSingleBitOperator(notOperatorExampleState, notOperatorExampleKeys, function (state) {return state.not(1);});
         notOperatorExampleState = notOperatorExampleState.not(1);
-        setTimeout(function () {
-            transitionQState('#notOperator', notOperatorExampleState, { showPhases: true, duration: 0 });
-        }, transitionDurations + 500);
-
+        transitionQState('#notOperator', notOperatorExampleState, { showPhases: true, keys: notOperatorExampleKeys });
     });
 
     renderQState("#hadamard0", [ {magnitude: 1, phase: 0}, 0], { showPhases: true, height: 150 });
