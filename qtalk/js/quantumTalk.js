@@ -1,4 +1,3 @@
-
 jQuery(function ($) {
 
     var transitionDurations = 2000;
@@ -57,7 +56,7 @@ jQuery(function ($) {
         var maxDiameter = 2 * maxRadius;
 
         d3.select(svgSelector).selectAll('.qstate')
-            .data(dataSet, function (item) { return item.key; })
+            .data(dataSet, function (item) { return item.basisState; })
             .enter()
             .append('text')
             .attr('class', 'qstate')
@@ -157,7 +156,7 @@ jQuery(function ($) {
         var svg = d3.select(svgSelector);
 
         svg.selectAll('.qstate')
-            .data(dataSet, function (item) { return item.key; })
+            .data(dataSet, function (item) { return item.basisState; })
             .transition()
             .duration(options.duration)
             .attr('opacity', computeOpacity);
