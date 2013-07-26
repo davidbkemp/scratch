@@ -53,7 +53,7 @@ jQuery(function ($) {
 
     function renderStateLabels(svgSelector, dataSet) {
         var maxRadius = $(svgSelector).data('maxRadius');
-        var numBits = Math.round(Math.log(dataSet.length)/Math.LOG2E);
+        var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
         var maxDiameter = 2 * maxRadius;
 
         d3.select(svgSelector).selectAll('.qstate')
