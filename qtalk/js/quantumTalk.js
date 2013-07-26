@@ -53,6 +53,7 @@ jQuery(function ($) {
 
     function renderStateLabels(svgSelector, dataSet) {
         var maxRadius = $(svgSelector).data('maxRadius');
+        var numBits = $(svgSelector).data('numBits');
         var maxDiameter = 2 * maxRadius;
 
         d3.select(svgSelector).selectAll('.qstate')
@@ -66,7 +67,7 @@ jQuery(function ($) {
             })
             .attr('opacity', computeOpacity)
             .text(function(d) {
-                return asBinary(d.basisState, Math.round(Math.log(dataSet.length)/Math.log(2)));
+                return asBinary(d.basisState, numBits);
             });
     }
 
@@ -136,11 +137,11 @@ jQuery(function ($) {
         options = options || {};
         dataSet = transformToAmplitudesWithKeys(dataSet, options.keys);
         var svgHeight = options.height != null ? options.height : 400;
-        var bitCount = dataSet.length;
-        var maxDiameter = svgHeight / bitCount;
+        var numBits = Math.round(Math.log(dataSet.length)/Math.log(2));
+        var maxDiameter = svgHeight / dataSet.length;
         var maxRadius = maxDiameter / 2;
 
-        $(svgSelector).data('bitCount', bitCount);
+        $(svgSelector).data('numBits', numBits);
         $(svgSelector).data('maxRadius', maxRadius);
 
         renderStateLabels(svgSelector, dataSet);
