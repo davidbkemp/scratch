@@ -175,11 +175,9 @@ jQuery(function ($) {
     function determineNewKeyMappingForSingleBitOperator(initialState, initialKeyMapping, operation) {
         var newKeyMapping = [];
         var numBits = initialState.numBits();
-        var numberOfBasisStates = 1 << numBits;
-        for (var i = 0; i < numberOfBasisStates; i++) {
-            var isolatedState = [];
-            isolatedState[i] = initialState.amplitude(i);
-            var newState = operation(new jsqubits.QState(numBits, isolatedState));
+        for (var i = 0; i < initialKeyMapping.length; i++) {
+            var newState = operation(jsqubits(asBinary(i, numBits)));
+            // assume for now that each state is mapped to a single new state.
             newState.each(function (stateWithAmplitude) {
                 newKeyMapping[stateWithAmplitude.index] = initialKeyMapping[i];
             });
@@ -254,8 +252,8 @@ jQuery(function ($) {
         2, [
         jsqubits.complex(0,1).multiply(0.7),
         jsqubits.complex(-1,0),
-        jsqubits.complex(Math.sqrt(0.5),Math.sqrt(0.5)).multiply(0.5),
-        jsqubits.complex(Math.sqrt(0.5),-Math.sqrt(0.5)).multiply(0.8)
+        jsqubits.complex(1,1).multiply(0.35),
+        jsqubits.complex(1,-1).multiply(0.56)
         ]
     ).normalize();
 
