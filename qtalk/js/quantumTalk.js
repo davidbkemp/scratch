@@ -257,6 +257,20 @@ jQuery(function ($) {
 
     renderQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true });
 
+    $('#bitFlipNotOperatorBit1').click(function () {
+        for(var i=0; i<bitFlippingNotState.length; i++) {
+            bitFlippingNotState[i].basisState = bitFlippingNotState[i].basisState ^ 2;
+        }
+        renderQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true });
+    });
+    
+    $('#bitFlipNotOperatorBit0').click(function () {
+        for(var i=0; i<bitFlippingNotState.length; i++) {
+            bitFlippingNotState[i].basisState = bitFlippingNotState[i].basisState ^ 1;
+        }
+        renderQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true });
+    });
+    
     var notOperatorExampleState = new jsqubits.QState(
         2, [
         jsqubits.complex(0,1).multiply(0.7),
@@ -288,4 +302,3 @@ jQuery(function ($) {
     renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: 0}], { showPhases: true, height: 150 });
 
 });
-
