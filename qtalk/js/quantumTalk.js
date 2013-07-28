@@ -75,7 +75,7 @@ jQuery(function ($) {
     function amplitudeCircle(maxRadius, dataElement) {
         return {
             cx: maxRadius + 1.3 * textWidth,
-            cy: maxRadius * (1 + 2 * dataElement.basisState),
+            cy: maxRadius * (1 + 2 * dataElement.seq),
             radius: maxRadius * dataElement.magnitude
         };
     }
