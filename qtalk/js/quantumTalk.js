@@ -39,7 +39,7 @@ jQuery(function ($) {
         keys = keys || [];
         return _.map(data, function(item, index) {
             var result = _.clone(item);
-            result.key = keys[item.basisState] || index;
+            result.key = (keys[item.basisState] == null) ? index : keys[item.basisState];
             return result;
         });
     }
