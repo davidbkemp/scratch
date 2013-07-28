@@ -18,7 +18,7 @@ jQuery(function ($) {
             var jsqubitsAmplitude = qstate.amplitude(i);
             var magnitude = jsqubitsAmplitude.magnitude();
             var phase = jsqubitsAmplitude.phase();
-            result[i] = {magnitude: magnitude, phase: phase, basisState: i};
+            result[i] = {magnitude: magnitude, phase: phase, basisState: i, seq: i};
         }
         return result;
     }
@@ -30,6 +30,7 @@ jQuery(function ($) {
             result.magnitude = result.magnitude || 0;
             result.phase = result.phase || 0;
             result.basisState = result.basisState || index;
+            result.seq = result.seq || index;
             return result;
         });
     }
@@ -57,13 +58,13 @@ jQuery(function ($) {
         var maxDiameter = 2 * maxRadius;
 
         d3.select(svgSelector).selectAll('.qstate')
-            .data(dataSet, function (item) { return item.basisState; })
+            .data(dataSet, function (item) { return item.seq; })
             .enter()
             .append('text')
             .attr('class', 'qstate')
             .attr('x', 0)
             .attr('y', function(d) {
-                return d.basisState * maxDiameter + maxRadius + (textHeight / 3);
+                return d.seq * maxDiameter + maxRadius + (textHeight / 3);
             })
             .attr('opacity', computeOpacity)
             .text(function(d) {
@@ -155,7 +156,7 @@ jQuery(function ($) {
         var svg = d3.select(svgSelector);
 
         svg.selectAll('.qstate')
-            .data(dataSet, function (item) { return item.basisState; })
+            .data(dataSet, function (item) { return item.seq; })
             .transition()
             .duration(options.duration)
             .attr('opacity', computeOpacity);
