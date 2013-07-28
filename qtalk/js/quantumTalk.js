@@ -263,6 +263,7 @@ jQuery(function ($) {
     $('#bitFlipNotOperatorBit1').click(function () {
         for(var i=0; i<bitFlippingNotState.length; i++) {
             bitFlippingNotState[i].basisState = bitFlippingNotState[i].basisState ^ 2;
+alert('seq: ' + bitFlippingNotState[i].seq + ', state: ' + bitFlippingNotState[i].basisState);
         }
         renderQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true });
     });
