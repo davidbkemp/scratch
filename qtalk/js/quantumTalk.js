@@ -248,6 +248,15 @@ jQuery(function ($) {
             });
     });
 
+    var bitFlippingNotState = [
+            {magnitude: 0.7, phase: Math.PI / 4, basisState: 0, seq: 0},
+            {magnitude: 0.4, phase: -Math.PI / 8, basisState: 1, seq: 1},
+            {magnitude: 0.9, phase: -1, basisState: 2, seq: 2},
+            {magnitude: 0.6, phase: 3 * Math.PI / 4, basisState: 3, seq: 3},
+    ];
+
+    renderQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true });
+
     var notOperatorExampleState = new jsqubits.QState(
         2, [
         jsqubits.complex(0,1).multiply(0.7),
