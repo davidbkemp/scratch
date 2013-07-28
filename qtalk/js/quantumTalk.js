@@ -57,10 +57,9 @@ jQuery(function ($) {
         var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
         var maxDiameter = 2 * maxRadius;
 
-        var stateLabels = d3.select(svgSelector).selectAll('.qstate')
-            .data(dataSet, function (item) { return item.seq; });
-
-        stateLabels.enter()
+        d3.select(svgSelector).selectAll('.qstate')
+            .data(dataSet, function (item) { return item.seq; })
+            .enter()
             .append('text')
             .attr('class', 'qstate')
             .attr('x', 0)
@@ -71,8 +70,6 @@ jQuery(function ($) {
             .text(function(d) {
                 return asBinary(d.basisState, numBits);
             });
-
-        stateLabels.exit().remove();
     }
 
     function amplitudeCircle(maxRadius, dataElement) {
@@ -155,6 +152,7 @@ jQuery(function ($) {
         options.duration = options.duration != null ? options.duration : transitionDurations;
         dataSet = transformToAmplitudesWithKeys(dataSet, options.keys);
         var maxRadius = $(svgSelector).data('maxRadius');
+        var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
 
         var svg = d3.select(svgSelector);
 
@@ -162,7 +160,10 @@ jQuery(function ($) {
             .data(dataSet, function (item) { return item.seq; })
             .transition()
             .duration(options.duration)
-            .attr('opacity', computeOpacity);
+            .attr('opacity', computeOpacity)
+            .text(function(d) {
+                return asBinary(d.basisState, numBits);
+            });
 
         svg.selectAll('.amplitude')
             .data(dataSet, function (item) { return item.key; })
@@ -263,16 +264,15 @@ jQuery(function ($) {
     $('#bitFlipNotOperatorBit1').click(function () {
         for(var i=0; i<bitFlippingNotState.length; i++) {
             bitFlippingNotState[i].basisState = bitFlippingNotState[i].basisState ^ 2;
-alert('seq: ' + bitFlippingNotState[i].seq + ', state: ' + bitFlippingNotState[i].basisState);
         }
-        renderQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true });
+        transitionQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true, duration: 0 });
     });
     
     $('#bitFlipNotOperatorBit0').click(function () {
         for(var i=0; i<bitFlippingNotState.length; i++) {
             bitFlippingNotState[i].basisState = bitFlippingNotState[i].basisState ^ 1;
         }
-        renderQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true });
+        transitionQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true, duration: 0 });
     });
     
     var notOperatorExampleState = new jsqubits.QState(
