@@ -29,8 +29,8 @@ jQuery(function ($) {
             var result = (item == null || typeof item === 'number') ? {magnitude: item} : _.clone(item);
             result.magnitude = result.magnitude || 0;
             result.phase = result.phase || 0;
-            result.basisState = result.basisState || index;
-            result.seq = result.seq || index;
+            result.basisState = (result.basisState == null) ? index : result.basisState;
+            result.seq = (result.seq == null) ? index : result.seq;
             return result;
         });
     }
