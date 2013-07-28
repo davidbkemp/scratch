@@ -57,9 +57,10 @@ jQuery(function ($) {
         var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
         var maxDiameter = 2 * maxRadius;
 
-        d3.select(svgSelector).selectAll('.qstate')
-            .data(dataSet, function (item) { return item.seq; })
-            .enter()
+        var stateLabels = d3.select(svgSelector).selectAll('.qstate')
+            .data(dataSet, function (item) { return item.seq; });
+
+        stateLabels.enter()
             .append('text')
             .attr('class', 'qstate')
             .attr('x', 0)
@@ -70,6 +71,8 @@ jQuery(function ($) {
             .text(function(d) {
                 return asBinary(d.basisState, numBits);
             });
+
+        stateLabels.exit().remove();
     }
 
     function amplitudeCircle(maxRadius, dataElement) {
