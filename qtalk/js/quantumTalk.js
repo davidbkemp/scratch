@@ -50,11 +50,9 @@ jQuery(function ($) {
     }
 
     var textHeight =  42;
-    var textWidth =  58;
+    var textWidth =  19;
 
-    function renderStateLabels(svgSelector, dataSet) {
-        var maxRadius = $(svgSelector).data('maxRadius');
-        var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
+    function renderStateLabels(svgSelector, dataSet, maxRadius, numBits) {
         var maxDiameter = 2 * maxRadius;
 
         d3.select(svgSelector).selectAll('.qstate')
@@ -63,43 +61,32 @@ jQuery(function ($) {
             .append('text')
             .attr('class', 'qstate')
             .attr('x', 0)
-            .attr('y', function(d) {
-                return d.seq * maxDiameter + maxRadius + (textHeight / 3);
+            .attr('y', function(dataElement) {
+                return dataElement.seq * maxDiameter + maxRadius + (textHeight / 3);
             })
             .attr('opacity', computeOpacity)
-            .text(function(d) {
-                return asBinary(d.basisState, numBits);
+            .text(function(dataElement) {
+                return asBinary(dataElement.basisState, numBits);
             });
     }
 
-    function amplitudeCircle(maxRadius, dataElement) {
-        return {
-            cx: maxRadius + 1.3 * textWidth,
-            cy: maxRadius * (1 + 2 * dataElement.seq),
-            radius: maxRadius * dataElement.magnitude
-        };
-    }
-
-    function createTransformString(maxRadius, dataElement) {
-        var circleData = amplitudeCircle(maxRadius, dataElement);
-        var x = circleData.cx;
-        var y = circleData.cy;
+    function createTransformString(maxRadius, numBits, dataElement) {
+        var x = maxRadius + (numBits + 1) * textWidth;
+        var y = maxRadius * (1 + 2 * dataElement.seq);
         var degrees = 180 * dataElement.phase / Math.PI;
         var scale = dataElement.magnitude;
         return 'translate(' + x + ',' + y + ') scale(' + scale + ') rotate(' + degrees + ')';
     }
 
-    function renderAmplitudes(svgSelector, dataSet, options) {
-
-        var maxRadius = $(svgSelector).data('maxRadius');
+    function renderAmplitudes(svgSelector, dataSet, maxRadius, numBits, options) {
 
         var amplitudeGroup = d3.select(svgSelector).selectAll('.amplitude')
             .data(dataSet, function (item) { return item.key; })
             .enter()
             .append('g')
             .attr('class', 'amplitude')
-            .attr('transform', function(d) {
-                return createTransformString(maxRadius, d);
+            .attr('transform', function(dataElement) {
+                return createTransformString(maxRadius, numBits, dataElement);
             });
 
         amplitudeGroup
@@ -121,7 +108,7 @@ jQuery(function ($) {
             amplitudeGroup
                 .append("polygon")
                 .attr('class', 'phaseLineEnd')
-                .attr('points', function(d) {
+                .attr('points', function(dataElement) {
                     var headLength = maxRadius/4;
                     var x1 = maxRadius - headLength;
                     var y1 = -headLength/2;
@@ -140,11 +127,13 @@ jQuery(function ($) {
         var svgHeight = options.height != null ? options.height : 400;
         var maxDiameter = svgHeight / dataSet.length;
         var maxRadius = maxDiameter / 2;
+        var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
 
         $(svgSelector).data('maxRadius', maxRadius);
+        $(svgSelector).data('numBits', numBits);
 
-        renderStateLabels(svgSelector, dataSet);
-        renderAmplitudes(svgSelector, dataSet, options);
+        renderStateLabels(svgSelector, dataSet, maxRadius, numBits);
+        renderAmplitudes(svgSelector, dataSet, maxRadius, numBits, options);
     }
 
     function transitionQState(svgSelector, dataSet, options) {
@@ -152,7 +141,7 @@ jQuery(function ($) {
         options.duration = options.duration != null ? options.duration : transitionDurations;
         dataSet = transformToAmplitudesWithKeys(dataSet, options.keys);
         var maxRadius = $(svgSelector).data('maxRadius');
-        var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
+        var numBits = $(svgSelector).data('numBits');
 
         var svg = d3.select(svgSelector);
 
@@ -161,16 +150,16 @@ jQuery(function ($) {
             .transition()
             .duration(options.duration)
             .attr('opacity', computeOpacity)
-            .text(function(d) {
-                return asBinary(d.basisState, numBits);
+            .text(function(dataElement) {
+                return asBinary(dataElement.basisState, numBits);
             });
 
         svg.selectAll('.amplitude')
             .data(dataSet, function (item) { return item.key; })
             .transition()
             .duration(options.duration)
-            .attr('transform', function(d) {
-                return createTransformString(maxRadius, d);
+            .attr('transform', function(dataElement) {
+                return createTransformString(maxRadius, numBits, dataElement);
             });
 
     }
