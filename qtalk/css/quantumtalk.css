@@ -37,3 +37,7 @@ button {
     width: 450px;
     height: 400px;
 }
+
+.qstateBitLabelsSubscript {
+    font-size: 0.4em;
+}

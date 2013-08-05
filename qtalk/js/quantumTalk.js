@@ -50,7 +50,7 @@ jQuery(function ($) {
     }
 
     var textHeight =  42;
-    var textWidth =  19;
+    var textWidth =  35;
 
     function renderStateLabels(svgSelector, dataSet, maxRadius, numBits) {
         var maxDiameter = 2 * maxRadius;
@@ -58,16 +58,19 @@ jQuery(function ($) {
         d3.select(svgSelector).selectAll('.qstate')
             .data(dataSet, function (item) { return item.seq; })
             .enter()
-            .append('text')
+            .append('g')
             .attr('class', 'qstate')
-            .attr('x', 0)
-            .attr('y', function(dataElement) {
-                return dataElement.seq * maxDiameter + maxRadius + (textHeight / 3);
+            .attr('transform', function(dataElement) {
+                return 'translate(0,' + (dataElement.seq * maxDiameter + maxRadius + (textHeight / 3)) + ')';
             })
             .attr('opacity', computeOpacity)
-            .text(function(dataElement) {
-                return asBinary(dataElement.basisState, numBits);
-            });
+            .selectAll('.qstateBit')
+            .data(function(dataElement) { return asBinary(dataElement.basisState, numBits).split(''); })
+            .enter()
+            .append('text')
+            .attr('class', 'qstateBit')
+            .attr('x', function (dataElement, index) {return index * textWidth;})
+            .text(function(dataElement) { return dataElement; });
     }
 
     function createTransformString(maxRadius, numBits, dataElement) {
@@ -121,10 +124,26 @@ jQuery(function ($) {
         }
     }
 
+    function createSections(svgSelector) {
+        var svg = d3.select(svgSelector);
+        svg.append('g').attr('class', 'qstateBitLabels').attr('transform', 'translate(0,' + textHeight + ')');
+        svg.append('g').attr('class', 'qstateBody').attr('transform', 'translate(0,' + (1.3 * textHeight) + ')');
+    }
+
+
+    function renderBitLabels(svgSelector, numBits) {
+        var svg = d3.select(svgSelector);
+        for(var bit = (numBits - 1); bit >= 0; bit--) {
+            var bitLabel = svg.append('text').attr('x', (numBits - bit - 1) * textWidth);
+            bitLabel.append('tspan').text('b').attr('y', 0);
+            bitLabel.append('tspan').attr('class', 'qstateBitLabelsSubscript').attr('y', textHeight/8).text(bit);
+        }
+    }
+
     function renderQState(svgSelector, dataSet, options) {
         options = options || {};
         dataSet = transformToAmplitudesWithKeys(dataSet, options.keys);
-        var svgHeight = options.height != null ? options.height : 400;
+        var svgHeight = options.height != null ? options.height : 350;
         var maxDiameter = svgHeight / dataSet.length;
         var maxRadius = maxDiameter / 2;
         var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
@@ -132,8 +151,10 @@ jQuery(function ($) {
         $(svgSelector).data('maxRadius', maxRadius);
         $(svgSelector).data('numBits', numBits);
 
-        renderStateLabels(svgSelector, dataSet, maxRadius, numBits);
-        renderAmplitudes(svgSelector, dataSet, maxRadius, numBits, options);
+        createSections(svgSelector);
+        renderBitLabels(svgSelector + ' .qstateBitLabels', numBits);
+        renderStateLabels(svgSelector + ' .qstateBody', dataSet, maxRadius, numBits);
+        renderAmplitudes(svgSelector + ' .qstateBody', dataSet, maxRadius, numBits, options);
     }
 
     function transitionQState(svgSelector, dataSet, options) {
@@ -143,16 +164,18 @@ jQuery(function ($) {
         var maxRadius = $(svgSelector).data('maxRadius');
         var numBits = $(svgSelector).data('numBits');
 
-        var svg = d3.select(svgSelector);
+        var svg = d3.select(svgSelector + ' .qstateBody');
 
         svg.selectAll('.qstate')
             .data(dataSet, function (item) { return item.seq; })
             .transition()
             .duration(options.duration)
-            .attr('opacity', computeOpacity)
-            .text(function(dataElement) {
-                return asBinary(dataElement.basisState, numBits);
-            });
+            .attr('opacity', computeOpacity);
+        svg.selectAll('.qstate')
+            .data(dataSet, function (item) { return item.seq; })
+            .selectAll('.qstateBit')
+            .data(function(dataElement) { return asBinary(dataElement.basisState, numBits).split(''); })
+            .text(function(dataElement) { return dataElement; });
 
         svg.selectAll('.amplitude')
             .data(dataSet, function (item) { return item.key; })
