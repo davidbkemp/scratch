@@ -49,6 +49,10 @@ jQuery(function ($) {
         return addKeysToAmplitudes(data, keys);
     }
 
+    function computeStateLabelTransform(dataElement, maxRadius, textHeight) {
+        return 'translate(0,' + (2 * dataElement.seq * maxRadius + maxRadius + (textHeight / 3)) + ')';
+    }
+
     var textHeight =  42;
     var textWidth =  35;
 
@@ -61,7 +65,7 @@ jQuery(function ($) {
             .append('g')
             .attr('class', 'qstate')
             .attr('transform', function(dataElement) {
-                return 'translate(0,' + (dataElement.seq * maxDiameter + maxRadius + (textHeight / 3)) + ')';
+                return computeStateLabelTransform(dataElement, maxRadius, textHeight);
             })
             .attr('opacity', computeOpacity)
             .selectAll('.qstateBit')
@@ -73,7 +77,7 @@ jQuery(function ($) {
             .text(function(dataElement) { return dataElement; });
     }
 
-    function createTransformString(maxRadius, numBits, dataElement) {
+    function createAmplitudeGraphicTransform(maxRadius, numBits, dataElement) {
         var x = maxRadius + (numBits + 1) * textWidth;
         var y = maxRadius * (1 + 2 * dataElement.seq);
         var degrees = 180 * dataElement.phase / Math.PI;
@@ -89,7 +93,7 @@ jQuery(function ($) {
             .append('g')
             .attr('class', 'amplitude')
             .attr('transform', function(dataElement) {
-                return createTransformString(maxRadius, numBits, dataElement);
+                return createAmplitudeGraphicTransform(maxRadius, numBits, dataElement);
             });
 
         amplitudeGroup
@@ -167,10 +171,13 @@ jQuery(function ($) {
         var svg = d3.select(svgSelector + ' .qstateBody');
 
         svg.selectAll('.qstate')
-            .data(dataSet, function (item) { return item.seq; })
+            .data(dataSet, function (item) { return item.key; })
             .transition()
             .duration(options.duration)
-            .attr('opacity', computeOpacity);
+            .attr('opacity', computeOpacity)
+            .attr('transform', function(dataElement) {
+                return computeStateLabelTransform(dataElement, maxRadius, textHeight);
+            })
         svg.selectAll('.qstate')
             .data(dataSet, function (item) { return item.seq; })
             .selectAll('.qstateBit')
@@ -182,7 +189,7 @@ jQuery(function ($) {
             .transition()
             .duration(options.duration)
             .attr('transform', function(dataElement) {
-                return createTransformString(maxRadius, numBits, dataElement);
+                return createAmplitudeGraphicTransform(maxRadius, numBits, dataElement);
             });
 
     }
