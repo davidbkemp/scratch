@@ -337,7 +337,13 @@ jQuery(function ($) {
 
       $('#CNot10').click(function () {
            keys = determineNewKeyMappingForSingleBitOperator(state, keys, function (state) {return state.cnot(1,0);});
-           state = state.not(0);
+           state = state.cnot(1,0);
+           transitionQState('#CNotOperator', state, { showPhases: true, keys: keys });
+        });
+
+      $('#CNot01').click(function () {
+           keys = determineNewKeyMappingForSingleBitOperator(state, keys, function (state) {return state.cnot(0,1);});
+           state = state.cnot(0,1);
            transitionQState('#CNotOperator', state, { showPhases: true, keys: keys });
         });
     })();
