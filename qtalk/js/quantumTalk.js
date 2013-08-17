@@ -321,6 +321,22 @@ jQuery(function ($) {
         transitionQState('#notOperator', notOperatorExampleState, { showPhases: true, keys: notOperatorExampleKeys });
     });
 
+    (function () {
+        var state = new jsqubits.QState(
+          2, [
+          jsqubits.complex(0,1).multiply(0.7),
+          jsqubits.complex(-1,0),
+          jsqubits.complex(1,1).multiply(0.35),
+          jsqubits.complex(1,-1).multiply(0.56)
+          ]
+      ).normalize();
+
+      var keys = ['k0', 'k1', 'k2', 'k3'];
+
+      renderQState('#cnotOperator', state, { showPhases: true, keys: keys });
+
+    })();
+
     renderQState("#hadamard0", [ {magnitude: 1, phase: 0}, 0], { showPhases: true, height: 150 });
     renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: 0}], { showPhases: true, height: 150 });
 
