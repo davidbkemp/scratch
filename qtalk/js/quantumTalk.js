@@ -333,7 +333,7 @@ jQuery(function ($) {
 
       var keys = ['k0', 'k1', 'k2', 'k3'];
 
-      renderQState('#cnotOperator', state, { showPhases: true, keys: keys });
+      renderQState('#CNotOperator', state, { showPhases: true, keys: keys });
 
     })();
 
