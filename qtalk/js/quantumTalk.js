@@ -147,7 +147,7 @@ jQuery(function ($) {
     function renderQState(svgSelector, dataSet, options) {
         options = options || {};
         dataSet = transformToAmplitudesWithKeys(dataSet, options.keys);
-        var svgHeight = options.height != null ? options.height : 350;
+        var svgHeight = options.height != null ? options.height : 330;
         var maxDiameter = svgHeight / dataSet.length;
         var maxRadius = maxDiameter / 2;
         var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
