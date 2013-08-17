@@ -335,6 +335,11 @@ jQuery(function ($) {
 
       renderQState('#CNotOperator', state, { showPhases: true, keys: keys });
 
+      $('#CNot10').click(function () {
+           keys = determineNewKeyMappingForSingleBitOperator(state, keys, function (state) {return state.cnot(1,0);});
+           state = state.not(0);
+           transitionQState('#CNotOperator', state, { showPhases: true, keys: keys });
+        });
     })();
 
     renderQState("#hadamard0", [ {magnitude: 1, phase: 0}, 0], { showPhases: true, height: 150 });
