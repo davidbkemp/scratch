@@ -85,7 +85,12 @@ jQuery(function ($) {
         return 'translate(' + x + ',' + y + ') scale(' + scale + ') rotate(' + degrees + ')';
     }
 
-    function appendArrow(d3Selection, length, lineClass, headClass) {
+    function appendArrow(d3Selection, options) {
+
+        var length = options.length;
+        var lineClass = options.lineClass;
+        var headClass = options.headClass;
+
         d3Selection
                 .append("line")
                 .attr('class', lineClass)
@@ -94,13 +99,13 @@ jQuery(function ($) {
                 .attr('x2', length)
                 .attr('y2', 0);
 
-                    var headLength = length/4;
-                    var x1 = length - headLength;
-                    var y1 = -headLength/2;
-                    var x2 = x1;
-                    var y2 = y1 + headLength;
-                    var x3 = length;
-                    var y3 = 0;
+        var headLength = length/4;
+        var x1 = length - headLength;
+        var y1 = -headLength/2;
+        var x2 = x1;
+        var y2 = y1 + headLength;
+        var x3 = length;
+        var y3 = 0;
 
         d3Selection
                 .append("polygon")
@@ -127,7 +132,7 @@ jQuery(function ($) {
             .attr("r",  maxRadius);
 
         if (options.showPhases) {
-            appendArrow(amplitudeGroup, maxRadius, 'phaseLine', 'phaseLineEnd');
+            appendArrow(amplitudeGroup, {length: maxRadius, lineClass: 'phaseLine', headClass: 'phaseLineEnd'});
         }
     }
 
