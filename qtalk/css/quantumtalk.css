@@ -33,6 +33,16 @@ button {
     fill: red;
 }
 
+.basicLine {
+    stroke: black;
+    stroke-width: 2px;
+}
+
+.basicLineEnd {
+    fill: black;
+}
+
+
 .fullSizeDiagram {
     width: 450px;
     height: 400px;
