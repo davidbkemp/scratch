@@ -120,6 +120,9 @@ jQuery(function ($) {
             .enter()
             .append('g')
             .attr('class', 'amplitude')
+            .attr('data-state', function(dataElement) {
+                return dataElement.basisState;
+            })
             .attr('transform', function(dataElement) {
                 return createAmplitudeGraphicTransform(maxRadius, numBits, dataElement);
             });
@@ -360,7 +363,7 @@ jQuery(function ($) {
     renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: 0}], { showPhases: true, height: 150 });
 
     (function () {
-        var hadamard0 = d3.select('#hadamard0 .amplitude');
+        var hadamard0 = d3.select('#hadamard0 .amplitude[data-state="0"]');
         var maxRadius = $('#hadamard0').data('maxRadius');
         var arrowX = maxRadius + 2;
         var arrow0 = hadamard0.append('g');
@@ -375,7 +378,7 @@ jQuery(function ($) {
     renderQState("#hadamardN", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: Math.PI}], { showPhases: true, height: 150 });
 
     (function () {
-        var hadamard1 = d3.select('#hadamard1 .amplitude');
+        var hadamard1 = d3.select('#hadamard1 .amplitude[data-state="1"]');
         var maxRadius = $('#hadamard1').data('maxRadius');
         var arrowX = maxRadius + 2;
         var arrow0 = hadamard1.append('g');
@@ -383,7 +386,7 @@ jQuery(function ($) {
         arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
         var arrowP = hadamard1.append('g');
         appendArrow(arrowP, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
-        arrowP.attr('transform', 'rotate(45) translate(' + arrowX + ', 0)');
+        arrowP.attr('transform', 'rotate(-45) translate(' + arrowX + ', 0)');
     })();
 
 
