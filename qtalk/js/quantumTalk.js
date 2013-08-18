@@ -372,7 +372,7 @@ jQuery(function ($) {
     })();
 
     renderQState("#hadamard1", [0,  {magnitude: 1, phase: 0}], { showPhases: true, height: 150 });
-    renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: Math.PI}], { showPhases: true, height: 150 });
+    renderQState("#hadamardN", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: Math.PI}], { showPhases: true, height: 150 });
 
     (function () {
         var hadamard1 = d3.select('#hadamard1 .amplitude');
