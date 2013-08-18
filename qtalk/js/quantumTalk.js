@@ -361,14 +361,13 @@ jQuery(function ($) {
 
     (function () {
         var hadamard0 = d3.select('#hadamard0 .amplitude');
-        var maxRadius = $('#hadamard0').attr('maxRadius');
-        alert(maxRadius);
+        var maxRadius = $('#hadamard0').data('maxRadius');
         var arrowX = maxRadius + 2;
         var arrow0 = hadamard0.append('g');
         appendArrow(arrow0, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
         arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
         var arrowP = hadamard0.append('g');
         appendArrow(arrowP, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
-        arrowP.attr('transform', 'rotate(-45) translate(' + arrowX + ', 0)');
+        arrowP.attr('transform', 'rotate(-20) translate(' + arrowX + ', 0)');
     })();
 });
