@@ -359,4 +359,11 @@ jQuery(function ($) {
     renderQState("#hadamard0", [ {magnitude: 1, phase: 0}, 0], { showPhases: true, height: 150 });
     renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: 0}], { showPhases: true, height: 150 });
 
+    (function () {
+        var hadamard0 = d3.select('#hadamard0');
+        var arrow0 = hadamard0.append('g');
+        var maxRadius = $('#hadamard0').attr('maxRadius');
+        appendArrow(arrow0, {length: 2 * maxRadius, lineClass: 'phaseLine', headClass: 'phaseLineEnd'});
+        arrow.attr('transform', 'translate(' + (2*textWidth + 2*maxRadius) + ', 0)');
+    })();
 });
