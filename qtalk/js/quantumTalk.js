@@ -370,4 +370,24 @@ jQuery(function ($) {
         appendArrow(arrowP, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
         arrowP.attr('transform', 'rotate(-20) translate(' + arrowX + ', 0)');
     })();
+
+    renderQState("#hadamard1", [0,  {magnitude: 1, phase: 0}], { showPhases: true, height: 150 });
+    renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: Math.PI}], { showPhases: true, height: 150 });
+
+    (function () {
+        var hadamard1 = d3.select('#hadamard1 .amplitude');
+        var maxRadius = $('#hadamard1').data('maxRadius');
+        var arrowX = maxRadius + 2;
+        var arrow0 = hadamard1.append('g');
+        appendArrow(arrow0, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
+        arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
+        var arrowP = hadamard1.append('g');
+        appendArrow(arrowP, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
+        arrowP.attr('transform', 'rotate(-20) translate(' + arrowX + ', 0)');
+    })();
+
+
+
+
+
 });
