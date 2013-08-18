@@ -363,7 +363,8 @@ jQuery(function ($) {
         var hadamard0 = d3.select('#hadamard0');
         var arrow0 = hadamard0.append('g');
         var maxRadius = $('#hadamard0').attr('maxRadius');
-        appendArrow(arrow0, {length: 2 * maxRadius, lineClass: 'phaseLine', headClass: 'phaseLineEnd'});
-        arrow.attr('transform', 'translate(' + (2*textWidth + 2*maxRadius) + ', 0)');
+        var arrow0x =  2*textWidth + 2*maxRadius + 2;
+        appendArrow(arrow0, {length: 250 - arrow0x - 2, lineClass: 'phaseLine', headClass: 'phaseLineEnd'});
+        arrow.attr('transform', 'translate(' + arrow0x + ', 0)');
     })();
 });
