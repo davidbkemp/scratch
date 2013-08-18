@@ -365,13 +365,13 @@ jQuery(function ($) {
     (function () {
         var hadamard0 = d3.select('#hadamard0 .amplitude[data-state="0"]');
         var maxRadius = $('#hadamard0').data('maxRadius');
-        var arrowX = maxRadius + 2;
+        var arrowX = maxRadius + 5;
         var arrow0 = hadamard0.append('g');
         appendArrow(arrow0, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
         arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
         var arrowP = hadamard0.append('g');
         appendArrow(arrowP, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
-        arrowP.attr('transform', 'rotate(40) translate(' + arrowX + ', 0)');
+        arrowP.attr('transform', 'rotate(30) translate(' + arrowX + ', 0)');
     })();
 
     renderQState("#hadamard1", [0,  {magnitude: 1, phase: 0}], { showPhases: true, height: 150 });
@@ -380,13 +380,13 @@ jQuery(function ($) {
     (function () {
         var hadamard1 = d3.select('#hadamard1 .amplitude[data-state="1"]');
         var maxRadius = $('#hadamard1').data('maxRadius');
-        var arrowX = maxRadius + 2;
+        var arrowX = maxRadius + 5;
         var arrow0 = hadamard1.append('g');
         appendArrow(arrow0, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
         arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
         var arrowP = hadamard1.append('g');
         appendArrow(arrowP, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
-        arrowP.attr('transform', 'rotate(-40) translate(' + arrowX + ', 0)');
+        arrowP.attr('transform', 'rotate(-30) translate(' + arrowX + ', 0)');
     })();
 
 
