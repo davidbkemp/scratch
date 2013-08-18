@@ -85,6 +85,29 @@ jQuery(function ($) {
         return 'translate(' + x + ',' + y + ') scale(' + scale + ') rotate(' + degrees + ')';
     }
 
+    function appendArrow(d3Selection, length, lineClass, headClass) {
+        d3Selection
+                .append("line")
+                .attr('class', lineClass)
+                .attr('x1', 0)
+                .attr('y1', 0)
+                .attr('x2', length)
+                .attr('y2', 0);
+
+                    var headLength = length/4;
+                    var x1 = length - headLength;
+                    var y1 = -headLength/2;
+                    var x2 = x1;
+                    var y2 = y1 + headLength;
+                    var x3 = length;
+                    var y3 = 0;
+
+        d3Selection
+                .append("polygon")
+                .attr('class', headClass)
+                .attr('points', '' + x1 + "," + y1 + " " + x2 + "," + y2 + " " +  x3 + "," + y3);
+    }
+
     function renderAmplitudes(svgSelector, dataSet, maxRadius, numBits, options) {
 
         var amplitudeGroup = d3.select(svgSelector).selectAll('.amplitude')
@@ -104,27 +127,7 @@ jQuery(function ($) {
             .attr("r",  maxRadius);
 
         if (options.showPhases) {
-            amplitudeGroup
-                .append("line")
-                .attr('class', 'phaseLine')
-                .attr('x1', 0)
-                .attr('y1', 0)
-                .attr('x2', maxRadius)
-                .attr('y2', 0);
-
-            amplitudeGroup
-                .append("polygon")
-                .attr('class', 'phaseLineEnd')
-                .attr('points', function(dataElement) {
-                    var headLength = maxRadius/4;
-                    var x1 = maxRadius - headLength;
-                    var y1 = -headLength/2;
-                    var x2 = x1;
-                    var y2 = y1 + headLength;
-                    var x3 = maxRadius;
-                    var y3 = 0;
-                    return x1 + "," + y1 + " " + x2 + "," + y2 + " " +  x3 + "," + y3
-                });
+            appendArrow(amplitudeGroup, maxRadius, 'phaseLine', 'phaseLineEnd');
         }
     }
 
