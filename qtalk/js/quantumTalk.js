@@ -360,11 +360,14 @@ jQuery(function ($) {
     renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: 0}], { showPhases: true, height: 150 });
 
     (function () {
-        var hadamard0 = d3.select('#hadamard0');
-        var arrow0 = hadamard0.append('g');
+        var hadamard0 = d3.select('#hadamard0 .amplitude');
         var maxRadius = $('#hadamard0').attr('maxRadius');
-        var arrow0x =  2*textWidth + 2*maxRadius + 2;
-        appendArrow(arrow0, {length: 250 - arrow0x - 2, lineClass: 'phaseLine', headClass: 'phaseLineEnd'});
-        arrow.attr('transform', 'translate(' + arrow0x + ', 0)');
+        var arrowX = maxRadius + 2;
+        var arrow0 = hadamard0.append('g');
+        appendArrow(arrow0, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
+        arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
+        var arrowP = hadamard0.append('g');
+        appendArrow(arrowP, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
+        arrowP.attr('transform', 'rotate(-45) translate(' + arrowX + ', 0)');
     })();
 });
