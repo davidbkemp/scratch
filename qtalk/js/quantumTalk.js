@@ -371,7 +371,7 @@ jQuery(function ($) {
         arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
         var arrowP = hadamard0.append('g');
         appendArrow(arrowP, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
-        arrowP.attr('transform', 'rotate(45) translate(' + arrowX + ', 0)');
+        arrowP.attr('transform', 'rotate(40) translate(' + arrowX + ', 0)');
     })();
 
     renderQState("#hadamard1", [0,  {magnitude: 1, phase: 0}], { showPhases: true, height: 150 });
@@ -386,7 +386,7 @@ jQuery(function ($) {
         arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
         var arrowP = hadamard1.append('g');
         appendArrow(arrowP, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
-        arrowP.attr('transform', 'rotate(-45) translate(' + arrowX + ', 0)');
+        arrowP.attr('transform', 'rotate(40) translate(' + arrowX + ', 0)');
     })();
 
 
