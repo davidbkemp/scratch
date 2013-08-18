@@ -370,7 +370,7 @@ jQuery(function ($) {
         appendArrow(arrow0, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
         arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
         var arrowP = hadamard0.append('g');
-        appendArrow(arrowP, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
+        appendArrow(arrowP, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
         arrowP.attr('transform', 'rotate(45) translate(' + arrowX + ', 0)');
     })();
 
@@ -385,7 +385,7 @@ jQuery(function ($) {
         appendArrow(arrow0, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
         arrow0.attr('transform', 'translate(' + arrowX + ', 0)');
         var arrowP = hadamard1.append('g');
-        appendArrow(arrowP, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
+        appendArrow(arrowP, {length: 80, lineClass: 'basicLine', headClass: 'basicLineEnd'});
         arrowP.attr('transform', 'rotate(-45) translate(' + arrowX + ', 0)');
     })();
 
