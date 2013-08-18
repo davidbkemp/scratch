@@ -362,6 +362,7 @@ jQuery(function ($) {
     (function () {
         var hadamard0 = d3.select('#hadamard0 .amplitude');
         var maxRadius = $('#hadamard0').attr('maxRadius');
+        alert(maxRadius);
         var arrowX = maxRadius + 2;
         var arrow0 = hadamard0.append('g');
         appendArrow(arrow0, {length: 40, lineClass: 'basicLine', headClass: 'basicLineEnd'});
