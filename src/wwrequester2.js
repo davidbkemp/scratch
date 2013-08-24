@@ -1,7 +1,7 @@
 (function($) {
 
 function handleClick() {
-    alert($('#input').value);
+    alert($('#input').val());
 
     var worker = new Worker('wwworker.js');
 
@@ -9,7 +9,7 @@ function handleClick() {
         alert('Worker said: ' + e.data);
      }, false);
 
-     worker.postMessage($('#input').value);
+     worker.postMessage($('#input').val());
 }
 
 $(function(){
