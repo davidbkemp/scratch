@@ -3,7 +3,7 @@
 function handleClick() {
     alert($('#input').val());
 
-    var worker = new Worker('src/wwworker.js');
+    var worker = new Worker('src/wwworker5.js');
 
     alert('created new worker')
     worker.addEventListener('message', function(e) {
