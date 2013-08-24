@@ -1,9 +1,9 @@
 (function($) {
 
 function handleClick() {
-    alert($('#input').val());
+    alert('Sending' + $('#input').val());
 
-    var worker = new Worker('src/wwworker5.js');
+    var worker = new Worker('src/wwworker6.js');
 
     alert('created new worker')
     worker.addEventListener('message', function(e) {
