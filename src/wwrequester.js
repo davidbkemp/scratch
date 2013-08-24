@@ -1,7 +1,8 @@
 (function($) {
 
 function handleClick() {
-    alert($(this).value());
+    alert('clicked');
+    alert($('#input').value);
 }
 
 $(function(){
