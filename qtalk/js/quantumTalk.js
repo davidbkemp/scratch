@@ -390,7 +390,7 @@ jQuery(function ($) {
     })();
 
 
-
+     renderQState('#hadamardOperator0', jsqubits('0'), { showPhases: true, height: 150 });
 
 
 });
