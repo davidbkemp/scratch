@@ -53,8 +53,8 @@ jQuery(function ($) {
         return 'translate(0,' + (2 * dataElement.seq * maxRadius + maxRadius + (textHeight / 3)) + ')';
     }
 
-    var textHeight =  42;
-    var textWidth =  35;
+    var textHeight = 42;
+    var textWidth = 35;
 
     function renderStateLabels(svgSelector, dataSet, maxRadius, numBits) {
         var maxDiameter = 2 * maxRadius;
@@ -92,25 +92,25 @@ jQuery(function ($) {
         var headClass = options.headClass;
 
         d3Selection
-                .append("line")
-                .attr('class', lineClass)
-                .attr('x1', 0)
-                .attr('y1', 0)
-                .attr('x2', length)
-                .attr('y2', 0);
+            .append("line")
+            .attr('class', lineClass)
+            .attr('x1', 0)
+            .attr('y1', 0)
+            .attr('x2', length)
+            .attr('y2', 0);
 
-        var headLength = length/4;
-        var x1 = length - headLength;
-        var y1 = -headLength/2;
-        var x2 = x1;
-        var y2 = y1 + headLength;
-        var x3 = length;
-        var y3 = 0;
+        var headLength = length / 4;
+        var x1 = length - headLength;
+        var y1 = -headLength / 2;
+        var x2 = x1;
+        var y2 = y1 + headLength;
+        var x3 = length;
+        var y3 = 0;
 
         d3Selection
-                .append("polygon")
-                .attr('class', headClass)
-                .attr('points', '' + x1 + "," + y1 + " " + x2 + "," + y2 + " " +  x3 + "," + y3);
+            .append("polygon")
+            .attr('class', headClass)
+            .attr('points', '' + x1 + "," + y1 + " " + x2 + "," + y2 + " " + x3 + "," + y3);
     }
 
     function renderAmplitudes(svgSelector, dataSet, maxRadius, numBits, options) {
@@ -132,7 +132,7 @@ jQuery(function ($) {
             .attr('class', 'amplitudeCircle')
             .attr('cx', 0)
             .attr('cy', 0)
-            .attr("r",  maxRadius);
+            .attr("r", maxRadius);
 
         if (options.showPhases) {
             appendArrow(amplitudeGroup, {length: maxRadius, lineClass: 'phaseLine', headClass: 'phaseLineEnd'});
@@ -148,10 +148,10 @@ jQuery(function ($) {
 
     function renderBitLabels(svgSelector, numBits) {
         var svg = d3.select(svgSelector);
-        for(var bit = (numBits - 1); bit >= 0; bit--) {
+        for (var bit = (numBits - 1); bit >= 0; bit--) {
             var bitLabel = svg.append('text').attr('x', (numBits - bit - 1) * textWidth);
             bitLabel.append('tspan').text('b').attr('y', 0);
-            bitLabel.append('tspan').attr('class', 'qstateBitLabelsSubscript').attr('y', textHeight/8).text(bit);
+            bitLabel.append('tspan').attr('class', 'qstateBitLabelsSubscript').attr('y', textHeight / 8).text(bit);
         }
     }
 
@@ -161,7 +161,7 @@ jQuery(function ($) {
         var svgHeight = options.height != null ? options.height : 330;
         var maxDiameter = svgHeight / dataSet.length;
         var maxRadius = maxDiameter / 2;
-        var numBits = Math.round(Math.log(dataSet.length)/Math.LN2);
+        var numBits = Math.round(Math.log(dataSet.length) / Math.LN2);
 
         $(svgSelector).data('maxRadius', maxRadius);
         $(svgSelector).data('numBits', numBits);
@@ -238,28 +238,30 @@ jQuery(function ($) {
     });
 
     renderQState("#phases", [
-        {magnitude: 0.9, phase: Math.PI/4},
-        {magnitude: 0.9, phase: -Math.PI/8},
+        {magnitude: 0.9, phase: Math.PI / 4},
+        {magnitude: 0.9, phase: -Math.PI / 8},
         0,
         0,
         {magnitude: 0.9, phase: -1},
         0,
-        {magnitude: 0.9, phase: 3 * Math.PI/4},
-        0 ],
+        {magnitude: 0.9, phase: 3 * Math.PI / 4},
+        0
+    ],
         {
             showPhases: true
         }
     );
 
     renderQState("#phasesAndMeasurement", [
-        {magnitude: 0.4, phase: Math.PI/4},
-        {magnitude: 0.75, phase: -Math.PI/8},
+        {magnitude: 0.4, phase: Math.PI / 4},
+        {magnitude: 0.75, phase: -Math.PI / 8},
         0,
         0,
         {magnitude: 0.4, phase: -1},
         0,
-        {magnitude: 0.4, phase: 3 * Math.PI/4},
-        0 ],
+        {magnitude: 0.4, phase: 3 * Math.PI / 4},
+        0
+    ],
         {
             showPhases: true
         }
@@ -283,34 +285,34 @@ jQuery(function ($) {
     });
 
     var bitFlippingNotState = [
-            {magnitude: 0.7, phase: Math.PI / 4, basisState: 0, seq: 0},
-            {magnitude: 0.4, phase: -Math.PI / 8, basisState: 1, seq: 1},
-            {magnitude: 0.9, phase: -1, basisState: 2, seq: 2},
-            {magnitude: 0.6, phase: 3 * Math.PI / 4, basisState: 3, seq: 3}
+        {magnitude: 0.7, phase: Math.PI / 4, basisState: 0, seq: 0},
+        {magnitude: 0.4, phase: -Math.PI / 8, basisState: 1, seq: 1},
+        {magnitude: 0.9, phase: -1, basisState: 2, seq: 2},
+        {magnitude: 0.6, phase: 3 * Math.PI / 4, basisState: 3, seq: 3}
     ];
 
     renderQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true });
 
     $('#bitFlipNotOperatorBit1').click(function () {
-        for(var i=0; i<bitFlippingNotState.length; i++) {
+        for (var i = 0; i < bitFlippingNotState.length; i++) {
             bitFlippingNotState[i].basisState = bitFlippingNotState[i].basisState ^ 2;
         }
         transitionQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true, duration: 0 });
     });
-    
+
     $('#bitFlipNotOperatorBit0').click(function () {
-        for(var i=0; i<bitFlippingNotState.length; i++) {
+        for (var i = 0; i < bitFlippingNotState.length; i++) {
             bitFlippingNotState[i].basisState = bitFlippingNotState[i].basisState ^ 1;
         }
         transitionQState('#bitFlipNotOperator', bitFlippingNotState, { showPhases: true, duration: 0 });
     });
-    
+
     var notOperatorExampleState = new jsqubits.QState(
         2, [
-        jsqubits.complex(0,1).multiply(0.7),
-        jsqubits.complex(-1,0),
-        jsqubits.complex(1,1).multiply(0.35),
-        jsqubits.complex(1,-1).multiply(0.56)
+            jsqubits.complex(0, 1).multiply(0.7),
+            jsqubits.complex(-1, 0),
+            jsqubits.complex(1, 1).multiply(0.35),
+            jsqubits.complex(1, -1).multiply(0.56)
         ]
     ).normalize();
 
@@ -320,47 +322,47 @@ jQuery(function ($) {
 
     $('#notOperatorBit0').click(function () {
         notOperatorExampleKeys =
-            determineNewKeyMappingForSingleBitOperator(notOperatorExampleState, notOperatorExampleKeys, function (state) {return state.not(0);});
+            determineNewKeyMappingForSingleBitOperator(notOperatorExampleState, notOperatorExampleKeys, function (state) { return state.not(0); });
         notOperatorExampleState = notOperatorExampleState.not(0);
         transitionQState('#notOperator', notOperatorExampleState, { showPhases: true, keys: notOperatorExampleKeys });
     });
 
     $('#notOperatorBit1').click(function () {
         notOperatorExampleKeys =
-            determineNewKeyMappingForSingleBitOperator(notOperatorExampleState, notOperatorExampleKeys, function (state) {return state.not(1);});
+            determineNewKeyMappingForSingleBitOperator(notOperatorExampleState, notOperatorExampleKeys, function (state) { return state.not(1); });
         notOperatorExampleState = notOperatorExampleState.not(1);
         transitionQState('#notOperator', notOperatorExampleState, { showPhases: true, keys: notOperatorExampleKeys });
     });
 
     (function () {
         var state = new jsqubits.QState(
-          2, [
-          jsqubits.complex(0,1).multiply(0.7),
-          jsqubits.complex(-1,0),
-          jsqubits.complex(1,1).multiply(0.35),
-          jsqubits.complex(1,-1).multiply(0.56)
-          ]
-      ).normalize();
+            2, [
+                jsqubits.complex(0, 1).multiply(0.7),
+                jsqubits.complex(-1, 0),
+                jsqubits.complex(1, 1).multiply(0.35),
+                jsqubits.complex(1, -1).multiply(0.56)
+            ]
+        ).normalize();
 
-      var keys = ['k0', 'k1', 'k2', 'k3'];
+        var keys = ['k0', 'k1', 'k2', 'k3'];
 
-      renderQState('#CNotOperator', state, { showPhases: true, keys: keys });
+        renderQState('#CNotOperator', state, { showPhases: true, keys: keys });
 
-      $('#CNot10').click(function () {
-           keys = determineNewKeyMappingForSingleBitOperator(state, keys, function (state) {return state.cnot(1,0);});
-           state = state.cnot(1,0);
-           transitionQState('#CNotOperator', state, { showPhases: true, keys: keys });
+        $('#CNot10').click(function () {
+            keys = determineNewKeyMappingForSingleBitOperator(state, keys, function (state) { return state.cnot(1, 0); });
+            state = state.cnot(1, 0);
+            transitionQState('#CNotOperator', state, { showPhases: true, keys: keys });
         });
 
-      $('#CNot01').click(function () {
-           keys = determineNewKeyMappingForSingleBitOperator(state, keys, function (state) {return state.cnot(0,1);});
-           state = state.cnot(0,1);
-           transitionQState('#CNotOperator', state, { showPhases: true, keys: keys });
+        $('#CNot01').click(function () {
+            keys = determineNewKeyMappingForSingleBitOperator(state, keys, function (state) { return state.cnot(0, 1); });
+            state = state.cnot(0, 1);
+            transitionQState('#CNotOperator', state, { showPhases: true, keys: keys });
         });
     })();
 
-    renderQState("#hadamard0", [ {magnitude: 1, phase: 0}, 0], { showPhases: true, height: 150 });
-    renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: 0}], { showPhases: true, height: 150 });
+    renderQState("#hadamard0", [ {magnitude: 1, phase: 0}, 0 ], { showPhases: true, height: 150 });
+    renderQState("#hadamardP", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: 0} ], { showPhases: true, height: 150 });
 
     (function () {
         var hadamard0 = d3.select('#hadamard0 .amplitude[data-state="0"]');
@@ -375,7 +377,7 @@ jQuery(function ($) {
     })();
 
     renderQState("#hadamard1", [0,  {magnitude: 1, phase: 0}], { showPhases: true, height: 150 });
-    renderQState("#hadamardN", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: Math.PI}], { showPhases: true, height: 150 });
+    renderQState("#hadamardN", [ {magnitude: Math.sqrt(0.5), phase: 0}, {magnitude: Math.sqrt(0.5), phase: Math.PI} ], { showPhases: true, height: 150 });
 
     (function () {
         var hadamard1 = d3.select('#hadamard1 .amplitude[data-state="1"]');
@@ -390,7 +392,7 @@ jQuery(function ($) {
     })();
 
 
-     renderQState('#hadamardOperator0', jsqubits('0'), { showPhases: true, height: 150 });
+    renderQState('#hadamardOperator0', jsqubits('0'), { showPhases: true, height: 150 });
 
 
 });
