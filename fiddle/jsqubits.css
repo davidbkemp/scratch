@@ -1,0 +1,29 @@
+.jsqubits {
+    border: 1px solid black;
+}
+
+.qstateBitLabelsSubscript {
+    font-size: 0.4em;
+}
+
+.amplitudeCircle {
+    fill: hsla(195, 53%, 60%, 0.5);
+}
+
+.phaseLine {
+    stroke: red;
+    stroke-width: 2px;
+}
+
+.phaseLineEnd {
+    fill: red;
+}
+
+.basicLine {
+    stroke: black;
+    stroke-width: 2px;
+}
+
+.basicLineEnd {
+    fill: black;
+}
