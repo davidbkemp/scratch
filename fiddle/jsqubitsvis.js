@@ -24,6 +24,9 @@ function start($) {
         return maxRadius * (1 + 2 * basisState);
     }
 
+    function computeInitialAmplitudeXValue(numBits, config) {
+        return config.maxRadius + (numBits + 1) * config.textWidth;
+    }
     function renderStateLabels(svgSelector, numBits, config) {
         var numStates = 1 << numBits;
         var svg = d3.select(svgSelector);
@@ -219,14 +222,13 @@ function start($) {
 
     function phase4(context) {
         log("phase 4");
-        context.expandedState.amplitudes.forEach(function (state) {
-            state.x = 0;
-        });
+        context.expandedState.amplitudes = context.phase4States;
+        console.log("jhere", context.expandedState)
         return renderAmplitudes(context.selector, context.expandedState, context.config)
     	    .then(function () {return context;});
     }
     
-    function createPhases1And2(context, expandedState, op) {
+    function createPhase1And2States(context, expandedState, op) {
         expandedState.amplitudes.forEach(function(amplitudeWithState) {
             var qstate = op(jsqubits(asBinary(amplitudeWithState.index, expandedState.numBits)));
             statesGroup = [];
@@ -271,6 +273,15 @@ function start($) {
     	});
     }
     
+    function createPhase4States(context) {
+        var xOffset = computeInitialAmplitudeXValue(context.expandedState.numBits, context.config);
+        context.phase4States = context.phase3States.map(function (state) {
+            var newState = _.clone(state);
+            newState.x = xOffset;
+            return newState;
+        });
+    }
+    
     function createPhases(op, selector, expandedState, config) {
         log("creating phases");
         var phase1States = [];
@@ -285,13 +296,15 @@ function start($) {
             phase2aStates: {},
             phase2bStates: {},
             phase3States: [],
+            phase4States: [],
             statesGroupedByOriginalState: [],
             keysGroupedByDestinationState: {},
             config: config
         };
         
-        createPhases1And2(context, expandedState, op);
+        createPhase1And2States(context, expandedState, op);
         createPhase3States(context);
+        createPhase4States(context);
 
         log("phases created");
         return context;
@@ -311,10 +324,11 @@ function start($) {
         function expandQState() {
             var keyCount = 0;
             var amplitudes = [];
+            var initialXOffset = computeInitialAmplitudeXValue(numBits, config);
 
             qstate.each(function(stateWithAmplitude) {
                 stateWithAmplitude.key = 'k' + (++keyCount);
-                stateWithAmplitude.x = config.maxRadius + (numBits + 1) * config.textWidth;
+                stateWithAmplitude.x = initialXOffset;
                 stateWithAmplitude.y = computeAmplitudeYValue(config.maxRadius, stateWithAmplitude.index);
                 amplitudes.push(stateWithAmplitude);
             });
