@@ -1,6 +1,6 @@
 function start($) {
     function log(message) {
-        $('#log').append($('<p>').text(message));
+        $('#log').append($('<div>').text(message));
     }
 
     function asBinary(i, length) {
@@ -53,7 +53,7 @@ function start($) {
     function createAmplitudeGraphicTransform(config, numBits, stateWithAmplitude) {
         var x = stateWithAmplitude.x;
         var y = stateWithAmplitude.y;
-        var degrees = 180 * stateWithAmplitude.amplitude.phase() / Math.PI;
+        var degrees = -180 * stateWithAmplitude.amplitude.phase() / Math.PI;
         var scale = stateWithAmplitude.amplitude.magnitude();
         return 'translate(' + x + ',' + y + ') scale(' + scale + ') rotate(' + degrees + ')';
     }
@@ -121,7 +121,6 @@ function start($) {
     }
 
     function renderAmplitudes(svgSelector, expandedState, config) {
-        log('rendering amplitudes');
         var amplitudeGroup = d3.select(svgSelector)
             .selectAll('.amplitude')
             .data(expandedState.amplitudes, function (stateWithAmplitude) {
@@ -154,7 +153,21 @@ function start($) {
         var phase2aState = phase1State.phase2aState;
         var phase2bState = _.clone(phase2aState);
         phase2bState.amplitude = phase2aState.amplitude.multiply(newState.amplitude);
-        phase2bState.index = newState.index;
+        var basisState = newState.index;
+        phase2bState.index = basisState;
+        var group = statesGroupedByDestinationState[basisState];
+        if (!group) {
+            group = [];
+            statesGroupedByDestinationState[basisState] = group;
+            phase2bState.x += 3 * config.maxRadius;
+            phase2bState.y = computeAmplitudeYValue(config.maxRadius, basisState);
+        } else {
+            var prevState = _.last(group).phase2bState;
+            var prevAmplitude = prevState.amplitude;
+            phase2bState.x = prevState.x + prevAmplitude.real() * config.maxRadius;
+            phase2bState.y = prevState.y - prevAmplitude.imaginary() * config.maxRadius;
+        }
+        group.push(phase1State);
         return phase2bState;
     }
 
@@ -179,113 +192,76 @@ function start($) {
                 statesGroup.push(phase1State);
             });
         });
-        var deferred = new $.Deferred();
-        renderAmplitudes(selector, newExpandedState, config)
+        
+        return renderAmplitudes(selector, newExpandedState, config)
             .then(function () {
-                deferred.resolve(selector, newExpandedState, statesGroupedByOriginalState, config);
+                return {
+                    selector: selector,
+                    newExpandedState: newExpandedState,
+                    statesGroupedByOriginalState: statesGroupedByOriginalState,
+                    statesGroupedByDestinationState: statesGroupedByDestinationState,
+                    config: config};
             });
-        return deferred;
     }
 
-    function phase2(selector, newExpandedState, statesGroupedByOriginalState, config) {
-        log('phase2: ' + statesGroupedByOriginalState.length);
+    function phase2(context, selector, newExpandedState, statesGroupedByOriginalState, statesGroupedByDestinationState, config) {
         var promise = $.when();
-        _.forEach(statesGroupedByOriginalState, function(statesGroup) {
-            promise = promise.then(phase2a(selector, newExpandedState, statesGroup, config))
-                .then(phase2b(selector, newExpandedState, statesGroup, config));
+        _.forEach(context.statesGroupedByOriginalState, function(statesGroup) {
+            promise = promise.then(phase2a(context, statesGroup))
+                .then(phase2b(context, statesGroup));
         });
-        return promise;
+        return promise.then(function () {return context;});
     }
 
-    function phase2a(selector, newExpandedState, statesGroup, config) {
+    function phase2a(context, statesGroup) {
         return function () {
             log('phase 2a');
             _.forEach(statesGroup, function(state) {
                 _.assign(state, state.phase2aState);
             });
-            return renderAmplitudes(selector, newExpandedState, _.assign(_.clone(config), {duration: 0}));
+            return renderAmplitudes(context.selector, context.newExpandedState, _.assign(_.clone(context.config), {duration: 0}));
         }
     }
 
-    function phase2b(selector, newExpandedState, statesGroup, config) {
+    function phase2b(context, statesGroup) {
         return function () {
             log('phase 2b');
             _.forEach(statesGroup, function(state) {
                 _.assign(state, state.phase2bState);
             });
-            return renderAmplitudes(selector, newExpandedState, config);
+            return renderAmplitudes(context.selector, context.newExpandedState, context.config);
         }
+    }
+    
+    function phase3(context) {
+    	log("phase 3");
+    	_.forOwn(context.statesGroupedByDestinationState, function (stateGroup) {
+    	    var totalAmplitude = _.reduce(stateGroup, function (accumulator, state) {
+    	        return accumulator.add(state.amplitude);
+    	    }, jsqubits.ZERO);
+    	    if (totalAmplitude.magnitude() > 0.0001) {
+    	        stateGroup[0].amplitude = totalAmplitude;
+    	    } else {
+    	        stateGroup[0].amplitude = stateGroup[0].amplitude.multiply(jsqubits.complex(0.0001));
+    	    }
+    	    var endOfArrowX = stateGroup[0].x + totalAmplitude.real() * config.maxRadius;
+    	    var endOfArrowY = stateGroup[0].y - totalAmplitude.imaginary() * config.maxRadius;
+    	    for (var i = 1; i < stateGroup.length; i++) {
+    	        var state = stateGroup[i];
+    	        state.amplitude = state.amplitude.multiply(jsqubits.complex(0.0001, 0));
+    	        state.x = endOfArrowX;
+    	        state.y = endOfArrowY;
+    	    }
+    	});
+    	return renderAmplitudes(context.selector, context.newExpandedState, context.config);
     }
 
     function applyOperator(op, selector, expandedState, config) {
         phase1(op, selector, expandedState, config)
-            .then(phase2);
+            .then(phase2)
+            .then(phase3);
     }
 
-    function oldApplyOperator(op, selector, expandedState, config) {
-        var afterInitialRendering = new $.Deferred();
-        var afterFirstPhase = new $.Deferred();
-        var firstPhasePromise = afterInitialRendering.promise();
-        var secondPhasePromise = afterFirstPhase.promise();
-        var clonedStates = [];
-        var basisStateMapping = {};
-        var newExpandedState = {
-            amplitudes: clonedStates,
-            numBits: expandedState.numBits
-        };
-
-        _.forEach(expandedState.amplitudes, function(amplitudeWithState) {
-            var qstate = op(jsqubits(asBinary(amplitudeWithState.index, expandedState.numBits)));
-            var subkey = 1;
-            qstate.each(function (newState) {
-                var key = amplitudeWithState.key + '-' + subkey;
-                subkey++;
-                var clonedState = _.clone(amplitudeWithState);
-                clonedState.key = key;
-                clonedState.targetAmplitude = clonedState.amplitude.multiply(newState.amplitude);
-                clonedStates.push(clonedState);
-                if (basisStateMapping[newState.index]) {
-                    var prevState = _.last(basisStateMapping[newState.index]);
-                    var prevStateAmplitude = prevState.targetAmplitude;
-                    basisStateMapping[newState.index].push(clonedState);
-                    clonedState.xOffset = prevState.xOffset + prevStateAmplitude.real() * config.maxRadius;
-                    clonedState.yOffset = prevState.yOffset - prevStateAmplitude.imaginary() * config.maxRadius;
-                    clonedState.finalAmplitude = jsqubits.ZERO;
-                    basisStateMapping[newState.index][0].finalAmplitude = basisStateMapping[newState.index][0].finalAmplitude.add(clonedState.targetAmplitude);
-                } else {
-                    basisStateMapping[newState.index] = [clonedState];
-                    clonedState.finalAmplitude = clonedState.targetAmplitude;
-                    clonedState.xOffset = 0;
-                    clonedState.yOffset = 0;
-                }
-
-                firstPhasePromise.then(function () {
-                    clonedState.index = newState.index;
-                    clonedState.amplitude = clonedState.targetAmplitude;
-                    clonedState.x += 4 * config.maxRadius + clonedState.xOffset;
-                    clonedState.y = computeAmplitudeYValue(config.maxRadius, newState.index) + clonedState.yOffset;
-                });
-
-                secondPhasePromise.then(function () {
-                    clonedState.amplitude = clonedState.finalAmplitude;
-                });
-            });
-
-            firstPhasePromise = firstPhasePromise.then(function () {
-                return renderAmplitudes(selector, newExpandedState, config);
-            });
-
-        });
-
-        firstPhasePromise.then(function () {
-            afterFirstPhase.resolve();
-        });
-        secondPhasePromise = secondPhasePromise.then(function() {
-            return renderAmplitudes(selector, newExpandedState, config);
-        });
-        renderAmplitudes(selector, newExpandedState, config);
-        afterInitialRendering.resolve();
-    }
 
     function visualiseQState(selector, qstate, config) {
 
@@ -305,7 +281,6 @@ function start($) {
             return amplitudes;
         }
 
-        log('visualising');
         var expandedState = {
             amplitudes: expandQState(),
             numBits: numBits
@@ -321,6 +296,7 @@ function start($) {
                 applyOperator(op, selector + ' .qstateBody', expandedState, config);
             }
         };
+        
     }
 
     var config = {
@@ -329,7 +305,9 @@ function start($) {
         maxRadius: 70
     };
 
-    var state = visualiseQState('#svg', jsqubits('00').hadamard(1), config);
+ //   var state = visualiseQState('#svg', jsqubits('00').hadamard(jsqubits.ALL).t(0), config);
+     var state = visualiseQState('#svg', jsqubits('1').t(jsqubits.ALL).hadamard(jsqubits.ALL), config);
+
 
     $('#hadamardBtn').click(function () {
         state.applyOperator(function (s) {
@@ -337,5 +315,5 @@ function start($) {
         });
     });
 
-    log('all done');
+    log('all done 1');
 }
