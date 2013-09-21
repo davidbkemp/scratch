@@ -149,120 +149,161 @@ function start($) {
         return phase2aState;
     }
 
-    function createPhase2bState(phase1State, newState, statesGroupedByDestinationState) {
-        var phase2aState = phase1State.phase2aState;
+    function createPhase2bState(phase1State, context, newState) {
+        var key = phase1State.key;
+        var config = context.config;
+        var keysGroupedByDestinationState = context.keysGroupedByDestinationState;
+        var phase2aState = context.phase2aStates[key];
         var phase2bState = _.clone(phase2aState);
         phase2bState.amplitude = phase2aState.amplitude.multiply(newState.amplitude);
         var basisState = newState.index;
         phase2bState.index = basisState;
-        var group = statesGroupedByDestinationState[basisState];
-        if (!group) {
-            group = [];
-            statesGroupedByDestinationState[basisState] = group;
+        var keyGroup = keysGroupedByDestinationState[basisState];
+        if (!keyGroup) {
+            keyGroup = [];
+            keysGroupedByDestinationState[basisState] = keyGroup;
             phase2bState.x += 3 * config.maxRadius;
             phase2bState.y = computeAmplitudeYValue(config.maxRadius, basisState);
         } else {
-            var prevState = _.last(group).phase2bState;
+            var prevState = context.phase2bStates[_.last(keyGroup)];
             var prevAmplitude = prevState.amplitude;
             phase2bState.x = prevState.x + prevAmplitude.real() * config.maxRadius;
             phase2bState.y = prevState.y - prevAmplitude.imaginary() * config.maxRadius;
         }
-        group.push(phase1State);
+        keyGroup.push(key);
         return phase2bState;
     }
 
-    function phase1(op, selector, expandedState, config) {
-        var clonedStates = [];
-        var statesGroupedByOriginalState = [];
-        var statesGroupedByDestinationState = {};
-        var newExpandedState = {
-            amplitudes: clonedStates,
-            numBits: expandedState.numBits
-        };
-        _.forEach(expandedState.amplitudes, function(amplitudeWithState) {
-            var qstate = op(jsqubits(asBinary(amplitudeWithState.index, expandedState.numBits)));
-            statesGroup = [];
-            statesGroupedByOriginalState.push(statesGroup);
-            var subSeq = 1;
-            qstate.each(function (newState) {
-                var phase1State = createPhase1State(amplitudeWithState, subSeq++);
-                phase1State.phase2aState = createPhase2aState(amplitudeWithState, phase1State);
-                phase1State.phase2bState = createPhase2bState(phase1State, newState, statesGroupedByDestinationState);
-                clonedStates.push(phase1State);
-                statesGroup.push(phase1State);
-            });
-        });
-        
-        return renderAmplitudes(selector, newExpandedState, config)
-            .then(function () {
-                return {
-                    selector: selector,
-                    newExpandedState: newExpandedState,
-                    statesGroupedByOriginalState: statesGroupedByOriginalState,
-                    statesGroupedByDestinationState: statesGroupedByDestinationState,
-                    config: config};
-            });
+    function phase1(context) {
+        log('phase 1');
+        return renderAmplitudes(context.selector, context.expandedState, context.config)
+            .then(function () { return context; });
     }
 
-    function phase2(context, selector, newExpandedState, statesGroupedByOriginalState, statesGroupedByDestinationState, config) {
+    function phase2(context) {
+        log('phase 2');
         var promise = $.when();
-        _.forEach(context.statesGroupedByOriginalState, function(statesGroup) {
-            promise = promise.then(phase2a(context, statesGroup))
-                .then(phase2b(context, statesGroup));
+        _.forEach(context.statesGroupedByOriginalState, function(stateGroup) {
+            promise = promise.then(phase2a(context, stateGroup))
+                .then(phase2b(context, stateGroup));
         });
         return promise.then(function () {return context;});
     }
 
-    function phase2a(context, statesGroup) {
+    function phase2a(context, stateGroup) {
         return function () {
             log('phase 2a');
-            _.forEach(statesGroup, function(state) {
-                _.assign(state, state.phase2aState);
+            _.forEach(stateGroup, function(state) {
+                _.assign(state, context.phase2aStates[state.key]);
             });
-            return renderAmplitudes(context.selector, context.newExpandedState, _.assign(_.clone(context.config), {duration: 0}));
+            return renderAmplitudes(context.selector, context.expandedState, _.assign(_.clone(context.config), {duration: 0}));
         }
     }
 
-    function phase2b(context, statesGroup) {
+    function phase2b(context, stateGroup) {
         return function () {
             log('phase 2b');
-            _.forEach(statesGroup, function(state) {
-                _.assign(state, state.phase2bState);
+            _.forEach(stateGroup, function(state) {
+                _.assign(state, context.phase2bStates[state.key]);
             });
-            return renderAmplitudes(context.selector, context.newExpandedState, context.config);
+            return renderAmplitudes(context.selector, context.expandedState, context.config);
         }
     }
     
     function phase3(context) {
     	log("phase 3");
-    	_.forOwn(context.statesGroupedByDestinationState, function (stateGroup) {
-    	    var totalAmplitude = _.reduce(stateGroup, function (accumulator, state) {
-    	        return accumulator.add(state.amplitude);
+    	context.expandedState.amplitudes = context.phase3States;
+    	return renderAmplitudes(context.selector, context.expandedState, context.config)
+    	    .then(function () {return context;});
+    }
+
+    function phase4(context) {
+        log("phase 4");
+        context.expandedState.amplitudes.forEach(function (state) {
+            state.x = 0;
+        });
+        return renderAmplitudes(context.selector, context.expandedState, context.config)
+    	    .then(function () {return context;});
+    }
+    
+    function createPhases1And2(context, expandedState, op) {
+        expandedState.amplitudes.forEach(function(amplitudeWithState) {
+            var qstate = op(jsqubits(asBinary(amplitudeWithState.index, expandedState.numBits)));
+            statesGroup = [];
+            context.statesGroupedByOriginalState.push(statesGroup);
+            var subSeq = 1;
+            qstate.each(function (newState) {
+                var phase1State = createPhase1State(amplitudeWithState, subSeq++);
+                var key = phase1State.key;
+                var phase2aState = createPhase2aState(amplitudeWithState, phase1State);
+                context.phase2aStates[key] = phase2aState;
+                context.phase2bStates[key] = createPhase2bState(phase1State, context, newState);
+                context.phase1States.push(phase1State);
+                statesGroup.push(phase1State);
+            });
+        });
+    }
+    
+    function createPhase3States(context) {
+        _.forOwn(context.keysGroupedByDestinationState, function (keyGroup) {
+        
+    	    var totalAmplitude = _.reduce(keyGroup, function (accumulator, key) {
+    	        return accumulator.add(context.phase2bStates[key].amplitude);
     	    }, jsqubits.ZERO);
+    	    
+    	    var keyGroupPrimaryState = _.clone(context.phase2bStates[keyGroup[0]]);
     	    if (totalAmplitude.magnitude() > 0.0001) {
-    	        stateGroup[0].amplitude = totalAmplitude;
+    	        keyGroupPrimaryState.amplitude = totalAmplitude;
     	    } else {
-    	        stateGroup[0].amplitude = stateGroup[0].amplitude.multiply(jsqubits.complex(0.0001));
+    	        keyGroupPrimaryState.amplitude = keyGroupPrimaryState.amplitude.multiply(jsqubits.complex(0.0001));
     	    }
-    	    var endOfArrowX = stateGroup[0].x + totalAmplitude.real() * config.maxRadius;
-    	    var endOfArrowY = stateGroup[0].y - totalAmplitude.imaginary() * config.maxRadius;
-    	    for (var i = 1; i < stateGroup.length; i++) {
-    	        var state = stateGroup[i];
+    	    context.phase3States.push(keyGroupPrimaryState);
+    	    
+    	    var endOfArrowX = keyGroupPrimaryState.x + totalAmplitude.real() * config.maxRadius;
+    	    var endOfArrowY = keyGroupPrimaryState.y - totalAmplitude.imaginary() * config.maxRadius;
+    	    for (var i = 1; i < keyGroup.length; i++) {
+    	        var state = _.clone(context.phase2bStates[keyGroup[i]]);
     	        state.amplitude = state.amplitude.multiply(jsqubits.complex(0.0001, 0));
     	        state.x = endOfArrowX;
     	        state.y = endOfArrowY;
+    	        context.phase3States.push(state);
     	    }
     	});
-    	return renderAmplitudes(context.selector, context.newExpandedState, context.config);
+    }
+    
+    function createPhases(op, selector, expandedState, config) {
+        log("creating phases");
+        var phase1States = [];
+        var newExpandedState = {
+            amplitudes: phase1States,
+            numBits: expandedState.numBits
+        };
+        var context = {
+            selector: selector,
+            expandedState: newExpandedState,
+            phase1States: phase1States,
+            phase2aStates: {},
+            phase2bStates: {},
+            phase3States: [],
+            statesGroupedByOriginalState: [],
+            keysGroupedByDestinationState: {},
+            config: config
+        };
+        
+        createPhases1And2(context, expandedState, op);
+        createPhase3States(context);
+
+        log("phases created");
+        return context;
     }
 
     function applyOperator(op, selector, expandedState, config) {
-        phase1(op, selector, expandedState, config)
+        phase1(createPhases(op, selector, expandedState, config))
             .then(phase2)
-            .then(phase3);
+            .then(phase3)
+            .then(phase4);
     }
-
-
+    
     function visualiseQState(selector, qstate, config) {
 
         var numBits = qstate.numBits();
