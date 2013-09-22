@@ -27,3 +27,8 @@
 .basicLineEnd {
     fill: black;
 }
+
+.qvisButtons_button {
+    display: inline-block;
+    min-width: 10em;
+}
