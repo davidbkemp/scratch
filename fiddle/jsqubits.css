@@ -30,5 +30,5 @@
 
 .qvisButtons_button {
     display: inline-block;
-    min-width: 10em;
+    width: 10em;
 }
