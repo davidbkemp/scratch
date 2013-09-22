@@ -135,7 +135,22 @@ function start($) {
         amplitudeGroup.exit().remove();
         return transitionsEndedPromise;
     }
+    
+    function expandQState(qstate, config) {
+        var keyCount = 0;
+        var amplitudes = [];
+        var initialXOffset = computeInitialAmplitudeXValue(qstate.numBits(), config);
 
+        qstate.each(function(stateWithAmplitude) {
+            stateWithAmplitude.key = 'k' + (++keyCount);
+            stateWithAmplitude.x = initialXOffset;
+            stateWithAmplitude.y = computeAmplitudeYValue(config.maxRadius, stateWithAmplitude.index);
+            amplitudes.push(stateWithAmplitude);
+        });
+
+        return amplitudes;
+    }
+        
     function createPhase1State(amplitudeWithState, subSeq) {
         var clonedState = _.clone(amplitudeWithState);
         var key = amplitudeWithState.key + '-' + subSeq;
@@ -179,6 +194,7 @@ function start($) {
 
     function phase1(context) {
         log('phase 1');
+        context.expandedState.amplitudes = context.phase1States;
         return renderAmplitudes(context.selector, context.expandedState, context.config)
             .then(function () { return context; });
     }
@@ -223,14 +239,21 @@ function start($) {
     function phase4(context) {
         log("phase 4");
         context.expandedState.amplitudes = context.phase4States;
-        console.log("jhere", context.expandedState)
         return renderAmplitudes(context.selector, context.expandedState, context.config)
     	    .then(function () {return context;});
     }
     
-    function createPhase1And2States(context, expandedState, op) {
-        expandedState.amplitudes.forEach(function(amplitudeWithState) {
-            var qstate = op(jsqubits(asBinary(amplitudeWithState.index, expandedState.numBits)));
+    function phase5(context) {
+        log("phase 5");
+        context.expandedState.amplitudes = context.phase5States;
+        context.expandedState.qstate = context.newQState;
+        return renderAmplitudes(context.selector, context.expandedState, context.config)
+    	    .then(function () {return context;});
+    }
+    
+    function createPhase1And2States(context, op) {
+        context.expandedState.amplitudes.forEach(function(amplitudeWithState) {
+            var qstate = op(jsqubits(asBinary(amplitudeWithState.index, context.expandedState.numBits)));
             statesGroup = [];
             context.statesGroupedByOriginalState.push(statesGroup);
             var subSeq = 1;
@@ -282,29 +305,33 @@ function start($) {
         });
     }
     
+    function createPhase5States(context, op) {
+        var oldQState = context.expandedState.qstate;
+        var newQState = op(oldQState);
+        context.newQState = newQState;
+        context.phase5States = expandQState(newQState, context.config);
+    }
+    
     function createPhases(op, selector, expandedState, config) {
         log("creating phases");
-        var phase1States = [];
-        var newExpandedState = {
-            amplitudes: phase1States,
-            numBits: expandedState.numBits
-        };
         var context = {
             selector: selector,
-            expandedState: newExpandedState,
-            phase1States: phase1States,
+            expandedState: expandedState,
+            phase1States: [],
             phase2aStates: {},
             phase2bStates: {},
             phase3States: [],
             phase4States: [],
+            phase5States: [],
             statesGroupedByOriginalState: [],
             keysGroupedByDestinationState: {},
             config: config
         };
         
-        createPhase1And2States(context, expandedState, op);
+        createPhase1And2States(context, op);
         createPhase3States(context);
         createPhase4States(context);
+        createPhase5States(context, op);
 
         log("phases created");
         return context;
@@ -314,30 +341,18 @@ function start($) {
         phase1(createPhases(op, selector, expandedState, config))
             .then(phase2)
             .then(phase3)
-            .then(phase4);
+            .then(phase4)
+            .then(phase5)
+            .then(function() {log("finished")});
     }
     
     function visualiseQState(selector, qstate, config) {
 
         var numBits = qstate.numBits();
-
-        function expandQState() {
-            var keyCount = 0;
-            var amplitudes = [];
-            var initialXOffset = computeInitialAmplitudeXValue(numBits, config);
-
-            qstate.each(function(stateWithAmplitude) {
-                stateWithAmplitude.key = 'k' + (++keyCount);
-                stateWithAmplitude.x = initialXOffset;
-                stateWithAmplitude.y = computeAmplitudeYValue(config.maxRadius, stateWithAmplitude.index);
-                amplitudes.push(stateWithAmplitude);
-            });
-
-            return amplitudes;
-        }
-
+        
         var expandedState = {
-            amplitudes: expandQState(),
+            qstate: qstate,
+            amplitudes: expandQState(qstate, config),
             numBits: numBits
         };
 
