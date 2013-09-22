@@ -1,8 +1,11 @@
 function start($) {
+
     function log(message) {
         $('#log').append($('<div>').text(message));
     }
 
+    var buttons = [];
+    
     function asBinary(i, length) {
         i = (typeof i == 'string') ? parseInt(i, 10) : i;
         var paddedString = "00000000000000000000000" + i.toString(2);
@@ -180,7 +183,7 @@ function start($) {
         if (!keyGroup) {
             keyGroup = [];
             keysGroupedByDestinationState[basisState] = keyGroup;
-            phase2bState.x += 3 * config.maxRadius;
+            phase2bState.x += 2 * config.maxRadius;
             phase2bState.y = computeAmplitudeYValue(config.maxRadius, basisState);
         } else {
             var prevState = context.phase2bStates[_.last(keyGroup)];
@@ -250,6 +253,7 @@ function start($) {
         return renderAmplitudes(context.selector, context.expandedState, context.config)
     	    .then(function () {return context;});
     }
+    
     
     function createPhase1And2States(context, op) {
         context.expandedState.amplitudes.forEach(function(amplitudeWithState) {
@@ -338,7 +342,7 @@ function start($) {
     }
 
     function applyOperator(op, selector, expandedState, config) {
-        phase1(createPhases(op, selector, expandedState, config))
+        return phase1(createPhases(op, selector, expandedState, config))
             .then(phase2)
             .then(phase3)
             .then(phase4)
@@ -363,7 +367,7 @@ function start($) {
 
         return {
             applyOperator: function(op) {
-                applyOperator(op, selector + ' .qstateBody', expandedState, config);
+                return applyOperator(op, selector + ' .qstateBody', expandedState, config);
             }
         };
         
@@ -375,14 +379,68 @@ function start($) {
         maxRadius: 70
     };
 
- //   var state = visualiseQState('#svg', jsqubits('00').hadamard(jsqubits.ALL).t(0), config);
-     var state = visualiseQState('#svg', jsqubits('1').t(jsqubits.ALL).hadamard(jsqubits.ALL), config);
+    var state = visualiseQState('#svg', jsqubits('00').hadamard(jsqubits.ALL).t(0), config);
+  //   var state = visualiseQState('#svg', jsqubits('1').t(jsqubits.ALL).hadamard(jsqubits.ALL), config);
 
-
-    $('#hadamardBtn').click(function () {
-        state.applyOperator(function (s) {
-            return s.hadamard(jsqubits.ALL);
+    function bindToClick(selector, op) {
+        $(selector).each(function () {
+            buttons.push(this);
+            $(this).click(function () {
+                buttons.forEach(function (btn) {
+                    $(btn).attr('disabled', 'disabled');
+                });
+                state.applyOperator(op)
+                    .then(function () {
+                        buttons.forEach(function (btn) {
+                            $(btn).removeAttr('disabled');
+                        });
+                    });
+            });
         });
+    }
+
+    bindToClick('#hadamardBtn0', function (s) {
+        return s.hadamard(0);
+    });
+    
+    bindToClick('#hadamardBtn1', function (s) {
+        return s.hadamard(1);
+    });
+    
+    bindToClick('#hadamardBtnAll', function (s) {
+        return s.hadamard(jsqubits.ALL);
+    });
+
+    bindToClick('#notBtn0', function (s) {
+        return s.not(0);
+    });
+    
+    bindToClick('#cnotBtn1_0', function (s) {
+        return s.cnot(1,0);
+    });
+    
+    bindToClick('#cnotBtn0_1', function (s) {
+        return s.cnot(0,1);
+    });
+
+    bindToClick('#notBtn1', function (s) {
+        return s.not(1);
+    });
+    
+    bindToClick('#notBtnAll', function (s) {
+        return s.not(jsqubits.ALL);
+    });
+    
+    bindToClick('#tBtnAll', function (s) {
+        return s.t(jsqubits.ALL);
+    });
+
+    bindToClick('#tBtn1', function (s) {
+        return s.t(1);
+    });
+
+    bindToClick('#tBtn0', function (s) {
+        return s.t(0);
     });
 
     log('all done 1');
