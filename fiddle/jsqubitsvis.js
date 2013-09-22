@@ -341,13 +341,21 @@ function start($) {
         return context;
     }
 
-    function applyOperator(op, selector, expandedState, config) {
-        return phase1(createPhases(op, selector, expandedState, config))
-            .then(phase2)
-            .then(phase3)
+    function applyOperator(op, selector, expandedState, config, options) {
+        var context = createPhases(op, selector, expandedState, config);
+        if (options && options.simple) {
+            return phase1(context)
             .then(phase4)
             .then(phase5)
             .then(function() {log("finished")});
+        } else {
+            return phase1(context)
+                .then(phase2)
+                .then(phase3)
+                .then(phase4)
+                .then(phase5)
+                .then(function() {log("finished")});
+        }
     }
     
     function visualiseQState(selector, qstate, config) {
@@ -366,8 +374,8 @@ function start($) {
         renderAmplitudes(selector + ' .qstateBody', expandedState, config);
 
         return {
-            applyOperator: function(op) {
-                return applyOperator(op, selector + ' .qstateBody', expandedState, config);
+            applyOperator: function(op, options) {
+                return applyOperator(op, selector + ' .qstateBody', expandedState, config, options);
             }
         };
         
@@ -382,14 +390,14 @@ function start($) {
     var state = visualiseQState('#svg', jsqubits('00').hadamard(jsqubits.ALL).t(0), config);
   //   var state = visualiseQState('#svg', jsqubits('1').t(jsqubits.ALL).hadamard(jsqubits.ALL), config);
 
-    function bindToClick(selector, op) {
+    function bindToClick(selector, options, op) {
         $(selector).each(function () {
             buttons.push(this);
             $(this).click(function () {
                 buttons.forEach(function (btn) {
                     $(btn).attr('disabled', 'disabled');
                 });
-                state.applyOperator(op)
+                state.applyOperator(op, options)
                     .then(function () {
                         buttons.forEach(function (btn) {
                             $(btn).removeAttr('disabled');
@@ -399,47 +407,48 @@ function start($) {
         });
     }
 
-    bindToClick('#hadamardBtn0', function (s) {
+    bindToClick('#hadamardBtn0', {simple: false}, function (s) {
         return s.hadamard(0);
     });
     
-    bindToClick('#hadamardBtn1', function (s) {
+    bindToClick('#hadamardBtn1', {simple: false}, function (s) {
         return s.hadamard(1);
     });
     
-    bindToClick('#hadamardBtnAll', function (s) {
+    bindToClick('#hadamardBtnAll', {simple: false}, function (s) {
         return s.hadamard(jsqubits.ALL);
     });
 
-    bindToClick('#notBtn0', function (s) {
+    bindToClick('#notBtn0', {simple: true}, function (s) {
         return s.not(0);
     });
     
-    bindToClick('#cnotBtn1_0', function (s) {
-        return s.cnot(1,0);
-    });
-    
-    bindToClick('#cnotBtn0_1', function (s) {
-        return s.cnot(0,1);
-    });
-
-    bindToClick('#notBtn1', function (s) {
+    bindToClick('#notBtn1', {simple: true}, function (s) {
         return s.not(1);
     });
     
-    bindToClick('#notBtnAll', function (s) {
+    bindToClick('#notBtnAll', {simple: true}, function (s) {
         return s.not(jsqubits.ALL);
     });
     
-    bindToClick('#tBtnAll', function (s) {
+    bindToClick('#cnotBtn1_0', {simple: true}, function (s) {
+        return s.cnot(1,0);
+    });
+    
+    bindToClick('#cnotBtn0_1', {simple: true}, function (s) {
+        return s.cnot(0,1);
+    });
+
+    
+    bindToClick('#tBtnAll', {simple: true}, function (s) {
         return s.t(jsqubits.ALL);
     });
 
-    bindToClick('#tBtn1', function (s) {
+    bindToClick('#tBtn1', {simple: true}, function (s) {
         return s.t(1);
     });
 
-    bindToClick('#tBtn0', function (s) {
+    bindToClick('#tBtn0', {simple: true}, function (s) {
         return s.t(0);
     });
 
