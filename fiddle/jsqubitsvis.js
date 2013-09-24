@@ -150,7 +150,11 @@ function start($) {
             stateWithAmplitude.y = computeAmplitudeYValue(config.maxRadius, stateWithAmplitude.index);
             amplitudes.push(stateWithAmplitude);
         });
-
+        amplitudes.sort(function (stateA, stateB) {
+            var indexA = parseInt(stateA.index, 10);
+            var indexB = parseInt(stateB.index, 10);
+            return indexA - indexB;
+        });
         return amplitudes;
     }
         
@@ -345,9 +349,9 @@ function start($) {
         var context = createPhases(op, selector, expandedState, config);
         if (options && options.simple) {
             return phase1(context)
-            .then(phase4)
-            .then(phase5)
-            .then(function() {log("finished")});
+                .then(phase4)
+                .then(phase5)
+                .then(function() {log("finished")});
         } else {
             return phase1(context)
                 .then(phase2)
