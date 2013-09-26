@@ -260,6 +260,7 @@ function start($) {
     
     
     function createPhase1And2States(context, op) {
+        log("createPhase1And2States");
         context.expandedState.amplitudes.forEach(function(amplitudeWithState) {
             var qstate = op(jsqubits(asBinary(amplitudeWithState.index, context.expandedState.numBits)));
             statesGroup = [];
@@ -278,6 +279,7 @@ function start($) {
     }
     
     function createPhase3States(context) {
+        log("createPhase3States");
         _.forOwn(context.keysGroupedByDestinationState, function (keyGroup) {
         
     	    var totalAmplitude = _.reduce(keyGroup, function (accumulator, key) {
@@ -314,6 +316,7 @@ function start($) {
     }
     
     function createPhase5States(context, op) {
+        log("createPhase5States");
         var oldQState = context.expandedState.qstate;
         var newQState = op(oldQState);
         context.newQState = newQState;
@@ -391,22 +394,16 @@ function start($) {
         maxRadius: 70
     };
 
-    var state = visualiseQState('#svg', jsqubits('00').hadamard(jsqubits.ALL).t(0), config);
-  //   var state = visualiseQState('#svg', jsqubits('1').t(jsqubits.ALL).hadamard(jsqubits.ALL), config);
+    var state = visualiseQState('#svg', jsqubits('00'), config);
+    
+    var lastOperatorPromise = $.when();
 
     function bindToClick(selector, options, op) {
         $(selector).each(function () {
-            buttons.push(this);
             $(this).click(function () {
-                buttons.forEach(function (btn) {
-                    $(btn).attr('disabled', 'disabled');
+                lastOperatorPromise = lastOperatorPromise.then(function () {
+                    return state.applyOperator(op, options);
                 });
-                state.applyOperator(op, options)
-                    .then(function () {
-                        buttons.forEach(function (btn) {
-                            $(btn).removeAttr('disabled');
-                        });
-                    });
             });
         });
     }
@@ -454,6 +451,10 @@ function start($) {
 
     bindToClick('#tBtn0', {simple: true}, function (s) {
         return s.t(0);
+    });
+    
+    bindToClick('#qftBtn', {simple: false}, function (s) {
+        return s.qft(jsqubits.ALL);
     });
 
     log('all done 1');
