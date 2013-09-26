@@ -10,6 +10,8 @@
 <body>      
 <h1>Quantum computation visualisation</h1>
 
+<svg id='svg' height='600px' class='jsqubits'></svg>
+
 <div class='qvisButtons'>
   <button id='notBtn1' class='qvisButtons_button'>Not<sub>1</sub></button>
   <button id='notBtn0' class='qvisButtons_button'>Not<sub>0</sub></button>
@@ -33,13 +35,16 @@
   <button id='hadamardBtnAll' class='qvisButtons_button'>Hadamard<sub>All</sub></button>
 </div>
 
+<div class='qvisButtons'>
+  <button id='qftBtn' class='qvisButtons_button'>QFT</button>
+</div>
 
-<svg id='svg' height='600px' class='jsqubits'></svg>
+
 <div id='log'>
 <p>Log...</p>
 </div>
 
-<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+<script src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
 <script src='http://davidbkemp.github.io/scratch/qtalk/js/jsqubits.js'></script>
 <script src='http://d3js.org/d3.v3.min.js'></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.3.1/lodash.min.js'></script>
