@@ -392,7 +392,28 @@ jQuery(function ($) {
     })();
 
 
-    renderQState('#hadamardOperator0', jsqubits('0'), { showPhases: true, height: 150 });
+    (function() {
+    
+        var config = {
+            textHeight: 12,
+            textWidth: 12,
+            maxRadius: 70
+        };
+        
+        var qstate = jsqubits("0");
+        
+        var animatedQubits = visQubits(qstate, config);
+        
+        animatedQubits.display($("hadamardOperator0").get());
+    
+        $("hadamard0Button").click(function () {
+            animatedQubits.applyOperator(function (s) {
+                return s.hadamard(0);
+            }, {simple: true});
+            $(this).hide();
+        });
+
+    })();
 
 
 });
