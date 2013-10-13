@@ -1,13 +1,12 @@
 visQubits = function (qstate, config) {
 
-    var $ = jQuery;
-
     function log(message) {
-        $('#log').append($('<div>').text(message));
+        d3.select('#log').append('div').text(message);
     }
 
-    var buttons = [];
     var expandedState = null;
+    var qstateBody = null;
+    var qstateBitLabels = null;
     
     function asBinary(i, length) {
         i = (typeof i == 'string') ? parseInt(i, 10) : i;
@@ -15,14 +14,13 @@ visQubits = function (qstate, config) {
         return paddedString.substr(paddedString.length - length);
     }
 
-    function createSections(element, numBits, config) {
-        var svg = d3.select(element[0]);
+    function createSections(svg, numBits, config) {
         log("creating sections for: " + numBits);
         svg.selectAll('.qstateBitLabels').remove();
         svg.selectAll('.qstateBody').remove();
         svg.attr('height', '' + (config.maxRadius * (1 + (2 << numBits))) + 'px');
-        svg.append('g').attr('class', 'qstateBitLabels').attr('transform', 'translate(0,' + config.textHeight + ')');
-        svg.append('g').attr('class', 'qstateBody').attr('transform', 'translate(0,' + (1.3 * config.textHeight) + ')');
+        qstateBitLabels = svg.append('g').attr('class', 'qstateBitLabels').attr('transform', 'translate(0,' + config.textHeight + ')');
+        qstateBody = svg.append('g').attr('class', 'qstateBody').attr('transform', 'translate(0,' + (1.3 * config.textHeight) + ')');
     }
 
 
@@ -37,11 +35,10 @@ visQubits = function (qstate, config) {
     function computeInitialAmplitudeXValue(numBits, config) {
         return config.maxRadius + (numBits + 1) * config.textWidth;
     }
-    function renderStateLabels(element, numBits, config) {
+    function renderStateLabels(numBits, config) {
         var numStates = 1 << numBits;
-        var svg = d3.select(element[0]);
         for (var basisState = 0; basisState < numStates; basisState++) {
-            var labelElement = svg.append('g')
+            var labelElement = qstateBody.append('g')
                 .attr('class', 'qstate')
                 .attr('transform', computeStateLabelTransform(basisState, config.maxRadius, config.textHeight));
             var label = asBinary(basisState, numBits);
@@ -54,10 +51,10 @@ visQubits = function (qstate, config) {
         }
     }
 
-    function renderBitLabels(element, numBits, config) {
-        var svg = d3.select(element[0]);
+    function renderBitLabels(numBits, config) {
         for (var bit = (numBits - 1); bit >= 0; bit--) {
-            var bitLabel = svg.append('text').attr('x', (numBits - bit - 1) * config.textWidth);
+            var bitLabel = qstateBitLabels.append('text')
+                .attr('x', (numBits - bit - 1) * config.textWidth);
             bitLabel.append('tspan').text('b').attr('y', 0);
             bitLabel.append('tspan').attr('class', 'qstateBitLabelsSubscript').attr('y', config.textHeight / 8).text(bit);
         }
@@ -125,17 +122,16 @@ visQubits = function (qstate, config) {
                 return createAmplitudeGraphicTransform(config, expandedState.numBits, stateWithAmplitude);
             })
             .each(function() {
-                transitionEndPromises.push(new $.Deferred());
+                transitionEndPromises.push(new jQuery.Deferred());
             })
             .each('end', function () {
                 transitionEndPromises.pop().resolve();
             });
-        return $.when.apply(null, transitionEndPromises);
+        return jQuery.when.apply(null, transitionEndPromises);
     }
 
-    function renderAmplitudes(element, expandedState, config) {
-        var amplitudeGroup = d3.select(element[0])
-            .selectAll('.amplitude')
+    function renderAmplitudes(expandedState, config) {
+        var amplitudeGroup = qstateBody.selectAll('.amplitude')
             .data(expandedState.amplitudes, function (stateWithAmplitude) {
                 return stateWithAmplitude.key;
             });
@@ -209,13 +205,13 @@ visQubits = function (qstate, config) {
     function phase1(context) {
         log('phase 1');
         context.expandedState.amplitudes = context.phase1States;
-        return renderAmplitudes(context.element, context.expandedState, context.config)
+        return renderAmplitudes(context.expandedState, context.config)
             .then(function () { return context; });
     }
 
     function phase2(context) {
         log('phase 2');
-        var promise = $.when();
+        var promise = jQuery.when();
         _.forEach(context.statesGroupedByOriginalState, function(stateGroup) {
             promise = promise.then(phase2a(context, stateGroup))
                 .then(phase2b(context, stateGroup));
@@ -229,7 +225,7 @@ visQubits = function (qstate, config) {
             _.forEach(stateGroup, function(state) {
                 _.assign(state, context.phase2aStates[state.key]);
             });
-            return renderAmplitudes(context.element, context.expandedState, _.assign(_.clone(context.config), {duration: 0}));
+            return renderAmplitudes(context.expandedState, _.assign(_.clone(context.config), {duration: 0}));
         }
     }
 
@@ -239,21 +235,21 @@ visQubits = function (qstate, config) {
             _.forEach(stateGroup, function(state) {
                 _.assign(state, context.phase2bStates[state.key]);
             });
-            return renderAmplitudes(context.element, context.expandedState, context.config);
+            return renderAmplitudes(context.expandedState, context.config);
         }
     }
     
     function phase3(context) {
     	log("phase 3");
     	context.expandedState.amplitudes = context.phase3States;
-    	return renderAmplitudes(context.element, context.expandedState, context.config)
+    	return renderAmplitudes(context.expandedState, context.config)
     	    .then(function () {return context;});
     }
 
     function phase4(context) {
         log("phase 4");
         context.expandedState.amplitudes = context.phase4States;
-        return renderAmplitudes(context.element, context.expandedState, context.config)
+        return renderAmplitudes(context.expandedState, context.config)
     	    .then(function () {return context;});
     }
     
@@ -261,7 +257,7 @@ visQubits = function (qstate, config) {
         log("phase 5");
         context.expandedState.amplitudes = context.phase5States;
         context.expandedState.qstate = context.newQState;
-        return renderAmplitudes(context.element, context.expandedState, context.config)
+        return renderAmplitudes(context.expandedState, context.config)
     	    .then(function () {return context;});
     }
     
@@ -330,10 +326,9 @@ visQubits = function (qstate, config) {
         context.phase5States = expandQState(newQState, context.config);
     }
     
-    function createPhases(op, element, expandedState, config) {
+    function createPhases(op, expandedState, config) {
         log("creating phases");
         var context = {
-            element: element,
             expandedState: expandedState,
             phase1States: [],
             phase2aStates: {},
@@ -355,8 +350,8 @@ visQubits = function (qstate, config) {
         return context;
     }
 
-    function applyOperator(op, element, expandedState, config, options) {
-        var context = createPhases(op, element, expandedState, config);
+    function applyOperator(op, expandedState, config, options) {
+        var context = createPhases(op, expandedState, config);
         if (options && options.simple) {
             return phase1(context)
                 .then(phase4)
@@ -372,7 +367,7 @@ visQubits = function (qstate, config) {
         }
     }
     
-    function visualiseQState(element, qstate, config) {
+    function visualiseQState(qstate, config) {
     
         var numBits = qstate.numBits();
         
@@ -382,84 +377,13 @@ visQubits = function (qstate, config) {
             numBits: numBits
         };
 
-        createSections(element, numBits, config);
-        renderBitLabels(element.find('.qstateBitLabels'), numBits, config);
-        renderStateLabels(element.find('.qstateBody'), numBits, config);
-        renderAmplitudes(element.find('.qstateBody'), expandedState, config);
+        createSections(targetElement, numBits, config);
+        renderBitLabels(numBits, config);
+        renderStateLabels(numBits, config);
+        renderAmplitudes(expandedState, config);
         
     }
 
-    /*
-    var config = {
-        textHeight: 12,
-        textWidth: 12,
-        maxRadius: 70
-    };
-
-    var state = visualiseQState('#svg', jsqubits('00'), config);
-    
-    var lastOperatorPromise = $.when();
-
-    function bindToClick(selector, options, op) {
-        $(selector).each(function () {
-            $(this).click(function () {
-                lastOperatorPromise = lastOperatorPromise.then(function () {
-                    return state.applyOperator(op, options);
-                });
-            });
-        });
-    }
-
-    bindToClick('#hadamardBtn0', {simple: false}, function (s) {
-        return s.hadamard(0);
-    });
-    
-    bindToClick('#hadamardBtn1', {simple: false}, function (s) {
-        return s.hadamard(1);
-    });
-    
-    bindToClick('#hadamardBtnAll', {simple: false}, function (s) {
-        return s.hadamard(jsqubits.ALL);
-    });
-
-    bindToClick('#notBtn0', {simple: true}, function (s) {
-        return s.not(0);
-    });
-    
-    bindToClick('#notBtn1', {simple: true}, function (s) {
-        return s.not(1);
-    });
-    
-    bindToClick('#notBtnAll', {simple: true}, function (s) {
-        return s.not(jsqubits.ALL);
-    });
-    
-    bindToClick('#cnotBtn1_0', {simple: true}, function (s) {
-        return s.cnot(1,0);
-    });
-    
-    bindToClick('#cnotBtn0_1', {simple: true}, function (s) {
-        return s.cnot(0,1);
-    });
-
-    
-    bindToClick('#tBtnAll', {simple: true}, function (s) {
-        return s.t(jsqubits.ALL);
-    });
-
-    bindToClick('#tBtn1', {simple: true}, function (s) {
-        return s.t(1);
-    });
-
-    bindToClick('#tBtn0', {simple: true}, function (s) {
-        return s.t(0);
-    });
-    
-    bindToClick('#qftBtn', {simple: false}, function (s) {
-        return s.qft(jsqubits.ALL);
-    });
-    
-    */
 
     log('all done 1');
     
@@ -467,14 +391,14 @@ visQubits = function (qstate, config) {
     
     return {
         display: function (element) {
-            targetElement = element;
-            visualiseQState(targetElement, qstate, config)
+            targetElement = d3.select(element);
+            visualiseQState(qstate, config)
         },
         updateQState: function (newQState) {
-            visualiseQState(targetElement, newQState, config)
+            visualiseQState(newQState, config)
         },
         applyOperator: function(op, options) {
-                applyOperator(op, targetElement.find('.qstateBody'), expandedState, config, options);
+                applyOperator(op, expandedState, config, options);
         }
     };
 };
