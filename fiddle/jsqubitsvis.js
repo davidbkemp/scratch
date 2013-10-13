@@ -115,6 +115,7 @@ visQubits = function (qstate, config) {
     }
 
     function transitionExistingAmplitudes(amplitudeGroup, expandedState, config) {
+        var transitionEndDeferreds = [];
         var transitionEndPromises = [];
         amplitudeGroup.transition()
             .duration(config.duration == null ? 1000 : config.duration)
@@ -122,12 +123,14 @@ visQubits = function (qstate, config) {
                 return createAmplitudeGraphicTransform(config, expandedState.numBits, stateWithAmplitude);
             })
             .each(function() {
-                transitionEndPromises.push(new jQuery.Deferred());
+                var deferred = Q.defer();
+                transitionEndDeferreds.push(deferred);
+                transitionEndPromises.push(deferred.promise);
             })
             .each('end', function () {
-                transitionEndPromises.pop().resolve();
+                transitionEndDeferreds.pop().resolve();
             });
-        return jQuery.when.apply(null, transitionEndPromises);
+        return Q.all(transitionEndPromises);
     }
 
     function renderAmplitudes(expandedState, config) {
@@ -211,7 +214,7 @@ visQubits = function (qstate, config) {
 
     function phase2(context) {
         log('phase 2');
-        var promise = jQuery.when();
+        var promise = Q.when();
         _.forEach(context.statesGroupedByOriginalState, function(stateGroup) {
             promise = promise.then(phase2a(context, stateGroup))
                 .then(phase2b(context, stateGroup));
