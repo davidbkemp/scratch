@@ -7,7 +7,7 @@ function jsqubitsDirective() {
         },
         
         link: function postLink(scope, element, attrs) {
-            scope.jsqubitsvis.display(element);
+            scope.jsqubitsvis.display(element[0]);
         }
     };
     
