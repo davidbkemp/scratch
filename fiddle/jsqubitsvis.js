@@ -359,14 +359,20 @@ visQubits = function (qstate, config) {
             return phase1(context)
                 .then(phase4)
                 .then(phase5)
-                .then(function() {log("finished")});
+                .then(function() {
+                    log("finished");
+                    return expandedState.qstate;
+                });
         } else {
             return phase1(context)
                 .then(phase2)
                 .then(phase3)
                 .then(phase4)
                 .then(phase5)
-                .then(function() {log("finished")});
+                .then(function() {
+                    log("finished");
+                    return expandedState.qstate;
+                });
         }
     }
     
@@ -391,6 +397,7 @@ visQubits = function (qstate, config) {
     log('all done 1');
     
     var targetElement = null;
+    var currentOperatorPromise = Q.when();
     
     return {
         display: function (element) {
@@ -398,10 +405,13 @@ visQubits = function (qstate, config) {
             visualiseQState(qstate, config)
         },
         updateQState: function (newQState) {
-            visualiseQState(newQState, config)
+            visualiseQState(newQState, config);
         },
         applyOperator: function(op, options) {
-                applyOperator(op, expandedState, config, options);
+            currentOperatorPromise = currentOperatorPromise.then(function() {
+                return applyOperator(op, expandedState, config, options);
+            });
+            return currentOperatorPromise;
         }
     };
 };
