@@ -54,8 +54,12 @@ function JsqubitsController($scope) {
         var op = function (s) {
             return s[$scope.request.operationId](targetBits);
         }
-        $scope.visualQubits.applyOperator(op, {});
-        $scope.jsqubitsModel.qstate = op($scope.jsqubitsModel.qstate);
+        $scope.visualQubits.applyOperator(op, {}).then(function (newQState) {
+            $scope.$apply(function () {
+                $scope.jsqubitsModel.qstate = newQState;
+            });
+        });
+        
     }
 
     initializeState();
