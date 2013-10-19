@@ -8,7 +8,7 @@
   },
   "main": "index",
   "scripts": {
-    "test": "jshint --config jshintConfig.json animatedQubits.js && jshint --config jshintConfig.json spec && jasmine-node spec",
+    "test": "jshint --config jshintConfig.json animatedQubits.js lib spec example/js && jasmine-node spec",
     "testOnly": "jasmine-node spec"
   },
   "dependencies": {

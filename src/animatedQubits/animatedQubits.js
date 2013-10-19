@@ -1,28 +1,31 @@
-/* global module */
-/* exported animatedQubits */
+/* global define:true, module, require, qubitsGraphics */
+/* exported animatedQubits, define */
 
-var define, animatedQubits;
+var animatedQubits;
 
 (function () {
     "use strict";
 
     /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
     if (typeof define !== 'function') {
-        define = function (f) {
+        define = function (ignoredList, f) {
             if (typeof module !== 'undefined' && module.exports) {
-                module.exports = f();
+                module.exports = f(require('./lib/qubitsGraphics.js'));
             } else {
-                animatedQubits = f();
+                animatedQubits = f(qubitsGraphics);
             }
         };
     }
-    
-    
-    define(function () {
+
+    define(['qubitsGraphics'], function (qubitsGraphics) {
         return function () {
+        
+            var graphics;
+            
             return {
-                display: function () {
-                    
+                display: function (svgElement) {
+                    graphics = qubitsGraphics(svgElement);
+                    graphics.setHeight(42);
                 }
             };
         };
