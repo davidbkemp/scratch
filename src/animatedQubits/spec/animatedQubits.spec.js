@@ -1,8 +1,21 @@
-/*global describe:true, it:true, expect:true */
+/*global require:true, describe:true, it:true, expect:true, beforeEach:true */
+
+(function () {
+"use strict";
+
+var animatedQubits = require('../animatedQubits');
 
 describe("animatedQubits", function () {
-    "use strict";
+
+    var animation;
+
+    beforeEach(function () {
+        animation = animatedQubits();
+    });
+
     it("should return an object with a display() method", function () {
-        expect("a").toBe("a");
+        expect(typeof animation.display).toBe("function");
     });
 });
+
+})();

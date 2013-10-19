@@ -8,7 +8,8 @@
   },
   "main": "index",
   "scripts": {
-    "test": "jshint --config jshintConfig.json spec && jasmine-node spec"
+    "test": "jshint --config jshintConfig.json animatedQubits.js && jshint --config jshintConfig.json spec && jasmine-node spec",
+    "testOnly": "jasmine-node spec"
   },
   "dependencies": {
     "requirejs": "2.1.x",
