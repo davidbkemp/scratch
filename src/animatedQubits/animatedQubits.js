@@ -5,23 +5,10 @@ var animatedQubits;
 
 (function () {
     "use strict";
-
-    /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
-    if (typeof define !== 'function') {
-        define = function (ignoredList, f) {
-            if (typeof module !== 'undefined' && module.exports) {
-                module.exports = f(require('./lib/qubitsGraphics.js'));
-            } else {
-                animatedQubits = f(qubitsGraphics);
-            }
-        };
-    }
-
-    define(['qubitsGraphics'], function (qubitsGraphics) {
+    
+    var createModule = function (qubitsGraphics) {
         return function () {
-        
             var graphics;
-            
             return {
                 display: function (svgElement) {
                     graphics = qubitsGraphics(svgElement);
@@ -29,6 +16,16 @@ var animatedQubits;
                 }
             };
         };
-    });
-    
+    };
+
+    /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
+    if (typeof define === 'function') {
+        define(['qubitsGraphics'], createModule);
+    } else if (typeof module !== 'undefined' && module.exports) {
+        module.exports = createModule(require('./lib/qubitsGraphics.js'));
+    } else {
+        animatedQubits = createModule(qubitsGraphics);
+    }
+
+
 })();

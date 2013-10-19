@@ -5,20 +5,8 @@ var qubitsGraphics;
 
 (function () {
     "use strict";
-
-    /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
-    if (typeof define !== 'function') {
-        define = function (ignoredList, f) {
-            if (typeof module !== 'undefined' && module.exports) {
-                module.exports = f();
-            } else {
-                qubitsGraphics = f();
-            }
-        };
-    }
     
-    
-    define([], function () {
+    var createModule = function () {
         return function () {
             return {
                 setHeight: function () {
@@ -26,6 +14,16 @@ var qubitsGraphics;
                 }
             };
         };
-    });
+    };
+    
+    /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
+    if (typeof define === 'function') {
+        define(createModule);
+    } else if (typeof module !== 'undefined' && module.exports) {
+        module.exports = createModule();
+    } else {
+        qubitsGraphics = createModule();
+    }
+
     
 })();
