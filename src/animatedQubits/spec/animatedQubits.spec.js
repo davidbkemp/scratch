@@ -1,16 +1,42 @@
-/*global require:true, describe:true, it:true, expect:true, beforeEach:true */
+/*global require, describe, it, expect, beforeEach, afterEach */
 
 (function () {
 "use strict";
 
-var animatedQubits = require('../animatedQubits');
+var mockery = require('mockery'),
+    jsqubits = require('jsqubits');
 
 describe("animatedQubits", function () {
 
-    var animation;
-
+    var animation,
+        mockQubitsGraphicsModule,
+        mockQubitsGraphics,
+        qstate,
+        config;
+        
     beforeEach(function () {
-        animation = animatedQubits();
+        qstate = jsqubits('|10>');
+        
+        config = {
+            maxRadius: 21;
+        };
+        
+        mockQubitsGraphics = {
+                setHeight: function () {}
+        };
+    
+        mockQubitsGraphicsModule = function (element) {
+            mockQubitsGraphicsModule.svgElement = element;
+            return mockQubitsGraphics;
+        };
+    
+        mockery.enable();
+        mockery.registerMock('./lib/qubitsGraphics.js', mockQubitsGraphicsModule);
+        animation = require('../animatedQubits')(config, qstate);
+    });
+    
+    afterEach(function () {
+        mockery.disable();
     });
 
     it("should return an object with a display() method", function () {
@@ -20,11 +46,13 @@ describe("animatedQubits", function () {
     describe("#display", function () {
     
         it("should adjust the height of the svg element", function () {
-            var svgElement = "the svg element";
+            var element = "the svg element";
+            spyOn(mockQubitsGraphics, 'setHeight');
     
-            animation.display(svgElement);
+            animation.display(element);
             
-            
+            expect(mockQubitsGraphicsModule.svgElement).toBe(element);
+            expect(mockQubitsGraphics).toHaveBeenCalledWith(55);
             // svg.attr('height', '' + (config.maxRadius * (1 + (2 << numBits))) + 'px');
         });
     });
