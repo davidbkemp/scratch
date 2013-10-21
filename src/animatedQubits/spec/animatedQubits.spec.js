@@ -52,7 +52,7 @@ describe("animatedQubits", function () {
             animation.display(element);
             
             expect(mockQubitsGraphicsModule.svgElement).toBe(element);
-            expect(mockQubitsGraphics).toHaveBeenCalledWith(55);
+            expect(mockQubitsGraphics.setHeight).toHaveBeenCalledWith(55);
             // svg.attr('height', '' + (config.maxRadius * (1 + (2 << numBits))) + 'px');
         });
     });
