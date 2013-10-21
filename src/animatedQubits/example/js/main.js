@@ -13,7 +13,6 @@ requirejs.config({
 requirejs(['animatedQubits'],
     function (animatedQubits) {
         animatedQubits('ohoh');
-        alert("made it")
     }
 );
 

@@ -1,10 +1,10 @@
-/*global require, describe, it, expect, beforeEach, afterEach */
+/*global require, describe, it, expect, beforeEach, afterEach, spyOn */
 
 (function () {
 "use strict";
 
 var mockery = require('mockery'),
-    jsqubits = require('jsqubits');
+    jsqubits = require('../lib/jsqubits.js');
 
 describe("animatedQubits", function () {
 
@@ -18,7 +18,7 @@ describe("animatedQubits", function () {
         qstate = jsqubits('|10>');
         
         config = {
-            maxRadius: 21;
+            maxRadius: 21
         };
         
         mockQubitsGraphics = {
