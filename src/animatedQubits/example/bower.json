@@ -1,0 +1,22 @@
+{
+  "name": "animatedQubitsExample",
+  "version": "0.0.0",
+  "homepage": "https://github.com/davidbkemp/scratch",
+  "authors": [
+    "David Kemp <davidbkemp@gmail.com>"
+  ],
+  "description": "example",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+    "dependencies": {
+        "animatedQubits": "../bower.json"
+    }
+}
