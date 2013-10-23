@@ -1,0 +1,34 @@
+{
+  "name": "animatedQubits",
+  "main": "animatedQubits.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/davidbkemp/scratch",
+  "authors": [
+    "David Kemp <davidbkemp@gmail.com>"
+  ],
+  "description": "Library for animating quantum computations",
+  "keywords": [
+    "quantum",
+    "jsqubits",
+    "animation",
+    "visualisation",
+    "d3"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+    "dependencies": {
+        "d3": "3.3.8",
+        "d3-measure-text": "0.0.1",
+        "qubitsGraphics": "lib/qubitsGraphics.js",
+        "jsqubits": "lib/jsqubits.js",
+        "d3-transform": "lib/d3-transform.js"
+    }
+}

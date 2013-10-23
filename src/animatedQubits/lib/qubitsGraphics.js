@@ -1,9 +1,6 @@
-/* global define:true, module */
-/* exported qubitsGraphics */
+/* global define, module */
 
-var qubitsGraphics;
-
-(function () {
+(function (globals) {
     "use strict";
     
     var createModule = function () {
@@ -17,13 +14,13 @@ var qubitsGraphics;
     };
     
     /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
-    if (typeof define === 'function') {
+    if (typeof define !== 'undefined' && define.amd) {
         define(createModule);
     } else if (typeof module !== 'undefined' && module.exports) {
         module.exports = createModule();
     } else {
-        qubitsGraphics = createModule();
+        globals.qubitsGraphics = createModule();
     }
 
     
-})();
+})(this);
