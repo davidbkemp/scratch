@@ -19,10 +19,12 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "spec",
     "test",
     "tests",
     "example",
-    "examples"
+    "examples",
+    "jshintConfig.json"
   ],
   "dependencies": {
     "d3-measure-text": "~0.0.1",

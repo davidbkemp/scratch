@@ -5,8 +5,8 @@
 requirejs.config({
     baseUrl: 'js',
     paths: {
-        animatedQubits: '../../animatedQubits',
-        qubitsGraphics: '../../lib/qubitsGraphics'
+        animatedQubits: '../bower_components/animatedQubits/animatedQubits',
+        qubitsGraphics: '../bower_components/animatedQubits/lib/qubitsGraphics'
     }
 });
 
