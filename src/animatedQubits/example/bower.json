@@ -15,7 +15,8 @@
     "tests"
   ],
   "dependencies": {
-    "animatedQubits": "../../animatedQubits.tar.gz",
+    "d3": "~3.3.8",
+    "d3-measure-text" : "0.0.1",
     "requirejs": "~2.1.9"
   }
 }

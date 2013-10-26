@@ -3,22 +3,22 @@
 (function () {
 "use strict";
 
-var bowerComps = '../bower_components/';
-var animatedQubitsPath = '../../';
+var animatedQubitsPath = '../',
+    bowerPath = 'app/bower_compnonets/';
 
 requirejs.config({
-    baseUrl: 'js',
+    baseUrl: '.',
     paths: {
         animatedQubits: animatedQubitsPath + 'animatedQubits',
         qubitsGraphics: animatedQubitsPath + 'lib/qubitsGraphics',
-        jsqubits: bowerComps + 'animatedQubits/lib/jsqubits',
-        d3MeasureText: bowerComps + 'd3-measure-text/lib/d3-measure-text'
+        jsqubits: animatedQubitsPath + 'lib/jsqubits',
+        d3MeasureText: bowerPath + 'd3-measure-text/lib/d3-measure-text'
     }
 });
 
 requirejs(['animatedQubits', 'jsqubits'],
     function (animatedQubits, jsqubits) {
-        var animation = animatedQubits(jsqubits("10"), {maxRadius: 50});
+        var animation = animatedQubits(jsqubits("|101>"), {maxRadius: 50});
         animation.display(document.getElementById("svg"));
     }
 );

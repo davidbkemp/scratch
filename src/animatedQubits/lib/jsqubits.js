@@ -4,20 +4,15 @@
 //     jsqubits may be freely distributed under the MIT license.
 
 /*jshint eqnull:true, eqeqeq:true, forin:true, immed:true, latedef:true, newcap:true, noarg:true, nonew:true, regexp:true, undef:true, unused:true, strict:true, trailing:true */
-/*global module:true */
+/*global module, define */
+ 
 
-function jsqubits(bitString) {
+(function(globals) {
     "use strict";
-    return jsqubits.QState.fromBits(bitString);
-}
 
-/* Allow this module to used within node and stand-alone. */
-if (typeof module !== 'undefined') {
-    module.exports = jsqubits;
-}
-
-(function() {
-    "use strict";
+    function jsqubits(bitString) {
+        return jsqubits.QState.fromBits(bitString);
+    }
 
     jsqubits.Complex = function(real, imaginary) {
         validateArgs(arguments, 1, 2, 'Must supply a real, and optionally an imaginary, argument to Complex()');
@@ -767,4 +762,17 @@ if (typeof module !== 'undefined') {
         return controlBitMask;
     }
 
-})();
+    function createModule() {
+        return jsqubits;
+    }
+
+    /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
+    if (typeof define !== 'undefined' && define.amd) {
+        define(createModule);
+    } else if (typeof module !== 'undefined' && module.exports) {
+        module.exports = createModule();
+    } else {
+        globals.qubitsGraphics = createModule();
+    }
+
+})(this);
