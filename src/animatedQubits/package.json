@@ -9,7 +9,8 @@
   "main": "index",
   "scripts": {
     "test": "jshint --config jshintConfig.json animatedQubits.js lib spec example/js && jasmine-node spec",
-    "testOnly": "jasmine-node spec"
+    "testOnly": "jasmine-node spec",
+    "build": "r.js -o build.js"
   },
   "dependencies": {
     "requirejs": "2.1.x",

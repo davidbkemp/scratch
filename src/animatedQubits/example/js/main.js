@@ -9,8 +9,7 @@ var animatedQubitsPath = '../',
 requirejs.config({
     baseUrl: '.',
     paths: {
-        animatedQubits: animatedQubitsPath + 'animatedQubits',
-        qubitsGraphics: animatedQubitsPath + 'lib/qubitsGraphics',
+        animatedQubits: animatedQubitsPath + 'animatedQubits.min',
         jsqubits: animatedQubitsPath + 'lib/jsqubits',
         d3MeasureText: bowerPath + 'd3-measure-text/lib/d3-measure-text'
     }
