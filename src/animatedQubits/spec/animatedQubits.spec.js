@@ -33,7 +33,7 @@ describe("animatedQubits", function () {
         mockery.enable();
         mockery.registerAllowable('../animatedQubits');
         mockery.registerMock('./lib/qubitsGraphics.js', mockQubitsGraphicsModule);
-        animation = require('../animatedQubits')(config, qstate);
+        animation = require('../animatedQubits')(qstate, config);
     });
     
     afterEach(function () {
@@ -54,7 +54,8 @@ describe("animatedQubits", function () {
             animation.display(element);
             
             expect(mockQubitsGraphicsModule.svgElement).toBe(element);
-            expect(mockQubitsGraphics.setHeight).toHaveBeenCalledWith(42);
+            expect(mockQubitsGraphics.setHeight)
+                .toHaveBeenCalledWith(config.maxRadius * (2 + Math.SQRT2));
             // svg.attr('height', '' + (config.maxRadius * (1 + (2 << numBits))) + 'px');
         });
     });

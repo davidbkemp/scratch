@@ -1,13 +1,13 @@
-/* global define, module */
+/* global define, module, d3 */
 
 (function (globals) {
     "use strict";
     
     var createModule = function () {
-        return function () {
+        return function (svgElement) {
             return {
-                setHeight: function () {
-                    
+                setHeight: function (height) {
+                    d3.select(svgElement).attr('height', height);
                 }
             };
         };

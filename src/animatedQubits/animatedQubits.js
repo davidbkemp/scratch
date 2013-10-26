@@ -4,12 +4,15 @@
     "use strict";
     
     var createModule = function (qubitsGraphics) {
-        return function () {
-            var graphics;
+        return function (qstate, config) {
+            var graphics,
+                numBits = qstate.numBits();
             return {
                 display: function (svgElement) {
                     graphics = qubitsGraphics(svgElement);
-                    graphics.setHeight(42);
+                    // A single qubit state can have a radius of up to maxRadius,
+                    // but two (valid) qubit states will be closest when each has a radius of 1/sqrt(2).
+                    graphics.setHeight(config.maxRadius * (2 + Math.SQRT2 * (numBits - 1)));
                 }
             };
         };
