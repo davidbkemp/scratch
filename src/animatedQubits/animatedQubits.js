@@ -6,13 +6,28 @@
     var createModule = function (qubitsGraphics) {
         return function (qstate, config) {
             var graphics,
-                numBits = qstate.numBits();
+                textHeight,
+                textWidth,
+                numBits = qstate.numBits(),
+                numStates = 1 << numBits;
+            
+            function determineTotalHeight() {
+                // A single qubit state can have a radius of up to maxRadius,
+                // but two (valid) qubit states will be closest when each has a radius of 1/sqrt(2).
+                return config.maxRadius * (2 + Math.SQRT2 * (numStates - 1));
+            }
+            
+            function determineTotalWidth() {
+                return (1 + numBits) * textWidth + 6 *  config.maxRadius;
+            }
+            
             return {
                 display: function (svgElement) {
                     graphics = qubitsGraphics(svgElement);
-                    // A single qubit state can have a radius of up to maxRadius,
-                    // but two (valid) qubit states will be closest when each has a radius of 1/sqrt(2).
-                    graphics.setHeight(config.maxRadius * (2 + Math.SQRT2 * (numBits - 1)));
+                    textHeight = graphics.getTextHeight();
+                    textWidth = graphics.getTextWidth();
+                    graphics.setHeight(determineTotalHeight());
+                    graphics.setWidth(determineTotalWidth());
                 }
             };
         };

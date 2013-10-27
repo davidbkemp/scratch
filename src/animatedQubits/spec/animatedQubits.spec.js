@@ -8,21 +8,20 @@ var mockery = require('mockery'),
 
 describe("animatedQubits", function () {
 
-    var animation,
-        mockQubitsGraphicsModule,
+    var mockQubitsGraphicsModule,
         mockQubitsGraphics,
-        qstate,
         config;
         
     beforeEach(function () {
-        qstate = jsqubits('|10>');
-        
         config = {
             maxRadius: 21
         };
         
         mockQubitsGraphics = {
-                setHeight: function () {}
+            setHeight: function () {},
+            setWidth: function () {},
+            getTextHeight: function () {return 1;},
+            getTextWidth: function () {return 1;}
         };
     
         mockQubitsGraphicsModule = function (element) {
@@ -33,32 +32,56 @@ describe("animatedQubits", function () {
         mockery.enable();
         mockery.registerAllowable('../animatedQubits');
         mockery.registerMock('./lib/qubitsGraphics.js', mockQubitsGraphicsModule);
-        animation = require('../animatedQubits')(qstate, config);
     });
     
     afterEach(function () {
         mockery.deregisterAll();
         mockery.disable();
     });
-
+    
     it("should return an object with a display() method", function () {
+        var qstate = jsqubits('|110>'),
+            animation = require('../animatedQubits')(qstate, config);
+        
         expect(typeof animation.display).toBe("function");
     });
     
-    describe("#display", function () {
-    
-        it("should adjust the height of the svg element", function () {
+    describe('#display', function () {
+        var qstate,
+            numStates,
+            animation;
+            
+        beforeEach(function () {
+            qstate = jsqubits('|101>');
+            numStates = 1 << qstate.numBits();
+            animation = require('../animatedQubits')(qstate, config);
+        });
+        
+        it("should set the height", function () {
             var element = "the svg element";
             spyOn(mockQubitsGraphics, 'setHeight');
-    
+               
             animation.display(element);
             
             expect(mockQubitsGraphicsModule.svgElement).toBe(element);
             expect(mockQubitsGraphics.setHeight)
-                .toHaveBeenCalledWith(config.maxRadius * (2 + Math.SQRT2));
-            // svg.attr('height', '' + (config.maxRadius * (1 + (2 << numBits))) + 'px');
+                .toHaveBeenCalledWith(config.maxRadius * (2 + (numStates - 1) * Math.SQRT2));
         });
-    });
-});
 
+        it('should set the width', function () {
+            var textWidth = 13;
+            spyOn(mockQubitsGraphics, 'setWidth');
+            spyOn(mockQubitsGraphics, 'getTextWidth').andReturn(textWidth);
+    
+            animation.display("the svg element");
+            
+            expect(mockQubitsGraphics.setWidth)
+                .toHaveBeenCalledWith((1 + qstate.numBits()) * textWidth + 6 * config.maxRadius);
+
+        });
+
+    });
+
+    
+});
 })();
