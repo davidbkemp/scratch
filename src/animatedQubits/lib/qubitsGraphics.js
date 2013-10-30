@@ -1,10 +1,11 @@
-/* global define, module, d3, require */
+/* global define, module, require */
 
 (function (globals) {
     "use strict";
     
-    var createModule = function (d3MeasureText) {
+    var createModule = function (d3, d3MeasureText) {
         return function (svgElement) {
+            d3MeasureText.d3 = d3MeasureText.d3 || d3;
             var d3Element = d3.select(svgElement),
                 textDim = d3MeasureText("M");
             
@@ -34,11 +35,11 @@
     
     /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
     if (typeof define !== 'undefined' && define.amd) {
-        define(["d3MeasureText"], createModule);
+        define(["d3", "d3MeasureText"], createModule);
     } else if (typeof module !== 'undefined' && module.exports) {
-        module.exports = createModule(require('d3MeasureText'));
+        module.exports = createModule(require('d3'), require('d3MeasureText'));
     } else {
-        globals.qubitsGraphics = createModule(globals.d3MeasureText);
+        globals.qubitsGraphics = createModule(globals.d3, globals.d3MeasureText);
     }
 
     
