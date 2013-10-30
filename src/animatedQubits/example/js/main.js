@@ -18,7 +18,7 @@ requirejs.config({
 
 requirejs(['animatedQubits', 'jsqubits'],
     function (animatedQubits, jsqubits) {
-        var animation = animatedQubits(jsqubits("|1>"), {maxRadius: 50});
+        var animation = animatedQubits(jsqubits("|101>"), {maxRadius: 50});
         animation.display(document.getElementById("svg"));
     }
 );

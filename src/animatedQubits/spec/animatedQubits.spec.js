@@ -10,7 +10,9 @@ describe("animatedQubits", function () {
 
     var mockQubitsGraphicsModule,
         mockQubitsGraphics,
-        config;
+        config,
+        textHeight = 13,
+        textWidth = 17;
         
     beforeEach(function () {
         config = {
@@ -20,8 +22,9 @@ describe("animatedQubits", function () {
         mockQubitsGraphics = {
             setHeight: function () {},
             setWidth: function () {},
-            getTextHeight: function () {return 1;},
-            getTextWidth: function () {return 1;}
+            getTextHeight: function () {return textHeight;},
+            getTextWidth: function () {return textWidth;},
+            addTextWithSubscript: function () {}
         };
     
         mockQubitsGraphicsModule = function (element) {
@@ -69,15 +72,27 @@ describe("animatedQubits", function () {
         });
 
         it('should set the width', function () {
-            var textWidth = 13;
             spyOn(mockQubitsGraphics, 'setWidth');
-            spyOn(mockQubitsGraphics, 'getTextWidth').andReturn(textWidth);
-    
+            
             animation.display("the svg element");
             
             expect(mockQubitsGraphics.setWidth)
                 .toHaveBeenCalledWith((1 + qstate.numBits()) * textWidth + 6 * config.maxRadius);
 
+        });
+        
+        it('should create bit labels', function () {
+            spyOn(mockQubitsGraphics, 'addTextWithSubscript');
+            
+            animation.display("the svg element");
+            
+            var expectedY = 2 * textHeight / 3;
+            expect(mockQubitsGraphics.addTextWithSubscript)
+                .toHaveBeenCalledWith('q', '2', 0, expectedY);
+            expect(mockQubitsGraphics.addTextWithSubscript)
+                .toHaveBeenCalledWith('q', '1', textWidth, expectedY);
+            expect(mockQubitsGraphics.addTextWithSubscript)
+                .toHaveBeenCalledWith('q', '0', textWidth * 2, expectedY);
         });
 
     });

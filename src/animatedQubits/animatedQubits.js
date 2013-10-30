@@ -21,6 +21,15 @@
                 return (1 + numBits) * textWidth + 6 *  config.maxRadius;
             }
             
+            function renderBitLabels() {
+                var y = 2 * textHeight / 3;
+                for (var i = 0; i < numBits; i++) {
+                    var subscript = (numBits - i - 1).toString();
+                    var x = i * textWidth;
+                    graphics.addTextWithSubscript('q', subscript, x, y);
+                }
+            }
+            
             return {
                 display: function (svgElement) {
                     graphics = qubitsGraphics(svgElement);
@@ -28,6 +37,7 @@
                     textWidth = graphics.getTextWidth();
                     graphics.setHeight(determineTotalHeight());
                     graphics.setWidth(determineTotalWidth());
+                    renderBitLabels();
                 }
             };
         };

@@ -1,1 +1,5 @@
+Use d3Transform
+Tighten test for require.amd.animatedQubits
+Create example based on globals.
+
 Consider Snap.js
