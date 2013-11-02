@@ -3,7 +3,7 @@
 (function () {
 "use strict";
 
-var animatedQubitsPath = '../',
+var animatedQubitsPath = '../../',
     bowerPath = 'app/bower_components/';
 
 requirejs.config({
