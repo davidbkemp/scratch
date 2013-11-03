@@ -772,7 +772,7 @@
     } else if (typeof module !== 'undefined' && module.exports) {
         module.exports = createModule();
     } else {
-        globals.qubitsGraphics = createModule();
+        globals.jsqubits = createModule();
     }
 
 })(this);

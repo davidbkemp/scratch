@@ -10,6 +10,7 @@ describe("animatedQubits", function () {
 
     var mockQubitsGraphicsModule,
         mockQubitsGraphics,
+        mockGraphicsGroup,
         config,
         textHeight = 13,
         textWidth = 17;
@@ -24,7 +25,12 @@ describe("animatedQubits", function () {
             setWidth: function () {},
             getTextHeight: function () {return textHeight;},
             getTextWidth: function () {return textWidth;},
-            addTextWithSubscript: function () {}
+            addTextWithSubscript: function () {},
+            createGroup: function () {return mockGraphicsGroup;}
+        };
+        
+        mockGraphicsGroup = {
+            addText: function () {}
         };
     
         mockQubitsGraphicsModule = function (element) {
@@ -93,6 +99,51 @@ describe("animatedQubits", function () {
                 .toHaveBeenCalledWith('q', '1', textWidth, expectedY);
             expect(mockQubitsGraphics.addTextWithSubscript)
                 .toHaveBeenCalledWith('q', '0', textWidth * 2, expectedY);
+        });
+
+        it('should create state labels', function () {
+        
+            spyOn(mockQubitsGraphics, 'createGroup').andReturn(mockGraphicsGroup);
+            spyOn(mockGraphicsGroup, 'addText');
+            
+            animation.display("the svg element");
+            
+            for (var basisState = 0; basisState < 8; basisState++) {
+                expect(mockQubitsGraphics.createGroup).toHaveBeenCalledWith({
+                    'class': 'animatedQubitsStateLabel',
+                    'y': config.maxRadius * (basisState * Math.SQRT2 + 1)
+                });
+                var label = ('00' + basisState.toString(2)).slice(-3);
+                for (var bitPos = 0; bitPos < 3; bitPos++) {
+                    expect(mockGraphicsGroup.addText).toHaveBeenCalledWith({
+                        'class': 'animatedQubitsStateBitLabel',
+                        'x': bitPos * textWidth,
+                        'text': label.charAt(bitPos)
+                    });
+                }
+            }
+            
+        
+            /*
+            var paddedString = "00000000000000000000000" + i.toString(2);
+        return paddedString.substr(paddedString.length - length);
+            
+            function renderStateLabels(numBits, config) {
+        var numStates = 1 << numBits;
+        for (var basisState = 0; basisState < numStates; basisState++) {
+            var labelElement = qstateBody.append('g')
+                .attr('class', 'qstate')
+                .attr('transform', computeStateLabelTransform(basisState, config.maxRadius, config.textHeight));
+            var label = asBinary(basisState, numBits);
+            for (var bitPos = 0; bitPos < label.length; bitPos++) {
+                labelElement.append('text')
+                    .attr('class', 'qstateBit')
+                    .attr('x', bitPos * config.textWidth)
+                    .text(label.charAt(bitPos));
+            }
+        }
+    }
+            */
         });
 
     });

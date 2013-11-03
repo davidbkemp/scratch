@@ -11,24 +11,48 @@
                 numBits = qstate.numBits(),
                 numStates = 1 << numBits;
             
-            function determineTotalHeight() {
+            var determineTotalHeight = function () {
                 // A single qubit state can have a radius of up to maxRadius,
                 // but two (valid) qubit states will be closest when each has a radius of 1/sqrt(2).
                 return config.maxRadius * (2 + Math.SQRT2 * (numStates - 1));
-            }
+            };
             
-            function determineTotalWidth() {
+            var determineTotalWidth = function () {
                 return (1 + numBits) * textWidth + 6 *  config.maxRadius;
-            }
+            };
             
-            function renderBitLabels() {
+            var renderBitLabels = function () {
                 var y = 2 * textHeight / 3;
                 for (var i = 0; i < numBits; i++) {
                     var subscript = (numBits - i - 1).toString();
                     var x = i * textWidth;
                     graphics.addTextWithSubscript('q', subscript, x, y);
                 }
-            }
+            };
+            
+            var asBitString = function (state) {
+                return ('0000000000000000' + state.toString(2)).slice(-numBits);
+            };
+            
+            var renderStateBitLabels = function (state, graphicsGroup) {
+                var bitString = asBitString(state);
+                for(var bitPos = 0; bitPos < numBits; bitPos++) {
+                    graphicsGroup.addText({
+                        'class': 'animatedQubitsStateBitLabel',
+                        'x': bitPos * textWidth,
+                        'text': bitString.charAt(bitPos)
+                    });
+                }
+            };
+            
+            var renderStateLabels = function () {
+                for (var state = 0; state < numStates; state++) {
+                    renderStateBitLabels(state, graphics.createGroup({
+                        'class': 'animatedQubitsStateLabel',
+                        'y': config.maxRadius * (state * Math.SQRT2 + 1)
+                    }));
+                }
+            };
             
             return {
                 display: function (svgElement) {
@@ -38,6 +62,7 @@
                     graphics.setHeight(determineTotalHeight());
                     graphics.setWidth(determineTotalWidth());
                     renderBitLabels();
+                    renderStateLabels();
                 }
             };
         };

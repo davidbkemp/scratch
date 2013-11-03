@@ -4,10 +4,14 @@
     "use strict";
     
     var createModule = function (d3, d3MeasureText) {
-        return function (svgElement) {
+    
+        var qubitsGraphicsFromDomElement = function (svgElement) {
+            return qubitsGraphicsFromD3Element(d3.select(svgElement));
+        };
+    
+        var qubitsGraphicsFromD3Element = function (d3Element) {
             d3MeasureText.d3 = d3MeasureText.d3 || d3;
-            var d3Element = d3.select(svgElement),
-                textDim = d3MeasureText("M");
+            var textDim = d3MeasureText("M");
             
             return {
                 getTextHeight: function () {
@@ -22,15 +26,37 @@
                 setWidth: function (width) {
                     d3Element.attr('width', width);
                 },
+                addText: function (options) {
+                    var cssClass = options['class'];
+                    var x = options.x || 0;
+                    var y = options.y || 0;
+                    var text = options.text;
+                    d3Element.append('text')
+                        .attr('x', x)
+                        .attr('y', y)
+                        .attr('class', cssClass)
+                        .text(text);
+                },
                 addTextWithSubscript: function (text, subscript, x, y) {
                     var textElem = d3Element.append('g').append('text').attr('x', x);
                     textElem.append('tspan').text(text).attr('y', y);
                     textElem.append('tspan').text(subscript)
                         .attr('class', 'animatedTextSubscript')
                         .attr('y', y + textDim.height / 2);
+                },
+                createGroup: function (options) {
+                    var cssClass = options['class'];
+                    var x = options.x || 0;
+                    var y = options.y || 0;
+                    var transform = d3.svg.transform().translate([x, y]);
+                    var element = d3Element.append('g')
+                        .attr('class', cssClass)
+                        .attr('transform', transform);
+                    return(qubitsGraphicsFromD3Element(element));
                 }
             };
         };
+        return qubitsGraphicsFromDomElement;
     };
     
     /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
