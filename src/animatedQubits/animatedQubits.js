@@ -4,7 +4,13 @@
     "use strict";
     
     var createModule = function (qubitsGraphics) {
+    
+        var ensureDependenciesAreSet = function () {
+            qubitsGraphics = qubitsGraphics || globals.qubitsGraphics;
+        };
+    
         return function (qstate, config) {
+            ensureDependenciesAreSet();
             var graphics,
                 textHeight,
                 textWidth,
@@ -74,7 +80,7 @@
     } else if (typeof module !== 'undefined' && module.exports) {
         module.exports = createModule(require('./lib/qubitsGraphics.js'));
     } else {
-        globals.animatedQubits = createModule(globals.qubitsGraphics);
+        globals.animatedQubits = createModule();
     }
 
 

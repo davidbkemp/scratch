@@ -5,7 +5,13 @@
     
     var createModule = function (d3, d3MeasureText) {
     
+        var ensureDependenciesAreSet = function () {
+            d3 = d3 || globals.d3;
+            d3MeasureText = d3MeasureText || globals.d3MeasureText;
+        };
+    
         var qubitsGraphicsFromDomElement = function (svgElement) {
+            ensureDependenciesAreSet();
             return qubitsGraphicsFromD3Element(d3.select(svgElement));
         };
     
@@ -65,7 +71,7 @@
     } else if (typeof module !== 'undefined' && module.exports) {
         module.exports = createModule(require('d3'), require('d3MeasureText'));
     } else {
-        globals.qubitsGraphics = createModule(globals.d3, globals.d3MeasureText);
+        globals.qubitsGraphics = createModule();
     }
 
     
