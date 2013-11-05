@@ -69,7 +69,7 @@
     if (typeof define !== 'undefined' && define.amd) {
         define(["d3", "d3MeasureText"], createModule);
     } else if (typeof module !== 'undefined' && module.exports) {
-        module.exports = createModule(require('d3'), require('d3MeasureText'));
+        module.exports = createModule(require('d3'), require('d3-measure-text'));
     } else {
         globals.qubitsGraphics = createModule();
     }
