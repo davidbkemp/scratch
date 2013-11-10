@@ -16,11 +16,15 @@
                 textWidth,
                 numBits = qstate.numBits(),
                 numStates = 1 << numBits;
-            
-            var determineTotalHeight = function () {
+                
+            var yOffSet = function (state) {
                 // A single qubit state can have a radius of up to maxRadius,
                 // but two (valid) qubit states will be closest when each has a radius of 1/sqrt(2).
-                return config.maxRadius * (2 + Math.SQRT2 * (numStates - 1));
+                return config.maxRadius * (state * Math.SQRT2 + 1);
+            };
+            
+            var determineTotalHeight = function () {
+                return yOffSet(numStates - 1) + config.maxRadius;
             };
             
             var determineTotalWidth = function () {
@@ -55,7 +59,7 @@
                 for (var state = 0; state < numStates; state++) {
                     renderStateBitLabels(state, graphics.createGroup({
                         'class': 'animatedQubitsStateLabel',
-                        'y': config.maxRadius * (state * Math.SQRT2 + 1)
+                        'y': yOffSet(state)
                     }));
                 }
             };
