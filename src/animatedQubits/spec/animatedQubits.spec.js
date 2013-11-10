@@ -4,43 +4,40 @@
 "use strict";
 
 var mockery = require('mockery'),
-    jsqubits = require('../lib/jsqubits.js');
+    jsqubits = require('../lib/jsqubits');
+
+describe("animatedQubits using npm/commonjs dependencies", function () {
+    it("should load without error", function () {
+        var animatedQubits = require('../animatedQubits');
+        expect(animatedQubits).not.toBeFalsy();
+    });
+});
 
 describe("animatedQubits", function () {
 
-    var mockQubitsGraphicsModule,
-        mockQubitsGraphics,
-        mockGraphicsGroup,
-        config,
-        textHeight = 13,
-        textWidth = 17;
+    var mockRendererModule,
+        mockRenderer,
+        config;
         
     beforeEach(function () {
         config = {
             maxRadius: 21
         };
         
-        mockQubitsGraphics = {
-            setHeight: function () {},
-            setWidth: function () {},
-            getTextHeight: function () {return textHeight;},
-            getTextWidth: function () {return textWidth;},
-            addTextWithSubscript: function () {},
-            createGroup: function () {return mockGraphicsGroup;}
+        mockRenderer = {
+            updateDimensions: function () {},
+            renderBitLabels: function () {},
+            renderStateLabels: function () {}
         };
         
-        mockGraphicsGroup = {
-            addText: function () {}
+        mockRendererModule = function (params) {
+            mockRendererModule.params = params;
+            return mockRenderer;
         };
     
-        mockQubitsGraphicsModule = function (element) {
-            mockQubitsGraphicsModule.svgElement = element;
-            return mockQubitsGraphics;
-        };
-    
-        mockery.enable();
+        mockery.enable({useCleanCache: true});
         mockery.registerAllowable('../animatedQubits');
-        mockery.registerMock('./lib/qubitsGraphics.js', mockQubitsGraphicsModule);
+        mockery.registerMock('./lib/animatedQubitsRenderer', mockRendererModule);
     });
     
     afterEach(function () {
@@ -54,7 +51,7 @@ describe("animatedQubits", function () {
         
         expect(typeof animation.display).toBe("function");
     });
-    
+
     describe('#display', function () {
         var qstate,
             numStates,
@@ -66,88 +63,30 @@ describe("animatedQubits", function () {
             animation = require('../animatedQubits')(qstate, config);
         });
         
-        it("should set the height", function () {
-            var element = "the svg element";
-            spyOn(mockQubitsGraphics, 'setHeight');
+        it("should pass the require params", function () {
+            animation.display("the svg element");
+            
+            expect(mockRendererModule.params).toEqual({
+                element: "the svg element",
+                numBits: 3,
+                maxRadius: config.maxRadius
+            });
+        });
+        
+        it("should render the labels", function () {
+            spyOn(mockRenderer, 'updateDimensions');
+            spyOn(mockRenderer, 'renderBitLabels');
+            spyOn(mockRenderer, 'renderStateLabels');
                
-            animation.display(element);
-            
-            expect(mockQubitsGraphicsModule.svgElement).toBe(element);
-            expect(mockQubitsGraphics.setHeight)
-                .toHaveBeenCalledWith(config.maxRadius * (2 + (numStates - 1) * Math.SQRT2));
-        });
-
-        it('should set the width', function () {
-            spyOn(mockQubitsGraphics, 'setWidth');
-            
             animation.display("the svg element");
-            
-            expect(mockQubitsGraphics.setWidth)
-                .toHaveBeenCalledWith((1 + qstate.numBits()) * textWidth + 6 * config.maxRadius);
 
-        });
-        
-        it('should create bit labels', function () {
-            spyOn(mockQubitsGraphics, 'addTextWithSubscript');
-            
-            animation.display("the svg element");
-            
-            var expectedY = 2 * textHeight / 3;
-            expect(mockQubitsGraphics.addTextWithSubscript)
-                .toHaveBeenCalledWith('q', '2', 0, expectedY);
-            expect(mockQubitsGraphics.addTextWithSubscript)
-                .toHaveBeenCalledWith('q', '1', textWidth, expectedY);
-            expect(mockQubitsGraphics.addTextWithSubscript)
-                .toHaveBeenCalledWith('q', '0', textWidth * 2, expectedY);
-        });
-
-        it('should create state labels', function () {
-        
-            spyOn(mockQubitsGraphics, 'createGroup').andReturn(mockGraphicsGroup);
-            spyOn(mockGraphicsGroup, 'addText');
-            
-            animation.display("the svg element");
-            
-            for (var basisState = 0; basisState < 8; basisState++) {
-                expect(mockQubitsGraphics.createGroup).toHaveBeenCalledWith({
-                    'class': 'animatedQubitsStateLabel',
-                    'y': config.maxRadius * (basisState * Math.SQRT2 + 1)
-                });
-                var label = ('00' + basisState.toString(2)).slice(-3);
-                for (var bitPos = 0; bitPos < 3; bitPos++) {
-                    expect(mockGraphicsGroup.addText).toHaveBeenCalledWith({
-                        'class': 'animatedQubitsStateBitLabel',
-                        'x': bitPos * textWidth,
-                        'text': label.charAt(bitPos)
-                    });
-                }
-            }
-            
-        
-            /*
-            var paddedString = "00000000000000000000000" + i.toString(2);
-        return paddedString.substr(paddedString.length - length);
-            
-            function renderStateLabels(numBits, config) {
-        var numStates = 1 << numBits;
-        for (var basisState = 0; basisState < numStates; basisState++) {
-            var labelElement = qstateBody.append('g')
-                .attr('class', 'qstate')
-                .attr('transform', computeStateLabelTransform(basisState, config.maxRadius, config.textHeight));
-            var label = asBinary(basisState, numBits);
-            for (var bitPos = 0; bitPos < label.length; bitPos++) {
-                labelElement.append('text')
-                    .attr('class', 'qstateBit')
-                    .attr('x', bitPos * config.textWidth)
-                    .text(label.charAt(bitPos));
-            }
-        }
-    }
-            */
+            expect(mockRenderer.updateDimensions).toHaveBeenCalled();
+            expect(mockRenderer.renderBitLabels).toHaveBeenCalled();
+            expect(mockRenderer.renderStateLabels).toHaveBeenCalled();
         });
 
     });
 
-    
 });
+
 })();
