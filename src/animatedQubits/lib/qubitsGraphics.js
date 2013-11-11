@@ -71,7 +71,8 @@
     } else if (typeof module !== 'undefined' && module.exports) {
         module.exports = createModule(require('d3'), require('d3-measure-text'));
     } else {
-        globals.qubitsGraphics = createModule();
+        globals.animatedQubitsInternal = globals.animatedQubitsInternal || {};
+        globals.animatedQubitsInternal.graphics = createModule();
     }
 
     

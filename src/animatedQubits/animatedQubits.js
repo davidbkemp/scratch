@@ -6,7 +6,7 @@
     var createModule = function (animatedQubitsRenderer) {
     
         var ensureDependenciesAreSet = function () {
-            animatedQubitsRenderer = animatedQubitsRenderer || globals.animatedQubitsRenderer;
+            animatedQubitsRenderer = animatedQubitsRenderer || globals.animatedQubitsInternal.renderer;
         };
     
         return function (qstate, config) {

@@ -6,7 +6,7 @@
     var createModule = function (qubitsGraphics) {
     
         var ensureDependenciesAreSet = function () {
-            qubitsGraphics = qubitsGraphics || globals.qubitsGraphics;
+            qubitsGraphics = qubitsGraphics || globals.animatedQubitsInternal.graphics;
         };
     
         var renderer = function (params) {
@@ -83,7 +83,8 @@
     } else if (typeof module !== 'undefined' && module.exports) {
         module.exports = createModule(require('./qubitsGraphics'));
     } else {
-        globals.animatedQubitsRenderer = createModule();
+        globals.animatedQubitsInternal = globals.animatedQubitsInternal || {};
+        globals.animatedQubitsInternal.renderer = createModule();
     }
 
     
