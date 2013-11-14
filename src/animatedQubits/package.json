@@ -9,14 +9,16 @@
   "main": "index",
   "scripts": {
     "test": "jshint --config jshintConfig.json animatedQubits.js lib spec examples/simpleImports/js examples/usingRequire/js && jasmine-node spec",
-    "testOnly": "jasmine-node spec",
+    "specOnly": "jasmine-node spec",
     "build": "r.js -o build.js"
   },
   "dependencies": {
     "requirejs": "2.1.x",
     "d3": "3.3.x",
     "d3-transform": "1.0.x",
-    "d3-measure-text": "0.0.x"
+    "d3-measure-text": "0.0.x",
+    "q": "0.9.x",
+    "lodash": "2.3.x"
   },
   "devDependencies": {
     "jasmine-node": "1.11.x",

@@ -11,6 +11,7 @@ requirejs.config({
     paths: {
         animatedQubits: animatedQubitsPath + 'animatedQubits',
         qubitsGraphics: animatedQubitsPath + 'lib/qubitsGraphics',
+        qubitAnimationCalculator: animatedQubitsPath + 'lib/qubitAnimationCalculator',
         animatedQubitsRenderer: animatedQubitsPath + 'lib/animatedQubitsRenderer',
         jsqubits: animatedQubitsPath + 'lib/jsqubits',
         d3MeasureText: bowerPath + 'd3-measure-text/lib/d3-measure-text',

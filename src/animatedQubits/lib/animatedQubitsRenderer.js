@@ -3,30 +3,27 @@
 (function (globals) {
     "use strict";
     
-    var createModule = function (qubitsGraphics) {
+    var createModule = function (graphicsFactory, calculatorFactory) {
     
         var ensureDependenciesAreSet = function () {
-            qubitsGraphics = qubitsGraphics || globals.animatedQubitsInternal.graphics;
+            graphicsFactory = graphicsFactory || globals.animatedQubitsInternal.graphicsFactory;
+            calculatorFactory = calculatorFactory || globals.animatedQubitsInternal.calculatorFactory;
         };
     
-        var renderer = function (params) {
+        var rendererFactory = function (config) {
             ensureDependenciesAreSet();
             
-            var graphics = qubitsGraphics(params.element),
-                maxRadius = params.maxRadius,
-                numBits = params.numBits,
+            var graphics = graphicsFactory(config.element),
+                animationCalculator = calculatorFactory(config),
+                maxRadius = config.maxRadius,
+                numBits = config.numBits,
                 numStates = 1 << numBits,
                 textHeight = graphics.getTextHeight(),
-                textWidth = graphics.getTextWidth();
-            
-            var yOffSet = function (state) {
-                // A single qubit state can have a radius of up to maxRadius,
-                // but two (valid) qubit states will be closest when each has a radius of 1/sqrt(2).
-                return maxRadius * (state * Math.SQRT2 + 1);
-            };
+                textWidth = graphics.getTextWidth(),
+                amplitudeDiscsGroup;
 
             var determineTotalHeight = function () {
-                return yOffSet(numStates - 1) + maxRadius;
+                return animationCalculator.yOffSetForState(numStates - 1) + maxRadius;
             };
             
             var determineTotalWidth = function () {
@@ -49,6 +46,7 @@
             };
 
             return {
+            
                 updateDimensions: function () {
                     graphics.setHeight(determineTotalHeight());
                     graphics.setWidth(determineTotalWidth());
@@ -67,24 +65,34 @@
                     for (var state = 0; state < numStates; state++) {
                         renderStateBitLabels(state, graphics.createGroup({
                             'class': 'animatedQubitsStateLabel',
-                            'y': yOffSet(state)
+                            'y': animationCalculator.yOffSetForState(state) + textHeight/3
                         }));
                     }
+                },
+                
+                renderState: function (stateComponents) {
+                    amplitudeDiscsGroup = amplitudeDiscsGroup || graphics.createGroup({
+                        'class': 'animatedQubitsAmplitudeDiscs',
+                        'x': maxRadius + (numBits + 1) * textWidth
+                    });
+                    amplitudeDiscsGroup.renderAmplitudeDiscs(stateComponents, config);
                 }
                 
             };
         };
-        return renderer;
+        return rendererFactory;
     };
     
     /* Support AMD and CommonJS, with a fallback of using the global namespace */
     if (typeof define !== 'undefined' && define.amd) {
-        define(["qubitsGraphics"], createModule);
+        define(["qubitsGraphics", "qubitAnimationCalculator"], createModule);
     } else if (typeof module !== 'undefined' && module.exports) {
-        module.exports = createModule(require('./qubitsGraphics'));
+        module.exports = createModule(
+            require('./qubitsGraphics'),
+            require('./qubitAnimationCalculator'));
     } else {
         globals.animatedQubitsInternal = globals.animatedQubitsInternal || {};
-        globals.animatedQubitsInternal.renderer = createModule();
+        globals.animatedQubitsInternal.rendererFactory = createModule();
     }
 
     

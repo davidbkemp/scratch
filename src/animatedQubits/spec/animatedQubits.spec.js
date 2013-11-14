@@ -17,6 +17,8 @@ describe("animatedQubits", function () {
 
     var mockRendererModule,
         mockRenderer,
+        mockCalculatorModule,
+        mockCalculator,
         config;
         
     beforeEach(function () {
@@ -27,17 +29,28 @@ describe("animatedQubits", function () {
         mockRenderer = {
             updateDimensions: function () {},
             renderBitLabels: function () {},
-            renderStateLabels: function () {}
+            renderStateLabels: function () {},
+            renderState: function () {}
         };
         
         mockRendererModule = function (params) {
             mockRendererModule.params = params;
             return mockRenderer;
         };
+        
+        mockCalculator = {
+            augmentState: function () {
+            }
+        };
+        
+        mockCalculatorModule = function () {
+            return mockCalculator;
+        };
     
         mockery.enable({useCleanCache: true});
         mockery.registerAllowable('../animatedQubits');
         mockery.registerMock('./lib/animatedQubitsRenderer', mockRendererModule);
+        mockery.registerMock('./lib/qubitAnimationCalculator', mockCalculatorModule);
     });
     
     afterEach(function () {
@@ -63,7 +76,7 @@ describe("animatedQubits", function () {
             animation = require('../animatedQubits')(qstate, config);
         });
         
-        it("should pass the require params", function () {
+        it("should pass the required params to the renderer", function () {
             animation.display("the svg element");
             
             expect(mockRendererModule.params).toEqual({
@@ -83,6 +96,23 @@ describe("animatedQubits", function () {
             expect(mockRenderer.updateDimensions).toHaveBeenCalled();
             expect(mockRenderer.renderBitLabels).toHaveBeenCalled();
             expect(mockRenderer.renderStateLabels).toHaveBeenCalled();
+        });
+
+        it("should augment the state", function () {
+            spyOn(mockCalculator, 'augmentState');
+        
+            animation.display("the svg element");
+            
+            expect(mockCalculator.augmentState).toHaveBeenCalledWith(qstate);
+        });
+        
+        it("should render the augmented state", function () {
+            spyOn(mockCalculator, 'augmentState').andReturn("augmented state");
+            spyOn(mockRenderer, 'renderState');
+            
+            animation.display("the svg element");
+            
+            expect(mockRenderer.renderState).toHaveBeenCalledWith("augmented state");
         });
 
     });
