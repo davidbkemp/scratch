@@ -34,7 +34,12 @@
                     });
 
                     return stateComponents;
-
+                },
+                
+                createPhases: function () {
+                    return {
+                        phase1: []
+                    };
                 }
             };
         };

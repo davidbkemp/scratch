@@ -3,9 +3,10 @@
 (function (globals) {
     "use strict";
     
-    var createModule = function (rendererFactory, calculatorFactory) {
-    
+    var createModule = function (Q, rendererFactory, calculatorFactory) {
+
         var ensureDependenciesAreSet = function () {
+            Q = Q || globals.Q;
             rendererFactory = rendererFactory || globals.animatedQubitsInternal.rendererFactory;
             calculatorFactory = calculatorFactory || globals.animatedQubitsInternal.calculatorFactory;
         };
@@ -15,7 +16,13 @@
             var stateComponents,
                 numBits = qstate.numBits(),
                 renderer,
-                calculator = calculatorFactory(config);
+                calculator = calculatorFactory(config),
+                currentOperationPromise = Q.when();
+
+            var applyOperation = function (operation) {
+                var phases = calculator.createPhases(qstate, stateComponents, operation);
+                return renderer.renderState(phases.phase1);
+            };
 
             return {
                 display: function (svgElement) {
@@ -29,6 +36,12 @@
                     renderer.renderStateLabels();
                     stateComponents = calculator.augmentState(qstate);
                     renderer.renderState(stateComponents);
+                },
+                applyOperation: function (operation) {
+                    currentOperationPromise = currentOperationPromise.then(function () {
+                        return applyOperation(operation);
+                    });
+                    return currentOperationPromise;
                 }
             };
         };
@@ -36,9 +49,10 @@
 
     /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
     if (typeof define !== 'undefined' && define.amd) {
-        define(['animatedQubitsRenderer', 'qubitAnimationCalculator'], createModule);
+        define(['q', 'animatedQubitsRenderer', 'qubitAnimationCalculator'], createModule);
     } else if (typeof module !== 'undefined' && module.exports) {
         module.exports = createModule(
+            require('q'),
             require('./lib/animatedQubitsRenderer'),
             require('./lib/qubitAnimationCalculator'));
     } else {

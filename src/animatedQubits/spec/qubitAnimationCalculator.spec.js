@@ -47,6 +47,22 @@ describe("qubitAnimationRenderer", function () {
             expect(augmentedState[1].y).toBe(config.maxRadius * (1 + 2 * Math.SQRT2));
         });
     });
+    
+    describe("#createPhases", function () {
+    
+        it("should replicate initial state components for each resultant component", function () {
+            var qstate = jsqubits('|10>'),
+                operation = function hadamard1(state) { return state.hadamard(1); };
+            var phases = calculator.createPhases(qstate, operation);
+            var phase1 = phases.phase1;
+            expect(phase1.length).toBe(2);
+            expect(phase1[0].asString()).toBe("10");
+            expect(phase1[1].asString()).toBe("10");
+            expect(phase1[0].amplitude).toEqual(jsqubits.complex(1,0));
+            expect(phase1[1].amplitude).toEqual(jsqubits.ZERO);
+            expect(phase1[0].key).not.toEqual(phase1[1].key);
+        });
+    });
 });
 
 

@@ -5,6 +5,19 @@
 
 var mockery = require('mockery'),
     jsqubits = require('../lib/jsqubits');
+    
+var createMockPromise = function () {
+    return {
+        when: function (f) {
+            if (f) f();
+            return createMockPromise();
+        },
+        then: function (f) {
+            if (f) f();
+            return createMockPromise();
+        }
+    };
+};
 
 describe("animatedQubits using npm/commonjs dependencies", function () {
     it("should load without error", function () {
@@ -19,6 +32,8 @@ describe("animatedQubits", function () {
         mockRenderer,
         mockCalculatorModule,
         mockCalculator,
+        mockQ,
+        mockInitialPromise,
         config;
         
     beforeEach(function () {
@@ -39,18 +54,29 @@ describe("animatedQubits", function () {
         };
         
         mockCalculator = {
-            augmentState: function () {
+            augmentState: function () {},
+            createPhases: function () {
+                return {};
             }
         };
         
         mockCalculatorModule = function () {
             return mockCalculator;
         };
-    
+
+        mockInitialPromise = createMockPromise();
+
+        mockQ = {
+            when: function () {}
+        };
+
+        spyOn(mockQ, 'when').andReturn(mockInitialPromise);
+
         mockery.enable({useCleanCache: true});
         mockery.registerAllowable('../animatedQubits');
         mockery.registerMock('./lib/animatedQubitsRenderer', mockRendererModule);
         mockery.registerMock('./lib/qubitAnimationCalculator', mockCalculatorModule);
+        mockery.registerMock('q', mockQ);
     });
     
     afterEach(function () {
@@ -115,6 +141,52 @@ describe("animatedQubits", function () {
             expect(mockRenderer.renderState).toHaveBeenCalledWith("augmented state");
         });
 
+    });
+    
+    describe("#applyOperation", function () {
+    
+        var animation,
+            qstate,
+            options = {someOption: 42},
+            operatation = function op(qstate) { return qstate; };
+            
+        beforeEach(function () {
+            qstate = jsqubits('|101>');
+            animation = require('../animatedQubits')(qstate, config);
+            animation.display('svg element');
+
+            spyOn(mockRenderer, 'renderState');
+            spyOn(mockCalculator, 'createPhases').andReturn({
+                phase1: 'phase1',
+                phase2a: 'phase2a',
+                phase2b: 'phase2b',
+                phase3: 'phase3',
+                phase4: 'phase4',
+                phase5: 'phase5'
+            });
+        });
+    
+        it("should wait for any exisiting operation to complete", function () {
+            var nextPromise = createMockPromise();
+            spyOn(mockInitialPromise, 'then').andReturn(nextPromise);
+            
+            var returnValue = animation.applyOperation(operatation, options);
+            
+            expect(mockQ.when).toHaveBeenCalledWith();
+            expect(mockInitialPromise.then).toHaveBeenCalled();
+            expect(returnValue).toBe(nextPromise);
+        });
+        
+        it("should create phases", function () {
+            animation.applyOperation(operatation, options);
+            expect(mockCalculator.createPhases)
+                .toHaveBeenCalledWith(qstate, jasmine.any(Array) operatation);
+        });
+        
+        it("should render phase1", function () {
+            animation.applyOperation(operatation, options);
+            expect(mockRenderer.renderState).toHaveBeenCalledWith("phase1");
+        });
     });
 
 });
