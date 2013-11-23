@@ -1,11 +1,11 @@
-/*global require, describe, it, expect, beforeEach, afterEach, spyOn */
+/*global require, describe, it, expect, beforeEach, afterEach, spyOn, jasmine */
 
 (function () {
 "use strict";
 
 var mockery = require('mockery'),
     jsqubits = require('../lib/jsqubits');
-    
+
 var createMockPromise = function () {
     return {
         when: function (f) {
@@ -54,10 +54,8 @@ describe("animatedQubits", function () {
         };
         
         mockCalculator = {
-            augmentState: function () {},
-            createPhases: function () {
-                return {};
-            }
+            augmentState: function () { return []; },
+            createPhases: function () { return {}; }
         };
         
         mockCalculatorModule = function () {
@@ -147,11 +145,14 @@ describe("animatedQubits", function () {
     
         var animation,
             qstate,
-            options = {someOption: 42},
-            operatation = function op(qstate) { return qstate; };
+            operation,
+            operationReturnState,
+            operationCalls,
+            options = {someOption: 42};
+            
             
         beforeEach(function () {
-            qstate = jsqubits('|101>');
+            qstate = jsqubits('|101>').hadamard(0);
             animation = require('../animatedQubits')(qstate, config);
             animation.display('svg element');
 
@@ -164,13 +165,19 @@ describe("animatedQubits", function () {
                 phase4: 'phase4',
                 phase5: 'phase5'
             });
+            operationCalls = [];
+            operationReturnState = qstate.T(0);
+            operation = function op(state) {
+                operationCalls.push(state);
+                return operationReturnState;
+            };
         });
     
         it("should wait for any exisiting operation to complete", function () {
             var nextPromise = createMockPromise();
             spyOn(mockInitialPromise, 'then').andReturn(nextPromise);
             
-            var returnValue = animation.applyOperation(operatation, options);
+            var returnValue = animation.applyOperation(operation, options);
             
             expect(mockQ.when).toHaveBeenCalledWith();
             expect(mockInitialPromise.then).toHaveBeenCalled();
@@ -178,14 +185,36 @@ describe("animatedQubits", function () {
         });
         
         it("should create phases", function () {
-            animation.applyOperation(operatation, options);
+           animation.applyOperation(operation, options);
             expect(mockCalculator.createPhases)
-                .toHaveBeenCalledWith(qstate, jasmine.any(Array) operatation);
+                .toHaveBeenCalledWith(jasmine.any(Array), operation);
         });
         
         it("should render phase1", function () {
-            animation.applyOperation(operatation, options);
+            animation.applyOperation(operation, options);
             expect(mockRenderer.renderState).toHaveBeenCalledWith("phase1");
+        });
+        
+        it("should apply the operation to qstate and its components", function () {
+            animation.applyOperation(operation, options);
+            expect(operationCalls.length).toBe(1);
+            expect(operationCalls[0]).toBe(qstate);
+        });
+        
+        it("should augment the new state", function () {
+            spyOn(mockCalculator, 'augmentState');
+            animation.applyOperation(operation, options);
+            expect(mockCalculator.augmentState).toHaveBeenCalledWith(operationReturnState);
+        });
+        
+        describe("when applied for a second time", function () {
+            it("should create phases based on the new state", function () {
+                spyOn(mockCalculator, 'augmentState').andReturn(["newAugmentedState"]);
+                animation.applyOperation(operation, options);
+                animation.applyOperation(operation, options);
+                expect(mockCalculator.createPhases.calls.length).toBe(2);
+                expect(mockCalculator.createPhases.calls[1].args[0]).toEqual(["newAugmentedState"]);
+            });
         });
     });
 

@@ -20,8 +20,11 @@
                 currentOperationPromise = Q.when();
 
             var applyOperation = function (operation) {
-                var phases = calculator.createPhases(qstate, stateComponents, operation);
-                return renderer.renderState(phases.phase1);
+                var phases = calculator.createPhases(stateComponents, operation);
+                var result = renderer.renderState(phases.phase1);
+                qstate = operation(qstate);
+                stateComponents = calculator.augmentState(qstate);
+                return result;
             };
 
             return {

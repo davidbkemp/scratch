@@ -33,9 +33,9 @@ describe("qubitAnimationRenderer", function () {
     
         it("should add keys to each state", function () {
             expect(augmentedState.length).toBe(2);
-            expect(augmentedState[0].asBitString()).toBe('00');
+            expect(augmentedState[0].bitString).toBe('00');
             expect(augmentedState[0].key).toBeDefined();
-            expect(augmentedState[1].asBitString()).toBe('10');
+            expect(augmentedState[1].bitString).toBe('10');
             expect(augmentedState[1].key).toBeDefined();
             expect(augmentedState[1].key).not.toEqual(augmentedState[0].key);
         });
@@ -49,18 +49,56 @@ describe("qubitAnimationRenderer", function () {
     });
     
     describe("#createPhases", function () {
+        var qstate, phases;
     
-        it("should replicate initial state components for each resultant component", function () {
-            var qstate = jsqubits('|10>'),
-                operation = function hadamard1(state) { return state.hadamard(1); };
-            var phases = calculator.createPhases(qstate, operation);
+        beforeEach(function () {
+            qstate = jsqubits('|10>').hadamard(0);
+            var operation = function hadamard1(state) { return state.hadamard(1); };
+            var stateComponents = calculator.augmentState(qstate);
+            phases = calculator.createPhases(stateComponents, operation);
+        });
+    
+        it("phase1: should replicate initial state components for each resultant component", function () {
             var phase1 = phases.phase1;
-            expect(phase1.length).toBe(2);
-            expect(phase1[0].asString()).toBe("10");
-            expect(phase1[1].asString()).toBe("10");
-            expect(phase1[0].amplitude).toEqual(jsqubits.complex(1,0));
-            expect(phase1[1].amplitude).toEqual(jsqubits.ZERO);
-            expect(phase1[0].key).not.toEqual(phase1[1].key);
+            
+            expect(phase1.length).toBe(4);
+            
+            expect(phase1[0].bitString).toBe("10");
+            expect(phase1[1].bitString).toBe("10");
+            expect(phase1[2].bitString).toBe("11");
+            expect(phase1[3].bitString).toBe("11");
+            
+            expect(phase1[0].amplitude.format({toString: 2}))
+                .toEqual(qstate.amplitude(2).format({toString: 2}));
+            expect(phase1[1].amplitude.format({toString: 2})).toEqual('0');
+            expect(phase1[2].amplitude.format({toString: 2}))
+                .toEqual(qstate.amplitude(3).format({toString: 2}));
+            expect(phase1[3].amplitude.format({toString: 2})).toEqual('0');
+            
+            expect(phase1[0].key).toBe("k1-1");
+            expect(phase1[1].key).toBe("k1-2");
+            expect(phase1[2].key).toBe("k2-1");
+            expect(phase1[3].key).toBe("k2-2");
+        });
+        
+        it("phase2a: should set amplitudes back to their origina values", function () {
+            var phase2a = phases.phase2a;
+            
+            expect(Object.keys(phase2a).length).toBe(4);
+            
+            expect(phase2a['k1-1'].bitString).toBe("10");
+            expect(phase2a['k1-2'].bitString).toBe("10");
+            expect(phase2a['k2-1'].bitString).toBe("11");
+            expect(phase2a['k2-2'].bitString).toBe("11");
+            
+            expect(phase2a['k1-1'].amplitude.format({toString: 2}))
+                .toEqual(qstate.amplitude(2).format({toString: 2}));
+            expect(phase2a['k1-2'].amplitude.format({toString: 2}))
+                .toEqual(qstate.amplitude(2).format({toString: 2}));
+            expect(phase2a['k2-1'].amplitude.format({toString: 2}))
+                .toEqual(qstate.amplitude(3).format({toString: 2}));
+            expect(phase2a['k2-2'].amplitude.format({toString: 2}))
+                .toEqual(qstate.amplitude(3).format({toString: 2}));
         });
     });
 });

@@ -4,7 +4,7 @@
     "use strict";
     
     var createModule = function (graphicsFactory, calculatorFactory) {
-    
+        
         var ensureDependenciesAreSet = function () {
             graphicsFactory = graphicsFactory || globals.animatedQubitsInternal.graphicsFactory;
             calculatorFactory = calculatorFactory || globals.animatedQubitsInternal.calculatorFactory;
