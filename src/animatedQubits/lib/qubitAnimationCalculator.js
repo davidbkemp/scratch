@@ -37,26 +37,77 @@
                 phase2aState.amplitude = oldStateComponent.amplitude;
                 return phase2aState;
             };
+            
+            var createPhase2bState = function (phase2aState, newStateComponent, phase2bGroupedByState) {
+                var phase2bState = _.clone(phase2aState),
+                    numericIndex = newStateComponent.asNumber();
+                phase2bState.amplitude = phase2aState.amplitude.multiply(newStateComponent.amplitude);
+                phase2bState.bitString = newStateComponent.asBitString();
+                phase2bState.numericIndex = numericIndex;
+                var stateGroup = phase2bGroupedByState[numericIndex];
+                if (!stateGroup) {
+                    stateGroup = phase2bGroupedByState[numericIndex] = [];
+                    phase2bState.x = maxRadius;
+                    phase2bState.y = yOffSetForState(numericIndex);
+                } else {
+                    var prevState = _.last(stateGroup),
+                        prevAmplitude = prevState.amplitude;
+                    phase2bState.x = prevState.x + prevAmplitude.real() * config.maxRadius;
+                    phase2bState.y = prevState.y - prevAmplitude.imaginary() * config.maxRadius;
+                }
+                stateGroup.push(phase2bState);
+                return phase2bState;
+            };
+
+        /*
+        function createPhase2bState(phase1State, context, newState) {
+        var key = phase1State.key;
+        var config = context.config;
+        var keysGroupedByDestinationState = context.keysGroupedByDestinationState;
+        var phase2aState = context.phase2aStates[key];
+        var phase2bState = _.clone(phase2aState);
+        phase2bState.amplitude = phase2aState.amplitude.multiply(newState.amplitude);
+        var basisState = newState.index;
+        phase2bState.index = basisState;
+        var keyGroup = keysGroupedByDestinationState[basisState];
+        if (!keyGroup) {
+            keyGroup = [];
+            keysGroupedByDestinationState[basisState] = keyGroup;
+            phase2bState.x += 2 * config.maxRadius;
+            phase2bState.y = computeAmplitudeYValue(config.maxRadius, basisState);
+        } else {
+            var prevState = context.phase2bStates[_.last(keyGroup)];
+            var prevAmplitude = prevState.amplitude;
+            phase2bState.x = prevState.x + prevAmplitude.real() * config.maxRadius;
+            phase2bState.y = prevState.y - prevAmplitude.imaginary() * config.maxRadius;
+        }
+        keyGroup.push(key);
+        return phase2bState;
+    }
+        */
 
             var createPhases1And2 = function (stateComponents, operation) {
                 var phases = {
-                    statesGroupedByOriginalState: [],
                     phase1: [],
                     phase2a: {},
-                    phase2b: {}
-                };
+                    phase2b: {},
+                    phase1GroupedByState: []
+                },
+                phase2bGroupedByState = {};
                 stateComponents.forEach(function(oldStateComponent) {
                     var qstate = operation(jsqubits(oldStateComponent.bitString));
-                    var stateGroup = [];
-                    phases.statesGroupedByOriginalState.push(stateGroup);
+                    var phase1StateGroup = [];
+                    phases.phase1GroupedByState.push(phase1StateGroup);
                     var subSeq = 1;
-                    qstate.each(function () {
+                    qstate.each(function (newStateComponent) {
                         var phase1State = createPhase1State(oldStateComponent, subSeq++);
                         var phase2aState = createPhase2aState(oldStateComponent, phase1State);
                         var key = phase1State.key;
                         phases.phase1.push(phase1State);
                         phases.phase2a[key] = phase2aState;
-                        stateGroup.push(phase1State);
+                        phases.phase2b[key] = createPhase2bState(
+                            phase2aState, newStateComponent, phase2bGroupedByState);
+                        phase1StateGroup.push(phase1State);
                     });
                 });
                 return phases;
