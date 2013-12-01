@@ -24,10 +24,16 @@
     "tests",
     "example",
     "examples",
+    "integrationTests",
+    "ToDo.txt",
     "jshintConfig.json"
   ],
   "dependencies": {
-    "d3-measure-text": "~0.0.1",
-    "d3": "~3.3.8"
+    "d3-measure-text": "~0.0.2",
+    "d3": "~3.3.x",
+    "jsqubits": "~0.1.x",
+    "d3-transform": "trinary/d3-transform",
+    "q": "~0.9.x",
+    "lodash": "~2.3.x"
   }
 }

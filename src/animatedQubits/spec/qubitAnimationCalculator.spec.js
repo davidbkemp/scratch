@@ -3,7 +3,7 @@
 (function () {
 "use strict";
 
-var jsqubits = require('../lib/jsqubits');
+var jsqubits = require('jsqubits').jsqubits;
 
 describe("qubitAnimationRenderer", function () {
     var config, calculator;

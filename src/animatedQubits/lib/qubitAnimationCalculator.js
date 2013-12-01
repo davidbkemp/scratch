@@ -3,11 +3,14 @@
 (function (globals) {
     "use strict";
     
-    var createModule = function (_, jsqubits) {
+    var createModule = function (_, jsqubitsModule) {
+
+       var jsqubits;
 
         var ensureDependenciesAreSet = function () {
             _ = _ || globals._;
-            jsqubits = jsqubits || globals.jsqubits;
+            jsqubitsModule = jsqubitsModule || globals.jsqubits;
+            jsqubits = jsqubitsModule.jsqubits;
         };
 
         var calculatorFactory = function (config) {
@@ -121,7 +124,7 @@
     if (typeof define !== 'undefined' && define.amd) {
         define(['lodash', 'jsqubits'], createModule);
     } else if (typeof module !== 'undefined' && module.exports) {
-        module.exports = createModule(require('lodash'), require('./jsqubits'));
+        module.exports = createModule(require('lodash'), require('jsqubits'));
     } else {
         globals.animatedQubitsInternal = globals.animatedQubitsInternal || {};
         globals.animatedQubitsInternal.calculatorFactory = createModule();

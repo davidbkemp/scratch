@@ -13,10 +13,12 @@ requirejs.config({
         qubitsGraphics: animatedQubitsPath + 'lib/qubitsGraphics',
         qubitAnimationCalculator: animatedQubitsPath + 'lib/qubitAnimationCalculator',
         animatedQubitsRenderer: animatedQubitsPath + 'lib/animatedQubitsRenderer',
-        jsqubits: animatedQubitsPath + 'lib/jsqubits',
+        jsqubits: bowerPath + 'jsqubits/lib/jsqubits',
         d3MeasureText: bowerPath + 'd3-measure-text/lib/d3-measure-text',
         d3: bowerPath + 'd3/d3.min',
-        d3Transform: bowerPath + 'd3-transform/src/d3-transform'
+        d3Transform: bowerPath + 'd3-transform/src/d3-transform',
+        q: bowerPath + 'q/q',
+        lodash: bowerPath + 'lodash/dist/lodash.min'
     },
     shim: {
         d3: {

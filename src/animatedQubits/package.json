@@ -13,12 +13,13 @@
     "build": "r.js -o build.js"
   },
   "dependencies": {
+    "jsqubits": "0.1.x",
     "requirejs": "2.1.x",
     "d3": "3.3.x",
     "d3-transform": "1.0.x",
     "d3-measure-text": "0.0.x",
     "q": "0.9.x",
-    "lodash": "2.3.x"
+    "lodash": "~2.3.x"
   },
   "devDependencies": {
     "jasmine-node": "1.11.x",
@@ -27,4 +28,3 @@
   },
   "optionalDependencies": {}
 }
-

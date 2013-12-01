@@ -5,7 +5,7 @@
 
 var mockery = require('mockery'),
     _ = require('lodash'),
-    jsqubits = require('../lib/jsqubits');
+    jsqubits = require('jsqubits').jsqubits;
 
 describe("animatedQubitsRenderer using npm/commonjs dependencies", function () {
     it('should should load without error', function () {

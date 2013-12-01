@@ -4,7 +4,7 @@
 "use strict";
 
 var mockery = require('mockery'),
-    jsqubits = require('../lib/jsqubits');
+    jsqubits = require('jsqubits').jsqubits;
 
 var createMockPromise = function () {
     return {
