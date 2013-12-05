@@ -1,4 +1,4 @@
-/* global requirejs, document */
+/* global requirejs, document, console, alert */
 
 (function () {
 "use strict";
@@ -35,6 +35,17 @@ requirejs(['animatedQubits', 'jsqubits', 'd3Transform'],
     function (animatedQubits, jsqubits) {
         var animation = animatedQubits(jsqubits("|101>"), {maxRadius: 50});
         animation.display(document.getElementById("svg"));
+
+        function hadamardAllClick() {
+            animation.applyOperation(function hadamardAll(qstate) {
+                return qstate.hadamard(jsqubits.ALL);
+            }).fail(function (msg) {
+                if (console && console.log) console.log(msg);
+                alert(msg);
+            });
+        }
+
+        document.getElementById("hadamardButton").onclick = hadamardAllClick;
     }
 );
 

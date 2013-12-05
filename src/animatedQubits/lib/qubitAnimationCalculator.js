@@ -3,14 +3,11 @@
 (function (globals) {
     "use strict";
     
-    var createModule = function (_, jsqubitsModule) {
-
-       var jsqubits;
+    var createModule = function (_, jsqubits) {
 
         var ensureDependenciesAreSet = function () {
             _ = _ || globals._;
-            jsqubitsModule = jsqubitsModule || globals.jsqubits;
-            jsqubits = jsqubitsModule.jsqubits;
+            jsqubits = jsqubits || globals.jsqubits;
         };
 
         var calculatorFactory = function (config) {
@@ -59,78 +56,32 @@
                 return phase2bState;
             };
 
-        /*
-        function createPhase2bState(phase1State, context, newState) {
-        var key = phase1State.key;
-        var config = context.config;
-        var keysGroupedByDestinationState = context.keysGroupedByDestinationState;
-        var phase2aState = context.phase2aStates[key];
-        var phase2bState = _.clone(phase2aState);
-        phase2bState.amplitude = phase2aState.amplitude.multiply(newState.amplitude);
-        var basisState = newState.index;
-        phase2bState.index = basisState;
-        var keyGroup = keysGroupedByDestinationState[basisState];
-        if (!keyGroup) {
-            keyGroup = [];
-            keysGroupedByDestinationState[basisState] = keyGroup;
-            phase2bState.x += 2 * config.maxRadius;
-            phase2bState.y = computeAmplitudeYValue(config.maxRadius, basisState);
-        } else {
-            var prevState = context.phase2bStates[_.last(keyGroup)];
-            var prevAmplitude = prevState.amplitude;
-            phase2bState.x = prevState.x + prevAmplitude.real() * config.maxRadius;
-            phase2bState.y = prevState.y - prevAmplitude.imaginary() * config.maxRadius;
-        }
-        keyGroup.push(key);
-        return phase2bState;
-    }
-        */
-
             var createPhases1And2 = function (stateComponents, operation) {
                 var phases = {
                     phase1: [],
                     phase2a: {},
                     phase2b: {},
-                    phase1GroupedByState: []
+                    stateComponentIndexesGroupedBySource: []
                 },
                 phase2bGroupedByState = {};
                 stateComponents.forEach(function(oldStateComponent) {
                     var qstate = operation(jsqubits(oldStateComponent.bitString));
-                    var phase1StateGroup = [];
-                    phases.phase1GroupedByState.push(phase1StateGroup);
+                    var phase1StateGroupIndexes = [];
+                    phases.stateComponentIndexesGroupedBySource.push(phase1StateGroupIndexes);
                     var subSeq = 1;
                     qstate.each(function (newStateComponent) {
                         var phase1State = createPhase1State(oldStateComponent, subSeq++);
                         var phase2aState = createPhase2aState(oldStateComponent, phase1State);
                         var key = phase1State.key;
+                        phase1StateGroupIndexes.push(phases.phase1.length);
                         phases.phase1.push(phase1State);
                         phases.phase2a[key] = phase2aState;
                         phases.phase2b[key] = createPhase2bState(
                             phase2aState, newStateComponent, phase2bGroupedByState);
-                        phase1StateGroup.push(phase1State);
                     });
                 });
                 return phases;
             };
-            
-            /*
-            forEach(function(amplitudeWithState) {
-            var qstate = op(jsqubits(asBinary(amplitudeWithState.index, context.expandedState.numBits)));
-            statesGroup = [];
-            context.statesGroupedByOriginalState.push(statesGroup);
-            var subSeq = 1;
-            qstate.each(function (newState) {
-                var phase1State = createPhase1State(amplitudeWithState, subSeq++);
-                var key = phase1State.key;
-                var phase2aState = createPhase2aState(amplitudeWithState, phase1State);
-                context.phase2aStates[key] = phase2aState;
-                context.phase2bStates[key] = createPhase2bState(phase1State, context, newState);
-                context.phase1States.push(phase1State);
-                statesGroup.push(phase1State);
-            });
-        });
-    }
-            */
 
             return {
                 yOffSetForState: yOffSetForState,
@@ -159,12 +110,7 @@
                 },
                 
                 createPhases: function (stateComponents, operation) {
-                    var phases1And2 = createPhases1And2(stateComponents, operation);
-                    return {
-                        phase1: phases1And2.phase1,
-                        phase2a: phases1And2.phase2a,
-                        phase2b: phases1And2.phase2b
-                    };
+                    return createPhases1And2(stateComponents, operation);
                 }
             };
         };
@@ -175,7 +121,7 @@
     if (typeof define !== 'undefined' && define.amd) {
         define(['lodash', 'jsqubits'], createModule);
     } else if (typeof module !== 'undefined' && module.exports) {
-        module.exports = createModule(require('lodash'), require('jsqubits'));
+        module.exports = createModule(require('lodash'), require('jsqubits').jsqubits);
     } else {
         globals.animatedQubitsInternal = globals.animatedQubitsInternal || {};
         globals.animatedQubitsInternal.calculatorFactory = createModule();

@@ -3,11 +3,12 @@
 (function (globals) {
     "use strict";
     
-    var createModule = function (d3, d3MeasureText) {
+    var createModule = function (Q, d3, d3MeasureText) {
 
         var amplitudeDiskTransform;
 
         var initialize = function () {
+            Q = Q || globals.Q;
             d3 = d3 || globals.d3;
             d3MeasureText = d3MeasureText || globals.d3MeasureText;
             amplitudeDiskTransform = d3.svg.transform()
@@ -79,7 +80,24 @@
                     headClass: 'animatedQubitsPhaseArrowEnd'
                 });
             };
-            
+
+            var transitionExistingAmplitudeDiscs = function (amplitudeDiscGroup, stateComponents, config, options) {
+                var transitionEndDeferreds = [];
+                var transitionEndPromises = [];
+                amplitudeDiscGroup.transition()
+                    .duration(options.duration == null ? 1000 : options.duration)
+                    .attr('transform', amplitudeDiskTransform)
+                    .each(function() {
+                        var deferred = Q.defer();
+                        transitionEndDeferreds.push(deferred);
+                        transitionEndPromises.push(deferred.promise);
+                    })
+                    .each('end', function () {
+                        transitionEndDeferreds.pop().resolve();
+                    });
+                return Q.all(transitionEndPromises);
+            };
+
             return {
                 getTextHeight: function () {
                     return textDim.height;
@@ -121,16 +139,17 @@
                         .attr('transform', transform);
                     return(qubitsGraphicsFromD3Element(element));
                 },
-                renderAmplitudeDiscs: function (stateComponents, config) {
+                renderAmplitudeDiscs: function (stateComponents, config, options) {
+                    options = options || {};
                     var amplitudeDiscGroup = d3Element.selectAll('.animatedQubitsAmplitudeDisc')
                         .data(stateComponents, function (stateComponent) {
                             return stateComponent.key;
                         });
             
-                    //var transitionsEndedPromise = transitionExistingAmplitudes(amplitudeDiscGroup, expandedState, config);
+                    var transitionsEndedPromise = transitionExistingAmplitudeDiscs(amplitudeDiscGroup, stateComponents, config, options);
                     renderNewAmplitudeDiscs(amplitudeDiscGroup, stateComponents, config);
                     amplitudeDiscGroup.exit().remove();
-                    //return transitionsEndedPromise;
+                    return transitionsEndedPromise;
                 }
             };
         };
@@ -139,9 +158,9 @@
     
     /* Support AMD and CommonJS, with a fallback of putting animatedQubits in the global namespace */
     if (typeof define !== 'undefined' && define.amd) {
-        define(["d3", "d3MeasureText"], createModule);
+        define(["q", "d3", "d3MeasureText"], createModule);
     } else if (typeof module !== 'undefined' && module.exports) {
-        module.exports = createModule(require('d3'), require('d3-measure-text'));
+        module.exports = createModule(require('q'), require('d3'), require('d3-measure-text'));
     } else {
         globals.animatedQubitsInternal = globals.animatedQubitsInternal || {};
         globals.animatedQubitsInternal.graphicsFactory = createModule();

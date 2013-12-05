@@ -123,32 +123,9 @@ describe("qubitAnimationRenderer", function () {
             expect(phase2b['k2-2'].y).toBe(maxRadius * (1 + 3 * Math.SQRT2));
         });
 
-        /*
-        function createPhase2bState(phase1State, context, newState) {
-        var key = phase1State.key;
-        var config = context.config;
-        var keysGroupedByDestinationState = context.keysGroupedByDestinationState;
-        var phase2aState = context.phase2aStates[key];
-        var phase2bState = _.clone(phase2aState);
-        phase2bState.amplitude = phase2aState.amplitude.multiply(newState.amplitude);
-        var basisState = newState.index;
-        phase2bState.index = basisState;
-        var keyGroup = keysGroupedByDestinationState[basisState];
-        if (!keyGroup) {
-            keyGroup = [];
-            keysGroupedByDestinationState[basisState] = keyGroup;
-            phase2bState.x += 2 * config.maxRadius;
-            phase2bState.y = computeAmplitudeYValue(config.maxRadius, basisState);
-        } else {
-            var prevState = context.phase2bStates[_.last(keyGroup)];
-            var prevAmplitude = prevState.amplitude;
-            phase2bState.x = prevState.x + prevAmplitude.real() * config.maxRadius;
-            phase2bState.y = prevState.y - prevAmplitude.imaginary() * config.maxRadius;
-        }
-        keyGroup.push(key);
-        return phase2bState;
-    }
-        */
+        it("stateComponentIndexesGroupedBySource: should group the state indexes by their initial states", function () {
+            expect(phases.stateComponentIndexesGroupedBySource).toEqual([[0,1], [2,3]]);
+        });
     });
     
     describe("#createPhases with interference", function () {
@@ -187,7 +164,10 @@ describe("qubitAnimationRenderer", function () {
             expect(phase2b['k2-1'].y).toBe(maxRadius * (1 + 2 * Math.SQRT2));
             expect(phase2b['k2-2'].x).toBe(maxRadius * 1.5);
             expect(phase2b['k2-2'].y).toBe(maxRadius * (1 + 3 * Math.SQRT2));
+        });
 
+it("stateComponentIndexesGroupedBySource: should group the state indexes by their initial states", function () {
+            expect(phases.stateComponentIndexesGroupedBySource).toEqual([[0,1], [2,3]]);
         });
 
     });

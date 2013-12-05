@@ -4,6 +4,7 @@
 "use strict";
 
 var mockery = require('mockery'),
+    _ = require('lodash'),
     jsqubits = require('jsqubits').jsqubits;
 
 var createMockPromise = function () {
@@ -45,7 +46,9 @@ describe("animatedQubits", function () {
             updateDimensions: function () {},
             renderBitLabels: function () {},
             renderStateLabels: function () {},
-            renderState: function () {}
+            renderState: function () {
+                return createMockPromise();
+            }
         };
         
         mockRendererModule = function (params) {
@@ -72,6 +75,7 @@ describe("animatedQubits", function () {
 
         mockery.enable({useCleanCache: true});
         mockery.registerAllowable('../animatedQubits');
+        mockery.registerAllowable('lodash');
         mockery.registerMock('./lib/animatedQubitsRenderer', mockRendererModule);
         mockery.registerMock('./lib/qubitAnimationCalculator', mockCalculatorModule);
         mockery.registerMock('q', mockQ);
@@ -148,6 +152,8 @@ describe("animatedQubits", function () {
             operation,
             operationReturnState,
             operationCalls,
+            renderStateCalls,
+            phase1, phase2a, phase2b,
             options = {someOption: 42};
             
             
@@ -155,15 +161,42 @@ describe("animatedQubits", function () {
             qstate = jsqubits('|101>').hadamard(0);
             animation = require('../animatedQubits')(qstate, config);
             animation.display('svg element');
+            phase1 = [
+                {key:'k1',amplitude:'a1-1'},
+                {key:'k2',amplitude:'a1-2'},
+                {key:'k3',amplitude:'a1-3'},
+                {key:'k4',amplitude:'a1-4'}
+            ];
 
-            spyOn(mockRenderer, 'renderState');
+            phase2a = {
+                'k1':{key:'k1',amplitude:'a2a-1'},
+                'k2':{key:'k2',amplitude:'a2a-2'},
+                'k3':{key:'k3',amplitude:'a2a-3'},
+                'k4':{key:'k4',amplitude:'a2a-4'}
+            };
+
+            phase2b = {
+                'k1':{key:'k1',amplitude:'a2b-1'},
+                'k2':{key:'k2',amplitude:'a2b-2'},
+                'k3':{key:'k3',amplitude:'a2b-3'},
+                'k4':{key:'k4',amplitude:'a2b-4'}
+            };
+
+            // Roll our own mockRenderer so we can clone the call arguments.
+            renderStateCalls = [];
+            mockRenderer.renderState = function renderState() {
+                renderStateCalls.push(_.cloneDeep(arguments));
+                return createMockPromise();
+            };
+            
             spyOn(mockCalculator, 'createPhases').andReturn({
-                phase1: 'phase1',
-                phase2a: 'phase2a',
-                phase2b: 'phase2b',
+                phase1: phase1,
+                phase2a: phase2a,
+                phase2b: phase2b,
                 phase3: 'phase3',
                 phase4: 'phase4',
-                phase5: 'phase5'
+                phase5: 'phase5',
+                stateComponentIndexesGroupedBySource: [[0, 1], [2, 3]]
             });
             operationCalls = [];
             operationReturnState = qstate.T(0);
@@ -185,14 +218,49 @@ describe("animatedQubits", function () {
         });
         
         it("should create phases", function () {
-           animation.applyOperation(operation, options);
+            animation.applyOperation(operation, options);
             expect(mockCalculator.createPhases)
                 .toHaveBeenCalledWith(jasmine.any(Array), operation);
         });
         
         it("should render phase1", function () {
             animation.applyOperation(operation, options);
-            expect(mockRenderer.renderState).toHaveBeenCalledWith("phase1");
+            expect(renderStateCalls[0][0]).toEqual(phase1);
+        });
+        
+        it("should render phase2a and phase2b one group at a time", function () {
+            animation.applyOperation(operation, options);
+            expect(renderStateCalls[1][0]).toEqual([
+                {key:'k1',amplitude:'a2a-1'},
+                {key:'k2',amplitude:'a2a-2'},
+                {key:'k3',amplitude:'a1-3'},
+                {key:'k4',amplitude:'a1-4'}
+            ]);
+            expect(renderStateCalls[1][1]).toEqual({duration: 0});
+            
+            expect(renderStateCalls[2][0]).toEqual([
+                {key:'k1',amplitude:'a2b-1'},
+                {key:'k2',amplitude:'a2b-2'},
+                {key:'k3',amplitude:'a1-3'},
+                {key:'k4',amplitude:'a1-4'}
+            ]);
+            expect(renderStateCalls[2][1]).toBeUndefined();
+            
+            expect(renderStateCalls[3][0]).toEqual([
+                {key:'k1',amplitude:'a2b-1'},
+                {key:'k2',amplitude:'a2b-2'},
+                {key:'k3',amplitude:'a2a-3'},
+                {key:'k4',amplitude:'a2a-4'}
+            ]);
+            expect(renderStateCalls[3][1]).toEqual({duration: 0});
+            
+            expect(renderStateCalls[4][0]).toEqual([
+                {key:'k1',amplitude:'a2b-1'},
+                {key:'k2',amplitude:'a2b-2'},
+                {key:'k3',amplitude:'a2b-3'},
+                {key:'k4',amplitude:'a2b-4'}
+            ]);
+            expect(renderStateCalls[4][1]).toBeUndefined();
         });
         
         it("should apply the operation to qstate and its components", function () {
@@ -219,5 +287,37 @@ describe("animatedQubits", function () {
     });
 
 });
+
+/*
+function phase2(context) {
+        log('phase 2');
+        var promise = Q.when();
+        _.forEach(context.statesGroupedByOriginalState, function(stateGroup) {
+            promise = promise.then(phase2a(context, stateGroup))
+                .then(phase2b(context, stateGroup));
+        });
+        return promise.then(function () {return context;});
+    }
+
+    function phase2a(context, stateGroup) {
+        return function () {
+            log('phase 2a');
+            _.forEach(stateGroup, function(state) {
+                _.assign(state, context.phase2aStates[state.key]);
+            });
+            return renderAmplitudes(context.expandedState, _.assign(_.clone(context.config), {duration: 0}));
+        }
+    }
+
+    function phase2b(context, stateGroup) {
+        return function () {
+            log('phase 2b');
+            _.forEach(stateGroup, function(state) {
+                _.assign(state, context.phase2bStates[state.key]);
+            });
+            return renderAmplitudes(context.expandedState, context.config);
+        }
+    }
+*/
 
 })();

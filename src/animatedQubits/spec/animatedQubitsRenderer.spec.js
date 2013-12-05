@@ -226,8 +226,10 @@ describe("animatedQubitsRenderer", function () {
 
         it("should render amplitude discs", function () {
             spyOn(mockGraphicsGroup, 'renderAmplitudeDiscs');
-            renderer.renderState(stateComponents);
-            expect(mockGraphicsGroup.renderAmplitudeDiscs).toHaveBeenCalledWith(stateComponents, config);
+            var options = {duration: 400};
+            renderer.renderState(stateComponents, options);
+            expect(mockGraphicsGroup.renderAmplitudeDiscs)
+                .toHaveBeenCalledWith(stateComponents, config, options);
         });
     });
 

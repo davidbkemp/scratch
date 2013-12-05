@@ -70,12 +70,12 @@
                     }
                 },
                 
-                renderState: function (stateComponents) {
+                renderState: function (stateComponents, options) {
                     amplitudeDiscsGroup = amplitudeDiscsGroup || graphics.createGroup({
                         'class': 'animatedQubitsAmplitudeDiscs',
                         'x': maxRadius + (numBits + 1) * textWidth
                     });
-                    amplitudeDiscsGroup.renderAmplitudeDiscs(stateComponents, config);
+                    return amplitudeDiscsGroup.renderAmplitudeDiscs(stateComponents, config, options);
                 }
                 
             };
