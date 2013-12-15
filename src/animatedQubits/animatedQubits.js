@@ -63,6 +63,10 @@
                 return renderer.renderState.bind(null, phases.phase4, {duration: 0});
             };
             
+            var phase5 = function name(phases) {
+                return renderer.renderState.bind(null, phases.phase5);
+            };
+            
             var applyOperation = function (operation) {
                 var phases = calculator.createPhases(stateComponents, operation),
                     newStateComponents = phases.phase1.map(_.clone);
@@ -71,7 +75,8 @@
                 return phase1(newStateComponents)
                     .then(phase2(phases, newStateComponents))
                     .then(phase3(phases))
-                    .then(phase4(phases));
+                    .then(phase4(phases))
+                    .then(phase5(phases));
             };
 
             return {

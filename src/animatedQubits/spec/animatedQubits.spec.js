@@ -153,7 +153,7 @@ describe("animatedQubits", function () {
             operationReturnState,
             operationCalls,
             renderStateCalls,
-            phase1, phase2a, phase2b, phase3, phase4,
+            phase1, phase2a, phase2b,
             options = {someOption: 42};
             
             
@@ -182,18 +182,6 @@ describe("animatedQubits", function () {
                 'k4':{key:'k4',amplitude:'a2b-4'}
             };
             
-            phase3 = [
-                {key:'k1',amplitude:'a3-1'},
-                {key:'k2',amplitude:'a3-2'},
-                {key:'k3',amplitude:'a3-3'},
-                {key:'k4',amplitude:'a3-4'}
-            ];
-            
-            phase4 = [
-                {key:'k1',amplitude:'a4-1'},
-                {key:'k4',amplitude:'a4-4'}
-            ];
-
             // Roll our own mockRenderer so we can clone the call arguments.
             renderStateCalls = [];
             mockRenderer.renderState = function renderState() {
@@ -205,8 +193,8 @@ describe("animatedQubits", function () {
                 phase1: phase1,
                 phase2a: phase2a,
                 phase2b: phase2b,
-                phase3: phase3,
-                phase4: phase4,
+                phase3: 'phase3',
+                phase4: 'phase4',
                 phase5: 'phase5',
                 stateComponentIndexesGroupedBySource: [[0, 1], [2, 3]]
             });
@@ -277,14 +265,20 @@ describe("animatedQubits", function () {
         
         it("should render phase3 states", function () {
             animation.applyOperation(operation, options);
-            expect(renderStateCalls[5][0]).toEqual(phase3);
+            expect(renderStateCalls[5][0]).toEqual('phase3');
             expect(renderStateCalls[5][1]).toBeUndefined();
         });
         
         it("should render phase4 states", function () {
             animation.applyOperation(operation, options);
-            expect(renderStateCalls[6][0]).toEqual(phase4);
+            expect(renderStateCalls[6][0]).toEqual('phase4');
             expect(renderStateCalls[6][1]).toEqual({duration: 0});
+        });
+        
+        it("should render phase4 states", function () {
+            animation.applyOperation(operation, options);
+            expect(renderStateCalls[7][0]).toEqual('phase5');
+            expect(renderStateCalls[7][1]).toBeUndefined();
         });
         
         it("should apply the operation to qstate and its components", function () {

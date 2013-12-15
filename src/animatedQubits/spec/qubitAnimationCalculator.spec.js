@@ -244,7 +244,20 @@ describe("qubitAnimationRenderer", function () {
             expect(p4_k1_2).toEqual(p3_k1_2);
 
             expect(phase4.length).toBe(2);
+        });
 
+        it("phase 5: should have zero x offset", function () {
+            var phase5 = phases.phase5,
+                k1_1 = findStateComponentWithKey(phase5, 'k1-1'),
+                k1_2 = findStateComponentWithKey(phase5, 'k1-2');
+            
+            expect(k1_1.bitString).toBe("10");
+            expect(k1_2.bitString).toBe("11");
+
+            expect(k1_1.x).toBe(0);
+            expect(k1_1.y).toBe(maxRadius * (1 + 2 * Math.SQRT2));
+            expect(k1_2.x).toBe(0);
+            expect(k1_2.y).toBe(maxRadius * (1 + 3 * Math.SQRT2));
         });
 
     });

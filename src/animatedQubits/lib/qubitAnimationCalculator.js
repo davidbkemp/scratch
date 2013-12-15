@@ -132,6 +132,14 @@
                     return stateComponent.amplitude.magnitude() > 0.0001;
                 });
             };
+            
+            var createPhase5 = function (phases) {
+                phases.phase5 = phases.phase4.map(function cloneWithZeroXOffset(stateComponent) {
+                    var result = _.clone(stateComponent);
+                    result.x = 0;
+                    return result;
+                });
+            };
 
             return {
                 yOffSetForState: yOffSetForState,
@@ -171,6 +179,7 @@
                     createPhases1And2(stateComponents, operation, phases, phase2bGroupedByState);
                     createPhase3(phases, mapStateGroupsToKeyGroups(phase2bGroupedByState));
                     createPhase4(phases);
+                    createPhase5(phases);
                     return phases;
                 }
             };
