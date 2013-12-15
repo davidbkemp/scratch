@@ -153,7 +153,7 @@ describe("animatedQubits", function () {
             operationReturnState,
             operationCalls,
             renderStateCalls,
-            phase1, phase2a, phase2b,
+            phase1, phase2a, phase2b, phase3,
             options = {someOption: 42};
             
             
@@ -181,6 +181,13 @@ describe("animatedQubits", function () {
                 'k3':{key:'k3',amplitude:'a2b-3'},
                 'k4':{key:'k4',amplitude:'a2b-4'}
             };
+            
+            phase3 = [
+                {key:'k1',amplitude:'a3-1'},
+                {key:'k2',amplitude:'a3-2'},
+                {key:'k3',amplitude:'a3-3'},
+                {key:'k4',amplitude:'a3-4'}
+            ];
 
             // Roll our own mockRenderer so we can clone the call arguments.
             renderStateCalls = [];
@@ -193,7 +200,7 @@ describe("animatedQubits", function () {
                 phase1: phase1,
                 phase2a: phase2a,
                 phase2b: phase2b,
-                phase3: 'phase3',
+                phase3: phase3,
                 phase4: 'phase4',
                 phase5: 'phase5',
                 stateComponentIndexesGroupedBySource: [[0, 1], [2, 3]]
@@ -263,6 +270,17 @@ describe("animatedQubits", function () {
             expect(renderStateCalls[4][1]).toBeUndefined();
         });
         
+        it("should render phase3 states", function () {
+            animation.applyOperation(operation, options);
+            expect(renderStateCalls[5][0]).toEqual([
+                {key:'k1',amplitude:'a3-1'},
+                {key:'k2',amplitude:'a3-2'},
+                {key:'k3',amplitude:'a3-3'},
+                {key:'k4',amplitude:'a3-4'}
+            ]);
+            expect(renderStateCalls[5][1]).toBeUndefined();
+        });
+        
         it("should apply the operation to qstate and its components", function () {
             animation.applyOperation(operation, options);
             expect(operationCalls.length).toBe(1);
@@ -288,36 +306,6 @@ describe("animatedQubits", function () {
 
 });
 
-/*
-function phase2(context) {
-        log('phase 2');
-        var promise = Q.when();
-        _.forEach(context.statesGroupedByOriginalState, function(stateGroup) {
-            promise = promise.then(phase2a(context, stateGroup))
-                .then(phase2b(context, stateGroup));
-        });
-        return promise.then(function () {return context;});
-    }
 
-    function phase2a(context, stateGroup) {
-        return function () {
-            log('phase 2a');
-            _.forEach(stateGroup, function(state) {
-                _.assign(state, context.phase2aStates[state.key]);
-            });
-            return renderAmplitudes(context.expandedState, _.assign(_.clone(context.config), {duration: 0}));
-        }
-    }
-
-    function phase2b(context, stateGroup) {
-        return function () {
-            log('phase 2b');
-            _.forEach(stateGroup, function(state) {
-                _.assign(state, context.phase2bStates[state.key]);
-            });
-            return renderAmplitudes(context.expandedState, context.config);
-        }
-    }
-*/
 
 })();

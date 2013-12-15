@@ -55,13 +55,20 @@
                 };
             };
             
+            var phase3 = function name(phases) {
+                return function () {
+                    renderer.renderState(phases.phase3);
+                };
+            };
+            
             var applyOperation = function (operation) {
                 var phases = calculator.createPhases(stateComponents, operation),
                     newStateComponents = phases.phase1.map(_.clone);
                 qstate = operation(qstate);
                 stateComponents = calculator.augmentState(qstate);
                 return phase1(newStateComponents)
-                    .then(phase2(phases, newStateComponents));
+                    .then(phase2(phases, newStateComponents))
+                    .then(phase3(phases));
             };
 
             return {
