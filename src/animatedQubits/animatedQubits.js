@@ -21,7 +21,7 @@
                 currentOperationPromise = Q.when();
 
             var phase1 = function (newStateComponents) {
-                return renderer.renderState(newStateComponents);
+                return renderer.renderState(newStateComponents, {duration: 0});
             };
             
             var phase2 = function (phases, newStateComponents) {

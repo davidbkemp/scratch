@@ -226,6 +226,7 @@ describe("animatedQubits", function () {
         it("should render phase1", function () {
             animation.applyOperation(operation, options);
             expect(renderStateCalls[0][0]).toEqual(phase1);
+            expect(renderStateCalls[0][1]).toEqual({duration: 0});
         });
         
         it("should render phase2a and phase2b one group at a time", function () {
