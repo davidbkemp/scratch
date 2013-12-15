@@ -231,6 +231,22 @@ describe("qubitAnimationRenderer", function () {
             expect(k2_2.y).toBeCloseTo(maxRadius * ((1 + 0.3536) + 3 * Math.SQRT2), 2);
         });
 
+        it("phase 4: major states should remain unchanged, and remainder disappear", function () {
+            var phase3 = phases.phase3,
+                p3_k1_1 = findStateComponentWithKey(phase3, 'k1-1'),
+                p3_k1_2 = findStateComponentWithKey(phase3, 'k1-2');
+                
+            var phase4 = phases.phase4,
+                p4_k1_1 = findStateComponentWithKey(phase4, 'k1-1'),
+                p4_k1_2 = findStateComponentWithKey(phase4, 'k1-2');
+                
+            expect(p4_k1_1).toEqual(p3_k1_1);
+            expect(p4_k1_2).toEqual(p3_k1_2);
+
+            expect(phase4.length).toBe(2);
+
+        });
+
     });
 });
 

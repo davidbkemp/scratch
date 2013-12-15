@@ -106,36 +106,6 @@
                 });
                 
             };
-        /*
-        
-        function createPhase3States(context) {
-        log("createPhase3States");
-        _.forOwn(context.keysGroupedByDestinationState, function (keyGroup) {
-        
-            var totalAmplitude = _.reduce(keyGroup, function (accumulator, key) {
-                return accumulator.add(context.phase2bStates[key].amplitude);
-            }, jsqubits.ZERO);
-            
-            var keyGroupPrimaryState = _.clone(context.phase2bStates[keyGroup[0]]);
-            if (totalAmplitude.magnitude() > 0.0001) {
-                keyGroupPrimaryState.amplitude = totalAmplitude;
-            } else {
-                keyGroupPrimaryState.amplitude = keyGroupPrimaryState.amplitude.multiply(jsqubits.complex(0.0001));
-            }
-            context.phase3States.push(keyGroupPrimaryState);
-            
-            var endOfArrowX = keyGroupPrimaryState.x + totalAmplitude.real() * config.maxRadius;
-            var endOfArrowY = keyGroupPrimaryState.y - totalAmplitude.imaginary() * config.maxRadius;
-            for (var i = 1; i < keyGroup.length; i++) {
-                var state = _.clone(context.phase2bStates[keyGroup[i]]);
-                state.amplitude = state.amplitude.multiply(jsqubits.complex(0.0001, 0));
-                state.x = endOfArrowX;
-                state.y = endOfArrowY;
-                context.phase3States.push(state);
-            }
-        });
-        }
-    */
 
             var createPhases1And2 = function (stateComponents, operation, phases, phase2bGroupedByState) {
                 stateComponents.forEach(function(oldStateComponent) {
@@ -155,6 +125,12 @@
                     });
                 });
                 return phases;
+            };
+            
+            var createPhase4 = function (phases) {
+                phases.phase4 = phases.phase3.filter(function hasSignificantAmplitude(stateComponent) {
+                    return stateComponent.amplitude.magnitude() > 0.0001;
+                });
             };
 
             return {
@@ -194,6 +170,7 @@
                     var phase2bGroupedByState = {};
                     createPhases1And2(stateComponents, operation, phases, phase2bGroupedByState);
                     createPhase3(phases, mapStateGroupsToKeyGroups(phase2bGroupedByState));
+                    createPhase4(phases);
                     return phases;
                 }
             };

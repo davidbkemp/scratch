@@ -56,9 +56,11 @@
             };
             
             var phase3 = function name(phases) {
-                return function () {
-                    renderer.renderState(phases.phase3);
-                };
+                return renderer.renderState.bind(null, phases.phase3);
+            };
+            
+            var phase4 = function name(phases) {
+                return renderer.renderState.bind(null, phases.phase4, {duration: 0});
             };
             
             var applyOperation = function (operation) {
@@ -68,7 +70,8 @@
                 stateComponents = calculator.augmentState(qstate);
                 return phase1(newStateComponents)
                     .then(phase2(phases, newStateComponents))
-                    .then(phase3(phases));
+                    .then(phase3(phases))
+                    .then(phase4(phases));
             };
 
             return {
