@@ -3,7 +3,7 @@
 (function (globals) {
 "use strict";
 
-var animation = animatedQubits(jsqubits("|101>"), {maxRadius: 50});
+var animation = animatedQubits(jsqubits("|101>").hadamard(0).T(0), {maxRadius: 50});
 
 animation.display(document.getElementById("svg"));
 

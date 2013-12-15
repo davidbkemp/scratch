@@ -2,7 +2,7 @@
 
 (function (globals) {
     "use strict";
-    
+
     var createModule = function (_, jsqubits) {
 
         var ensureDependenciesAreSet = function () {
@@ -12,7 +12,8 @@
 
         var calculatorFactory = function (config) {
             ensureDependenciesAreSet();
-            var maxRadius = config.maxRadius;
+            var maxRadius = config.maxRadius,
+                smallComplexWithZeroPhase = jsqubits.complex(0.0001);
         
             var yOffSetForState = function (state) {
                 // A single qubit state can have a radius of up to maxRadius,
@@ -56,14 +57,87 @@
                 return phase2bState;
             };
 
-            var createPhases1And2 = function (stateComponents, operation) {
-                var phases = {
-                    phase1: [],
-                    phase2a: {},
-                    phase2b: {},
-                    stateComponentIndexesGroupedBySource: []
-                },
-                phase2bGroupedByState = {};
+            var mapStateGroupsToKeyGroups = function (stateGroups) {
+                return Object.keys(stateGroups).map(function keyGroupForIndex(index) {
+                    return stateGroups[index].map(function extractKey(stateComponent) {
+                        return stateComponent.key;
+                    });
+                });
+            };
+
+            var createPhase3 = function (phases, keysGroupedByDestinationState) {
+
+                var sumAllAmplitudesInKeyGroup = function (keyGroup) {
+                    return keyGroup.reduce(function sumAmplitudes(accumulator, key) {
+                        return accumulator.add(phases.phase2b[key].amplitude);
+                    }, jsqubits.ZERO);
+                };
+
+                var addAllAmplitudesToFirstStateComponent = function(keyGroup) {
+                    var totalAmplitude = sumAllAmplitudesInKeyGroup(keyGroup);
+                        // NOTE: The first key in the key group is regarded as the 'primary' for the group.
+                    var groupPrimaryState = _.clone(phases.phase2b[keyGroup[0]]);
+
+                    // If the amplitude is close to zero then the phase is often quite random and this can cause the disc to rotate in strange ways as it shrinks.
+                    // So, when it is close to zero, we simply mupltiply the existing amplitude by a small constant so as to preserve the phase.
+                    groupPrimaryState.amplitude = totalAmplitude.magnitude() > 0.0001 ? totalAmplitude : groupPrimaryState.amplitude.multiply(smallComplexWithZeroPhase);
+
+                    phases.phase3.push(groupPrimaryState);
+                    return groupPrimaryState;
+                };
+
+                var shrinkRemainingAmplitudes = function (groupPrimaryState, keyGroup) {
+                    var totalAmplitude = groupPrimaryState.amplitude;
+                    var endOfArrowX = groupPrimaryState.x + totalAmplitude.real() * config.maxRadius;
+                    var endOfArrowY = groupPrimaryState.y - totalAmplitude.imaginary() * config.maxRadius;
+                    for (var index = 1; index < keyGroup.length; index++) {
+                        var key = keyGroup[index];
+                        var newStateComponent = _.clone(phases.phase2b[key]);
+                        newStateComponent.amplitude = newStateComponent.amplitude.multiply(smallComplexWithZeroPhase);
+                        newStateComponent.x = endOfArrowX;
+                        newStateComponent.y = endOfArrowY;
+                        phases.phase3.push(newStateComponent);
+                    }
+                };
+
+                keysGroupedByDestinationState.forEach(function (keyGroup) {
+                    var groupPrimaryState = addAllAmplitudesToFirstStateComponent(keyGroup);
+                    shrinkRemainingAmplitudes(groupPrimaryState, keyGroup);
+                });
+                
+            };
+        /*
+        
+        function createPhase3States(context) {
+        log("createPhase3States");
+        _.forOwn(context.keysGroupedByDestinationState, function (keyGroup) {
+        
+            var totalAmplitude = _.reduce(keyGroup, function (accumulator, key) {
+                return accumulator.add(context.phase2bStates[key].amplitude);
+            }, jsqubits.ZERO);
+            
+            var keyGroupPrimaryState = _.clone(context.phase2bStates[keyGroup[0]]);
+            if (totalAmplitude.magnitude() > 0.0001) {
+                keyGroupPrimaryState.amplitude = totalAmplitude;
+            } else {
+                keyGroupPrimaryState.amplitude = keyGroupPrimaryState.amplitude.multiply(jsqubits.complex(0.0001));
+            }
+            context.phase3States.push(keyGroupPrimaryState);
+            
+            var endOfArrowX = keyGroupPrimaryState.x + totalAmplitude.real() * config.maxRadius;
+            var endOfArrowY = keyGroupPrimaryState.y - totalAmplitude.imaginary() * config.maxRadius;
+            for (var i = 1; i < keyGroup.length; i++) {
+                var state = _.clone(context.phase2bStates[keyGroup[i]]);
+                state.amplitude = state.amplitude.multiply(jsqubits.complex(0.0001, 0));
+                state.x = endOfArrowX;
+                state.y = endOfArrowY;
+                context.phase3States.push(state);
+            }
+        });
+        }
+    */
+
+            var createPhases1And2 = function (stateComponents, operation, phases, phase2bGroupedByState) {
                 stateComponents.forEach(function(oldStateComponent) {
                     var qstate = operation(jsqubits(oldStateComponent.bitString));
                     var phase1StateGroupIndexes = [];
@@ -110,7 +184,17 @@
                 },
                 
                 createPhases: function (stateComponents, operation) {
-                    return createPhases1And2(stateComponents, operation);
+                    var phases = {
+                        phase1: [],
+                        phase2a: {},
+                        phase2b: {},
+                        stateComponentIndexesGroupedBySource: [],
+                        phase3: []
+                    };
+                    var phase2bGroupedByState = {};
+                    createPhases1And2(stateComponents, operation, phases, phase2bGroupedByState);
+                    createPhase3(phases, mapStateGroupsToKeyGroups(phase2bGroupedByState));
+                    return phases;
                 }
             };
         };

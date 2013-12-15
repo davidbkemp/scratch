@@ -3,10 +3,23 @@
 (function () {
 "use strict";
 
-var jsqubits = require('jsqubits').jsqubits;
+var jsqubits = require('jsqubits').jsqubits,
+    _ = require('lodash');
 
 describe("qubitAnimationRenderer", function () {
     var config, calculator, maxRadius = 64;
+
+    var findStateComponentWithKey = function (stateComponents, key) {
+        return _.find(stateComponents, function stateComponentHasKey(stateComponent) {
+            return stateComponent.key === key;
+        });
+    };
+
+    var stateComponentAsString = function (stateComponent) {
+        var clone = _.clone(stateComponent);
+        _.assign(clone, {amplitude : stateComponent.amplitude.toString()});
+        return JSON.stringify(clone);
+    };
 
     beforeEach(function () {
         config = {maxRadius: maxRadius};
@@ -126,6 +139,16 @@ describe("qubitAnimationRenderer", function () {
         it("stateComponentIndexesGroupedBySource: should group the state indexes by their initial states", function () {
             expect(phases.stateComponentIndexesGroupedBySource).toEqual([[0,1], [2,3]]);
         });
+        
+        it("phase 3: should be the same as phase2b (due to no interference)", function () {
+            expect(phases.phase3.length).toEqual(4);
+            phases.phase3.forEach(function shouldMatchPhase2b(phase3Component) {
+                var key = phase3Component.key;
+                expect(stateComponentAsString(phase3Component))
+                    .toEqual(stateComponentAsString(phases.phase2b[key]));
+            });
+        });
+
     });
     
     describe("#createPhases with interference", function () {
@@ -141,7 +164,7 @@ describe("qubitAnimationRenderer", function () {
             // 0.8536+0.3536i |10> + 0.1464-0.3536i |11>
         });
     
-        it("phase 2b: should postion disc arrows head-to-tail", function () {
+        it("phase 2b: should position disc arrows head-to-tail", function () {
             var phase2b = phases.phase2b;
             
             expect(Object.keys(phase2b).length).toBe(4);
@@ -166,12 +189,49 @@ describe("qubitAnimationRenderer", function () {
             expect(phase2b['k2-2'].y).toBe(maxRadius * (1 + 3 * Math.SQRT2));
         });
 
-it("stateComponentIndexesGroupedBySource: should group the state indexes by their initial states", function () {
+        it("stateComponentIndexesGroupedBySource: should group the state indexes by their initial states", function () {
             expect(phases.stateComponentIndexesGroupedBySource).toEqual([[0,1], [2,3]]);
+        });
+        
+        it("phase 3: the first state disk of each state should expand to final state", function () {
+            var phase3 = phases.phase3,
+                k1_1 = findStateComponentWithKey(phase3, 'k1-1'),
+                k1_2 = findStateComponentWithKey(phase3, 'k1-2');
+            
+            expect(k1_1.bitString).toBe("10");
+            expect(k1_2.bitString).toBe("11");
+
+            expect(k1_1.amplitude.format({decimalPlaces: 2})).toEqual('0.85+0.35i');
+            expect(k1_2.amplitude.format({decimalPlaces: 2})).toEqual('0.15-0.35i');
+
+            expect(k1_1.x).toBe(maxRadius);
+            expect(k1_1.y).toBe(maxRadius * (1 + 2 * Math.SQRT2));
+            expect(k1_2.x).toBe(maxRadius);
+            expect(k1_2.y).toBe(maxRadius * (1 + 3 * Math.SQRT2));
+
+        });
+
+        it("phase 3: remaining states should have a tiny magnitude", function () {
+            var phase3 = phases.phase3,
+                k2_1 = findStateComponentWithKey(phase3, 'k2-1'),
+                k2_2 = findStateComponentWithKey(phase3, 'k2-2');
+
+            expect(k2_1.bitString).toBe("10");
+            expect(k2_2.bitString).toBe("11");
+
+            expect(k2_1.amplitude.format({decimalPlaces: 2})).toEqual('0');
+            expect(k2_2.amplitude.format({decimalPlaces: 2})).toEqual('0');
+            
+            expect(k2_1.amplitude.phase()).toBe(phases.phase2b['k2-1'].amplitude.phase());
+            expect(k2_2.amplitude.phase()).toBe(phases.phase2b['k2-2'].amplitude.phase());
+
+            expect(k2_1.x).toBeCloseTo(maxRadius * 1.8536, 2);
+            expect(k2_1.y).toBeCloseTo(maxRadius * ((1 - 0.3536) + 2 * Math.SQRT2), 2);
+            expect(k2_2.x).toBeCloseTo(maxRadius * 1.1464, 2);
+            expect(k2_2.y).toBeCloseTo(maxRadius * ((1 + 0.3536) + 3 * Math.SQRT2), 2);
         });
 
     });
 });
-
 
 })();
