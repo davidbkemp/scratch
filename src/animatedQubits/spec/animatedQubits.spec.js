@@ -154,10 +154,11 @@ describe("animatedQubits", function () {
             operationCalls,
             renderStateCalls,
             phase1, phase2a, phase2b,
-            options = {someOption: 42};
+            options;
             
             
         beforeEach(function () {
+            options = {someOption: 42};
             qstate = jsqubits('|101>').hadamard(0);
             animation = require('../animatedQubits')(qstate, config);
             animation.display('svg element');
@@ -301,6 +302,16 @@ describe("animatedQubits", function () {
                 animation.applyOperation(operation, options);
                 expect(mockCalculator.createPhases.calls.length).toBe(2);
                 expect(mockCalculator.createPhases.calls[1].args[0]).toEqual(["newAugmentedState"]);
+            });
+        });
+        
+        describe('when skipInterferenceSteps is specified', function () {
+            it('should only apply phases 1 and 5', function () {
+                animation.applyOperation(operation, {skipInterferenceSteps: true});
+                expect(renderStateCalls[0][0]).toEqual(phase1);
+                expect(renderStateCalls[0][1]).toEqual({duration: 0});
+                expect(renderStateCalls[1][0]).toEqual('phase5');
+                expect(renderStateCalls[1][1]).toBeUndefined();
             });
         });
     });

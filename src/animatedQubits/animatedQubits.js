@@ -67,16 +67,20 @@
                 return renderer.renderState.bind(null, phases.phase5);
             };
             
-            var applyOperation = function (operation) {
+            var applyOperation = function (operation, options) {
                 var phases = calculator.createPhases(stateComponents, operation),
                     newStateComponents = phases.phase1.map(_.clone);
                 qstate = operation(qstate);
                 stateComponents = calculator.augmentState(qstate);
-                return phase1(newStateComponents)
-                    .then(phase2(phases, newStateComponents))
-                    .then(phase3(phases))
-                    .then(phase4(phases))
-                    .then(phase5(phases));
+                if (options && options.skipInterferenceSteps) {
+                    return phase1(newStateComponents).then(phase5(phases));
+                } else {
+                    return phase1(newStateComponents)
+                        .then(phase2(phases, newStateComponents))
+                        .then(phase3(phases))
+                        .then(phase4(phases))
+                        .then(phase5(phases));
+                }
             };
 
             return {
@@ -92,9 +96,9 @@
                     stateComponents = calculator.augmentState(qstate);
                     renderer.renderState(stateComponents);
                 },
-                applyOperation: function (operation) {
+                applyOperation: function (operation, options) {
                     currentOperationPromise = currentOperationPromise.then(function () {
-                        return applyOperation(operation);
+                        return applyOperation(operation, options);
                     });
                     return currentOperationPromise;
                 }
