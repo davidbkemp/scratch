@@ -11,8 +11,18 @@
         
         var qstate, animation,
             svgElement = jQuery("#singleBitRandomNotExampleSvg"),
+            qstateElement = jQuery("#singleBitRandomNotExampleQState"),
             currentOperationPromise = Q.when();
-        
+
+        function displayState(newState) {
+            var newStateText = "";
+            newState.each(function (stateComponent) {
+                if (newStateText !== "") newStateText += " and ";
+                newStateText += (stateComponent.amplitude.multiply(100).format({decimalPlaces: 1})) + "% chance of being " + stateComponent.asBitString();
+            });
+            qstateElement.text(newStateText);
+        }
+
         function onClickNot() {
             function randomNot(localQState) {
                 var complementState = localQState.not(0).multiply(0.3);
@@ -21,6 +31,7 @@
             
             currentOperationPromise = currentOperationPromise
                 .then(animation.applyOperation.bind(animation, randomNot))
+                .then(displayState)
                 .then(null, function error(msg) {
                     alert(msg);
                 });
@@ -33,6 +44,7 @@
             animation = animatedQubits(qstate, {maxRadius: 30});
             animation.display(svgElement[0]);
             svgElement.height(animation.getNaturalDimensions().height);
+            displayState(qstate);
         }
         
         function onReset() {

@@ -84,16 +84,16 @@
     <p>For example, performing a NOT operation on the right most bit of the binary number 111 results in 110.</p>
     <p>It will be convenient to represent state by listing all possible states and placing a blue disk next to the current state.</p>
     <p>
-        Click the button labelled <em>Not q<sub>1</sub></em>
+        Click the button labelled &ldquo;<em>Not bit<sub>a</sub>&rdquo;</em>
         to apply the NOT operation to the left bit,
-        and click the button labelled <em>Not q<sub>0</sub></em>
+        and click the button labelled &ldquo;<em>Not bit<sub>b</sub>&rdquo;</em>
         to apply the NOT operation to the right bit:
     </p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
-                <button id="notExampleNot1Button">Not q<sub>1</sub></button>
-                <button id="notExampleNot0Button">Not q<sub>0</sub></button>
+                <button id="notExampleNot1Button">Not bit<sub>a</sub></button>
+                <button id="notExampleNot0Button">Not bit<sub>b</sub></button>
             </div>
             <div>
                 <button id="notExampleResetButton">Reset</button>
@@ -144,9 +144,11 @@
 </section>    
 <section>
     <h1>Random NOT (animated)</h1>
+    <p>Next we provide an interactive animation of the Random NOT operator.</p>
     <p>It will be convenient to track all the states the system might be in.</p>
     <p>The probability of being in a state is represented by the length of an arrow.</p>
-    <p>Note how the arrows add head to tail.</p>
+    <p>Press the &ldquo;Random NOT&rdquo; button multiple times and note how the arrows add head to tail.</p>
+    <p><small>Note that there is still nothing especially quantum mechanical about this yet.</small></p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -156,13 +158,13 @@
                 <button id="singleBitRandomNotResetButton">Reset</button>
             </div>
         </div>
+        <div class="qstate">State: <span id="singleBitRandomNotExampleQState">0</span></div>
         <svg id="singleBitRandomNotExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
 
 <footer>
-Introduction To Quantum Computing by David Kemp is licensed under a Creative Commons Attribution 4.0 International License.
-</footer>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Introduction To Quantum Computing</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Kemp</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US">Creative Commons Attribution 4.0 International License</a>.</footer>
 
 <script src="http://code.jquery.com/jquery-2.1.0.js"></script>
 <script src="main.min.js"></script>

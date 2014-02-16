@@ -5,6 +5,7 @@ body {
 }
 
 footer {
+    margin-top: 1em;
     font-size: 80%;
 }
 
@@ -57,7 +58,7 @@ h1, h2 {
 
 .animationBlock {
     border: 1px solid #999;
-    width: 15em;
+    width: 26em;
     padding: 0.5em;
 }
 
@@ -67,6 +68,10 @@ h1, h2 {
 
 .qstateSvg__hideBitLabels .animatedQubitsBitLabels {
     display: none;;
+}
+
+#notExampleSvg .animatedQubitsBitLabels {
+    font-size: 65%;
 }
 
 #notExampleSvg .animatedQubitsPhaseArrow,

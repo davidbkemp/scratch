@@ -13,7 +13,19 @@
             svgElement = jQuery("#notExampleSvg"),
             qstateElement = jQuery("#notExampleQState"),
             currentOperationPromise = Q.when();
-            
+
+
+        function replaceBitLabels() {
+            var bitNumber = 0;
+            var bitLabelSubscripts = ["a", "b"];
+            jQuery("#notExampleSvg .animatedQubitsBitLabels text tspan:first-child").each(function () {
+                jQuery(this).text("bit");
+            });
+            jQuery("#notExampleSvg .animatedQubitsBitLabels text tspan:nth-child(2)").each(function () {
+                jQuery(this).text(bitLabelSubscripts[bitNumber++]);
+            });
+        }
+
         function reset() {
             svgElement.empty();
             qstate = jsqubits("00");
@@ -21,6 +33,7 @@
             animation.display(svgElement[0]);
             svgElement.height(animation.getNaturalDimensions().height);
             displayState(qstate);
+            replaceBitLabels();
         }
             
         function displayState(newState) {
@@ -51,7 +64,7 @@
         }
         
         reset();
-        
+
         jQuery("#notExampleNot0Button").click(onClickNot.bind(null, 0));
         jQuery("#notExampleNot1Button").click(onClickNot.bind(null, 1));
         jQuery("#notExampleResetButton").click(onReset);
