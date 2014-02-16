@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Introduction To Quantum Computing</title>
+<link rel="stylesheet" href="qtalk.css" />
+</head>
+
+<body>
+<section>
+    <h1>Introduction To Quantum Computing</h1>
+    <div class="subtitle">
+        Or <em>What Do You Mean They Can Be Both Zero And One At The Same Time!</em>
+    </div>
+    <p>By David Kemp @david_b_kemp</p>
+    <p>DRAFT</p>
+</section>
+
+<section>
+    <h1>Quantum Computers?</h1>
+    <p>You have probably heard of quantum computers.</p>
+    <p>You have probably heard that they are faster than conventional computers.</p>
+    <p>Perhaps you have heard of quantum bits, or qubits.</p>
+    <p>
+        Maybe you have even heard of the puzzling notion that qubits can
+        have the values 0 and 1 both
+        <em>at the same time</em>.
+    </p>
+    <p>Let me try to explain what this really means.</p>
+</section>
+
+<section>
+    <h1>Conventional Bits</h1>
+    <p>I assume you know what binary bits are.</p>
+    <p>
+        For instance, 110 is binary for six.
+        <span class="help">
+            See
+            <a href="http://en.wikipedia.org/wiki/Binary_number">Wikipedia</a>
+            for more about binary numbers.
+        </span>
+    </p>
+    <p>
+        A bit may be represented using two different voltages on a wire,
+        pulses of light on a glass fibre,
+        etc. etc.
+    </p>
+</section>
+
+<section>
+    <h1>Qubits</h1>
+    <p>Just like bits, qubits have a binary state.</p>
+    <p>Qubits use quantum phenomenon like <em>nuclear spin</em></p>
+    <p>
+        Use &ldquo;clockwise&rdquo; for 0 and &ldquo;anti clockwise&rdquo; for 1.
+        <span class="help">
+            Conventionally called &ldquo;spin up&rdquo; and &ldquo;spin down&rdquo;.
+            Quantum spin is a bit like spinning things in the classical world,
+            but has some very important differences we will touch on in a moment.
+        </span>
+    </p>
+    <figure>
+        <div class="labelledImage">
+            <img src="spinDown.jpg" alt="Spin Down" class="nuclearSpin"/>
+            <div class="labelledImage_label nuclearSpinLabel">0</div>
+        </div>
+        <div class="labelledImage">
+            <img src="spinUp.jpg" alt="Spin Up" class="nuclearSpin"/>
+            <div class="labelledImage_label nuclearSpinLabel">1</div>
+        </div>
+    </figure>
+</section>
+
+<section>
+    <h1>The NOT operator</h1>
+    <p>
+        Consider the conventional NOT operator.
+        <span class="help">
+            1 and 0 can represent logical <em>true</em> and <em>false</em>.
+            NOT <em>true</em> is <em>false</em>, and NOT <em>false</em> is <em>true</em>.
+            And so, NOT of 1 is 0, and NOT of 0 is 1.
+        </span>
+    </p>
+    <p>For example, performing a NOT operation on the right most bit of the binary number 111 results in 110.</p>
+    <p>It will be convenient to represent state by listing all possible states and placing a blue disk next to the current state.</p>
+    <p>
+        Click the button labelled <em>Not q<sub>1</sub></em>
+        to apply the NOT operation to the left bit,
+        and click the button labelled <em>Not q<sub>0</sub></em>
+        to apply the NOT operation to the right bit:
+    </p>
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="notExampleNot1Button">Not q<sub>1</sub></button>
+                <button id="notExampleNot0Button">Not q<sub>0</sub></button>
+            </div>
+            <div>
+                <button id="notExampleResetButton">Reset</button>
+            </div>
+        </div>
+        <div class="qstate">State: <span id="notExampleQState">00</span></div>
+        <svg id="notExampleSvg" class="qstateSvg"></svg>
+    </div>
+</section>
+
+<!--
+<section>
+    <h1>Controlled NOT</h1>
+    <p>NOT one bit (the target) if another (control) has the value of 1.</p>
+    <p>Still just a classical (non-quantum) operator.</p>
+    <p>CNot<sub>1&rarr;0</sub> will have no effect unless and until q<sub>1</sub> is 1.</p>
+    <div class="animationBlock">
+        <div>
+            <button id="cnotExampleNot1Button">Not q<sub>1</sub></button>
+            <button id="cnotExampleNot0Button">Not q<sub>0</sub></button>
+        </div>
+        <div>
+            <button id="cnotExampleCNot10Button">CNot<sub>1&rarr;0</sub></button>
+            <button id="cnotExampleCNot01Button">CNot<sub>0&rarr;1</sub></button>
+        </div>
+        <div class="qstate">State: <span id="cnotExampleQState">00</span></div>
+        <svg id="cnotExampleSvg" class="qstateSvg"></svg>
+    </div>
+</section>
+-->
+
+<section>
+    <h1>Random NOT</h1>
+    <p>Apply the NOT operator with a specified chance of success.</p>
+    <p>The result is unknown until we peek at it.</p>
+    <p>Still just a classical non-quantum operator.</p>
+    <p>
+        Consider applying a &ldquo;Random NOT&rdquo; twice to a bit whose initial value is 0,
+        where the NOT has say a 30% chance of flipping the bit.
+    </p>
+    <p>There are two paths leading to a final state of 0:</p>
+    <ul>
+        <li>0 &rarr; 0 &rarr; 0 with probability of 0.7 x 0.7 = 0.49</li>
+        <li>0 &rarr; 1 &rarr; 0 with probability of 0.3 x 0.3 = 0.09</li>
+    </ul>
+    <p>And so the final state will be 0 with a probability of 49% + 9% = 58%</p>
+    <img src="classicalRandomNot.png" width="80%"/>
+</section>    
+<section>
+    <h1>Random NOT (animated)</h1>
+    <p>It will be convenient to track all the states the system might be in.</p>
+    <p>The probability of being in a state is represented by the length of an arrow.</p>
+    <p>Note how the arrows add head to tail.</p>
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="singleBitRandomNotExampleNotButton">Random Not<sub>30%</sub></button>
+            </div>
+            <div>
+                <button id="singleBitRandomNotResetButton">Reset</button>
+            </div>
+        </div>
+        <svg id="singleBitRandomNotExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+</section>
+
+<footer>
+Introduction To Quantum Computing by David Kemp is licensed under a Creative Commons Attribution 4.0 International License.
+</footer>
+
+<script src="http://code.jquery.com/jquery-2.1.0.js"></script>
+<script src="main.min.js"></script>
+<script src="browserSupportDetection.js"></script>
+
+</body>
+</html>

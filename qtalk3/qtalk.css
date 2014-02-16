@@ -1,0 +1,75 @@
+body {
+    max-width: 960px;
+    font-size: large;
+    margin: 1em;
+}
+
+footer {
+    font-size: 80%;
+}
+
+h1, h2 {
+    color: #25378B;
+}
+
+.help {
+    color: gray;
+}
+
+.help_button {
+    border-color: hsla(195, 53%, 60%, 0.5);
+    background-color: hsla(195, 53%, 60%, 0.5);
+    border-radius: 0.5em;
+}
+
+.labelledImage {
+    display: inline-block;
+}
+
+.nuclearSpin, .nuclearSpinLabel {
+    width: 5em;
+}
+
+.nuclearSpinLabel {
+    text-align: center;
+}
+
+.animatedQubitsAmplitudeCircle {
+    fill: hsla(195, 53%, 60%, 0.5);
+}
+
+.animatedQubitsPhaseArrow {
+    stroke: red;
+    stroke-width: 2px;
+}
+
+.animatedQubitsPhaseArrowEnd {
+    fill: red;
+}
+
+.qstate {
+    margin: 1em 0;
+}
+
+.qstateSvg {
+    width: 15em;
+}
+
+.animationBlock {
+    border: 1px solid #999;
+    width: 15em;
+    padding: 0.5em;
+}
+
+.animationBlock_buttons {
+    margin: 0.5em 0;
+}
+
+.qstateSvg__hideBitLabels .animatedQubitsBitLabels {
+    display: none;;
+}
+
+#notExampleSvg .animatedQubitsPhaseArrow,
+#notExampleSvg .animatedQubitsPhaseArrowEnd {
+    display: none;
+}
