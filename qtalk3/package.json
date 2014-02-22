@@ -6,19 +6,19 @@
   "repository": "tbd",
   "private": true,
   "scripts": {
-    "hint": "jshint --config jshintConfig.json main.js browserSupportDetection.js src",
-    "browserify": "browserify main.js -o main.deps.js",
-    "uglify": "uglifyjs main.deps.js -o main.min.js",
-    "build": "npm run hint && npm run browserify && npm run uglify"
+    "build": "gulp",
+    "watch": "gulp watch"
   },
   "author": "David Kemp",
   "license": "Creative Commons & MIT",
   "devDependencies": {
-    "uglify-js": "~2.4.12",
-    "jshint": "~2.4.3",
-    "browserify": "~3.25.2",
     "animated-qubits": "0.0.8",
     "q": "~1.0.0",
-    "jsqubits": "~0.2.0"
+    "jsqubits": "~0.2.0",
+    "gulp": "~3.5.2",
+    "gulp-util": "~2.2.14",
+    "gulp-browserify": "~0.4.6",
+    "gulp-uglify": "~0.2.1",
+    "gulp-jshint": "~1.4.2"
   }
 }

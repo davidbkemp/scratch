@@ -12,7 +12,8 @@
     <div class="subtitle">
         Or <em>What Do You Mean They Can Be Both Zero And One At The Same Time!</em>
     </div>
-    <p>By David Kemp @david_b_kemp</p>
+    <p>By David Kemp</p>
+    <p>@david_b_kemp</p>
     <p>DRAFT</p>
 </section>
 
@@ -41,7 +42,9 @@
         </span>
     </p>
     <p>
-        A bit may be represented using two different voltages on a wire,
+        Conventional bits are represented using many different approaches:
+        e.g. using two different voltages on a wire,
+        points on a magnetic disk magnetized in different directions,
         pulses of light on a glass fibre,
         etc. etc.
     </p>
@@ -50,9 +53,12 @@
 <section>
     <h1>Qubits</h1>
     <p>Just like bits, qubits have a binary state.</p>
-    <p>Qubits use quantum phenomenon like <em>nuclear spin</em></p>
     <p>
-        Use &ldquo;clockwise&rdquo; for 0 and &ldquo;anti clockwise&rdquo; for 1.
+        Qubits use quantum phenomenon like
+        the <em>nuclear spin direction of individual atoms</em>.
+    </p>
+    <p>
+        e.g. use &ldquo;clockwise&rdquo; for 0 and &ldquo;anti clockwise&rdquo; for 1.
         <span class="help">
             Conventionally called &ldquo;spin up&rdquo; and &ldquo;spin down&rdquo;.
             Quantum spin is a bit like spinning things in the classical world,
@@ -104,35 +110,13 @@
     </div>
 </section>
 
-<!--
-<section>
-    <h1>Controlled NOT</h1>
-    <p>NOT one bit (the target) if another (control) has the value of 1.</p>
-    <p>Still just a classical (non-quantum) operator.</p>
-    <p>CNot<sub>1&rarr;0</sub> will have no effect unless and until q<sub>1</sub> is 1.</p>
-    <div class="animationBlock">
-        <div>
-            <button id="cnotExampleNot1Button">Not q<sub>1</sub></button>
-            <button id="cnotExampleNot0Button">Not q<sub>0</sub></button>
-        </div>
-        <div>
-            <button id="cnotExampleCNot10Button">CNot<sub>1&rarr;0</sub></button>
-            <button id="cnotExampleCNot01Button">CNot<sub>0&rarr;1</sub></button>
-        </div>
-        <div class="qstate">State: <span id="cnotExampleQState">00</span></div>
-        <svg id="cnotExampleSvg" class="qstateSvg"></svg>
-    </div>
-</section>
--->
-
 <section>
     <h1>Random NOT</h1>
-    <p>Apply the NOT operator with a specified chance of success.</p>
-    <p>The result is unknown until we peek at it.</p>
-    <p>Still just a classical non-quantum operator.</p>
+    <p><em>Random NOT</em>: A NOT operator that has a specified chance of flipping a bit.</p>
+    <p>It is still just a classical (non-quantum) operator.</p>
     <p>
         Consider applying a &ldquo;Random NOT&rdquo; twice to a bit whose initial value is 0,
-        where the NOT has say a 30% chance of flipping the bit.
+        where the NOT has, say, a 30% chance of flipping the bit.
     </p>
     <p>There are two paths leading to a final state of 0:</p>
     <ul>
@@ -145,10 +129,10 @@
 <section>
     <h1>Random NOT (animated)</h1>
     <p>Next we provide an interactive animation of the Random NOT operator.</p>
-    <p>It will be convenient to track all the states the system might be in.</p>
-    <p>The probability of being in a state is represented by the length of an arrow.</p>
+    <p>The blue disk now splits in two so that we can track the different possible outcomes.</p>
+    <p>The probability of being in a state is represented by the radius of the disk.</p>
     <p>Press the &ldquo;Random NOT&rdquo; button multiple times and note how the arrows add head to tail.</p>
-    <p><small>Note that there is still nothing especially quantum mechanical about this yet.</small></p>
+    <p><small>Note that there is still nothing quantum mechanical about this yet.</small></p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -163,11 +147,139 @@
     </div>
 </section>
 
+<section>
+<h1>Hadamard of 0</h1>
+<p>Initially seems like a Random NOT with 50% chance of success.</p>
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="hadamard0Button">Apply Hadamard</button>
+            </div>
+            <div>
+                <button id="hadamard0ResetButton">Reset</button>
+            </div>
+        </div>
+        <svg id="hadamard0Svg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+</section>
+
+<section>
+<h1>Hadamard of 1</h1>
+<p>Look carefully at the arrow directions.</p>
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="hadamard1Button">Apply Hadamard</button>
+            </div>
+            <div>
+                <button id="hadamard1ResetButton">Reset</button>
+            </div>
+        </div>
+        <svg id="hadamard1Svg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+</section>
+
+<section>
+<h1>Huh?</h1>
+<img src="confusedCat.jpg" width="50%"/>
+</section>
+
+<section>
+<h1>Phase</h1>
+<p>
+    The arrow directions represent what physicists call <em>phase</em>:
+    <ul>
+        <li>it is an abstract concept of quantum mechanics.</li>
+        <li>it has no real classical interpretation.</li>
+        <li>it can only be measured indirectly.</li>
+    </ul>
+</p>
+<p>
+    In the case of nuclear spin,
+    phases can be manipulated by applying electric and/or
+    magnetic fields.
+</p>
+<p>We will see the importance of phase in a moment, but first...</p>
+</section>
+
+<section>
+<h1>T Operator</h1>
+<p>Rotates the phase of 1, leaves 0 untouched.</p>
+</section>
+
+<section>
+<h1>Quantum Interference</h1>
+<p>
+    The arrows still add head to tail.
+    <span class="help">
+        For the maths to work,
+        the arrow lengths now have to represent
+        the square root of the probabilty.
+        We will briefly cover this in more detail later.
+    </span>
+</p>
+</section>
+
+<section>
+<h1>Oh!</h1>
+<p>
+    The different paths a system could take to
+    reach its final state all seem to interfere with each other!
+</p>
+</section>
+
+<section>
+<h1>Measurement</h1>
+<p>Peeking causes the system to collapse to a single state.</p>
+<p>The larger the blue disk, the more likely the system will collapse to that state.</p>
+</section>
+
+<section>
+<h1>The effects of measuring too soon</h1>
+<p>Measuring between each Hadamard would reduce the Hadamard to a simple Random NOT.</p>
+<p>i.e. peeking destroys quantum effects.</p>
+<p>In general, information leackage about intermediate states can cause collapse.</p>
+</section>
+
+<section>
+<h1>Multiple bits</h1>
+<p><b>Important</b>: The blue disks do <em>not</em> correspond to single qubits.</p>
+<p>Each blue disk corresponds to a distinct state of the entire quantum system.</p>
+<p>
+    The blue disks are technically called state &ldquo;amplitudes&rdquo;
+    and are represented using complex numbers.
+</p>
+</section>
+
+<section>
+<h1>Controlled NOT</h1>
+</section>
+
+<section>
+<h1>Quantum Algorithms</h1>
+</section>
+
+<section>
+<h1>Quantum Search</h1>
+</section>
+
+<section>
+<h1>Some philosophy</h1>
+</section>
+
+<section>
+<h1>Some maths</h1>
+</section>
+
+<section>
+<h1>Useful links</h1>
+</section>
+
 <footer>
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Introduction To Quantum Computing</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Kemp</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US">Creative Commons Attribution 4.0 International License</a>.</footer>
 
 <script src="http://code.jquery.com/jquery-2.1.0.js"></script>
-<script src="main.min.js"></script>
+<script src="dist/main.js"></script>
 <script src="browserSupportDetection.js"></script>
 
 </body>

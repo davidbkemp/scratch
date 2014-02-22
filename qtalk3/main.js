@@ -2,17 +2,19 @@
 
 (function () {
     "use strict";
-    
+
+    var jsqubits = require("jsqubits").jsqubits;
     var manageHelpSections = require("./src/manageHelpSections.js");
-    //var manageSvgExtensions = require("./src/manageSvgExtensions.js");
     var manageClassicalNotAnimation = require("./src/manageClassicalNotAnimation.js");
     var manageSingleBitRandomNotAnimation = require("./src/manageSingleBitRandomNotAnimation.js");
+    var manageSimpleHadarmardAnimation = require("./src/manageSimpleHadarmardAnimation.js");
 
     jQuery(function onLoad() {
         manageHelpSections();
-      //  manageSvgExtensions();
         manageClassicalNotAnimation();
         manageSingleBitRandomNotAnimation();
+        manageSimpleHadarmardAnimation(jsqubits("0"), "#hadamard0Svg", "#hadamard0Button", "#hadamard0ResetButton");
+        manageSimpleHadarmardAnimation(jsqubits("1"), "#hadamard1Svg", "#hadamard1Button", "#hadamard1ResetButton");
     });
     
 }());

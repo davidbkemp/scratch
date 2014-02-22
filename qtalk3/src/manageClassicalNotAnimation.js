@@ -18,11 +18,8 @@
         function replaceBitLabels() {
             var bitNumber = 0;
             var bitLabelSubscripts = ["a", "b"];
-            jQuery("#notExampleSvg .animatedQubitsBitLabels text tspan:first-child").each(function () {
-                jQuery(this).text("bit");
-            });
-            jQuery("#notExampleSvg .animatedQubitsBitLabels text tspan:nth-child(2)").each(function () {
-                jQuery(this).text(bitLabelSubscripts[bitNumber++]);
+            jQuery("#notExampleSvg .animatedQubitsBitLabels text").each(function () {
+                jQuery(this).text("bit-"+bitLabelSubscripts[bitNumber++]);
             });
         }
 
@@ -52,7 +49,6 @@
             .then(null, function error(msg) {
                 alert(msg);
             });
-            
         }
         
         function onReset() {
