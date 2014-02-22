@@ -17,10 +17,10 @@
             }
 
             hadamardButton.attr('disabled', true);
-                animation.applyOperation(hadamard)
-                    .then(null, function error(msg) {
-                        alert(msg);
-                    });
+            animation.applyOperation(hadamard)
+                .then(null, function error(msg) {
+                    alert(msg);
+                });
         }
     
         function reset() {

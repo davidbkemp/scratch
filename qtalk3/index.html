@@ -149,7 +149,8 @@
 
 <section>
 <h1>Hadamard of 0</h1>
-<p>Initially seems like a Random NOT with 50% chance of success.</p>
+    <p>The Hadamard is a special <em>quantum</em> operator.</p>
+    <p>Initially the Hadamard seems like a Random NOT with 50% chance of success.</p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -165,7 +166,7 @@
 
 <section>
 <h1>Hadamard of 1</h1>
-<p>Look carefully at the arrow directions.</p>
+    <p>Look carefully at the arrow directions.</p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -204,28 +205,54 @@
 
 <section>
 <h1>T Operator</h1>
-<p>Rotates the phase of 1, leaves 0 untouched.</p>
+<p>The T operator rotates the phase of 1, but leaves 0 untouched.</p>
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="tButton">Apply T</button>
+            </div>
+        </div>
+        <svg id="tSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
 </section>
 
 <section>
 <h1>Quantum Interference</h1>
-<p>
-    The arrows still add head to tail.
-    <span class="help">
-        For the maths to work,
-        the arrow lengths now have to represent
-        the square root of the probabilty.
-        We will briefly cover this in more detail later.
-    </span>
-</p>
+    <p>Apply the Hadamard Operation to a complicated state</p>
+    <p>
+        The arrows still add head to tail.
+        <span class="help">
+            For the maths to work,
+            the arrow lengths now have to represent
+            the square root of the probabilty.
+            We will briefly cover this in more detail later.
+        </span>
+         <div class="animationBlock">
+            <div class="animationBlock_buttons">
+                <div>
+                    <button id="interferenceExampleButton">Apply Hadamard</button>
+                </div>
+            </div>
+            <svg id="interferenceExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        </div>
+    </p>
 </section>
 
 <section>
 <h1>Oh!</h1>
-<p>
-    The different paths a system could take to
-    reach its final state all seem to interfere with each other!
-</p>
+    <p>
+        Study the previous animation carefully.
+    </p>
+    <p>
+        Each state initially splits into two equally sized states...
+    </p>
+    <p>
+        But adding the arrows together results in two states of different sizes.
+    </p>
+    <p>
+        The different paths a system could take to
+        reach its final state all seem to interfere with each other!
+    </p>
 </section>
 
 <section>
