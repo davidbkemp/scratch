@@ -166,6 +166,7 @@
 
 <section>
 <h1>Hadamard of 1</h1>
+    <p>Things start to get weird when look at the Hadamard of 1.</p>
     <p>Look carefully at the arrow directions.</p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
@@ -216,9 +217,31 @@
     </div>
 </section>
 
+
+<section>
+<h1>Measurement</h1>
+    <p>Peeking causes the system to collapse to a single state.</p>
+    <p>The larger the blue disk, the more likely the system will collapse to that state.</p>
+    <p>Phases do not effect the outcome of measurements. i.e. measurements are not affected by arrow directions.</p>
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="measurementButton">Measure</button>
+            </div>
+            <div>
+                 <button id="measurementResetButton">Reset</button>
+             </div>
+        </div>
+        <svg id="measurementSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+</section>
+
+
 <section>
 <h1>Quantum Interference</h1>
-    <p>Apply the Hadamard Operation to a complicated state</p>
+    <p>Apply the Hadamard Operation to a complicated state.</p>
+    <p>Now things get extremely weird.</p>
+    <p>This is what physicists loose sleep over...</p>
     <p>
         The arrows still add head to tail.
         <span class="help">
@@ -239,12 +262,12 @@
 </section>
 
 <section>
-<h1>Oh!</h1>
+<h1>BUT THAT IS IMPOSSIBLE!</h1>
     <p>
         Study the previous animation carefully.
     </p>
     <p>
-        Each state initially splits into two equally sized states...
+        Each state initially splits into two equally sized components...
     </p>
     <p>
         But adding the arrows together results in two states of different sizes.
@@ -253,19 +276,44 @@
         The different paths a system could take to
         reach its final state all seem to interfere with each other!
     </p>
+
 </section>
 
 <section>
-<h1>Measurement</h1>
-<p>Peeking causes the system to collapse to a single state.</p>
-<p>The larger the blue disk, the more likely the system will collapse to that state.</p>
-</section>
+    <h1>What if I peek?</h1>
 
-<section>
-<h1>The effects of measuring too soon</h1>
-<p>Measuring between each Hadamard would reduce the Hadamard to a simple Random NOT.</p>
-<p>i.e. peeking destroys quantum effects.</p>
-<p>In general, information leackage about intermediate states can cause collapse.</p>
+    <p>Measuring between each Hadamard would reduce the Hadamard to a simple Random NOT.</p>
+
+    <p>i.e. peeking destroys quantum effects.</p>
+
+    <p>In general, information leackage about intermediate states causes collapse.</p>
+
+    <p>
+        In the interactive example below,
+        apply the Hadamard multiple times without measurement and note the effects of interference.
+    </p>
+    <p>
+        Repeat, but measure between each Hadamard.
+    </p>
+
+    <p>
+        Note that the arrow directions (phases) cannot be directly observed,
+        and so, measuring between each Hadamard
+        would seem to simply randomly flip the bit between 0 and 1.
+    </p>
+
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="interferenceAndMeasurementHadamardButton">Apply Hadamard</button>
+            </div>
+            <div>
+                <button id="interferenceAndMeasurementMeasurementButton">Measure</button>
+            </div>
+        </div>
+        <svg id="interferenceAndMeasurementSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+
 </section>
 
 <section>

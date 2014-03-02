@@ -10,6 +10,8 @@
     var manageSimpleHadarmardAnimation = require("./src/manageSimpleHadarmardAnimation.js");
     var manageTAnimation = require("./src/manageTAnimation.js");
     var manageInterferenceExampleAnimation = require("./src/manageInterferenceExampleAnimation.js");
+    var manageMeasurementExampleAnimation = require("./src/manageMeasurementExampleAnimation.js");
+    var manageHadarmardAndMeasurementAnimation = require("./src/manageHadarmardAndMeasurementAnimation.js");
 
     jQuery(function onLoad() {
         manageHelpSections();
@@ -18,7 +20,9 @@
         manageSimpleHadarmardAnimation(jsqubits("0"), "#hadamard0Svg", "#hadamard0Button", "#hadamard0ResetButton");
         manageSimpleHadarmardAnimation(jsqubits("1"), "#hadamard1Svg", "#hadamard1Button", "#hadamard1ResetButton");
         manageTAnimation();
+        manageMeasurementExampleAnimation();
         manageInterferenceExampleAnimation();
+        manageHadarmardAndMeasurementAnimation();
     });
     
 }());
