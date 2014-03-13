@@ -16,7 +16,15 @@
     jQuery(function onLoad() {
         manageHelpSections();
         manageClassicalNotAnimation();
-        manageSingleBitRandomNotAnimation();
+        manageSingleBitRandomNotAnimation("#singleBitRandomNotExampleSvg",
+            "#singleBitRandomNotExampleQState",
+            "#singleBitRandomNotExampleNotButton",
+            "#singleBitRandomNotResetButton");
+        manageSingleBitRandomNotAnimation("#peekingSvg",
+            "#peekingQState",
+            "#peekingNotButton",
+            "#na",
+            "#peekingButton");
         manageSimpleHadarmardAnimation(jsqubits("0"), "#hadamard0Svg", "#hadamard0Button", "#hadamard0ResetButton");
         manageSimpleHadarmardAnimation(jsqubits("1"), "#hadamard1Svg", "#hadamard1Button", "#hadamard1ResetButton");
         manageTAnimation();

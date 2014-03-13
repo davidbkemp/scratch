@@ -7,11 +7,12 @@
         jsqubits = require("jsqubits").jsqubits,
         Q = require("q");
     
-    function manageRandomNotAnimation() {
-        
+    function manageRandomNotAnimation(svgSelector, qstateSelector, notButtonSelector,
+        resetButtonSelector, measureButtonSelector) {
+
         var qstate, animation,
-            svgElement = jQuery("#singleBitRandomNotExampleSvg"),
-            qstateElement = jQuery("#singleBitRandomNotExampleQState"),
+            svgElement = jQuery(svgSelector),
+            qstateElement = jQuery(qstateSelector),
             currentOperationPromise = Q.when();
 
         function displayState(newState) {
@@ -37,6 +38,15 @@
                 });
             
         }
+        
+        function onMeasure() {
+            currentOperationPromise = currentOperationPromise
+                .then(animation.measure.bind(animation, jsqubits.ALL))
+                .then(displayState)
+                .then(null, function error(msg) {
+                    alert(msg);
+                });
+        }
     
         function reset() {
             svgElement.empty();
@@ -57,8 +67,9 @@
         
         reset();
         
-        jQuery("#singleBitRandomNotExampleNotButton").click(onClickNot);
-        jQuery("#singleBitRandomNotResetButton").click(onReset);
+        jQuery(notButtonSelector).click(onClickNot);
+        jQuery(resetButtonSelector).click(onReset);
+        jQuery(measureButtonSelector).click(onMeasure);
 
     }
 

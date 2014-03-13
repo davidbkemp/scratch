@@ -2,13 +2,13 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Introduction To Quantum Computing</title>
+<title>An Interactive Introduction To Quantum Computing</title>
 <link rel="stylesheet" href="qtalk.css" />
 </head>
 
 <body>
 <section>
-    <h1>Introduction To Quantum Computing</h1>
+    <h1>An Interactive Introduction To Quantum Computing</h1>
     <div class="subtitle">
         Or <em>What Do You Mean They Can Be Both Zero And One At The Same Time!</em>
     </div>
@@ -55,7 +55,7 @@
     <p>Just like bits, qubits have a binary state.</p>
     <p>
         Qubits use quantum phenomenon like
-        the <em>nuclear spin direction of individual atoms</em>.
+        the nuclear spin direction of individual atoms.
     </p>
     <p>
         e.g. use &ldquo;clockwise&rdquo; for 0 and &ldquo;anti clockwise&rdquo; for 1.
@@ -80,7 +80,7 @@
 <section>
     <h1>The NOT operator</h1>
     <p>
-        Consider the conventional NOT operator.
+        Consider the conventional NOT (or bit-flip) operator.
         <span class="help">
             1 and 0 can represent logical <em>true</em> and <em>false</em>.
             NOT <em>true</em> is <em>false</em>, and NOT <em>false</em> is <em>true</em>.
@@ -88,7 +88,7 @@
         </span>
     </p>
     <p>For example, performing a NOT operation on the right most bit of the binary number 111 results in 110.</p>
-    <p>It will be convenient to represent state by listing all possible states and placing a blue disk next to the current state.</p>
+    <p>In what follows, it will be convenient to represent state of a system by listing all possible states and placing a blue disk next to the current state.</p>
     <p>
         Click the button labelled &ldquo;<em>Not bit<sub>a</sub>&rdquo;</em>
         to apply the NOT operation to the left bit,
@@ -113,10 +113,11 @@
 <section>
     <h1>Random NOT</h1>
     <p><em>Random NOT</em>: A NOT operator that has a specified chance of flipping a bit.</p>
-    <p>It is still just a classical (non-quantum) operator.</p>
+    <p>Although not very common, it is still just a classical (non-quantum) operator.</p>
     <p>
         Consider applying a &ldquo;Random NOT&rdquo; twice to a bit whose initial value is 0,
-        where the NOT has, say, a 30% chance of flipping the bit.
+        where the NOT has, for instance, a 30% chance of flipping the bit.
+        What is the probability of the final state being 0?
     </p>
     <p>There are two paths leading to a final state of 0:</p>
     <ul>
@@ -147,9 +148,53 @@
     </div>
 </section>
 
+
+<section>
+<h1>Measurement</h1>
+    <p>
+        When a conventional computer has various probabilities
+        of being in different states,
+        e.g. because of random NOT operations,
+        it is of course in reality in only one of those states.
+        We just don't know which one.
+    </p>
+    <p>
+        If you peek at the system to determine its actual state,
+        then the probabilities all <em>collapse</em>
+        so that one state has a probability of 1,
+        and all the others have a probability of 0.
+    </p>
+    <p>
+        Remember, the larger the blue disk,
+        the more likely the system will turn out to be in that state.
+    </p>
+    <p>
+        In quantum computing,
+        the word <em>meausurement</em> refers to this act of peeking.
+    </p>
+    <p>
+        Press the &ldquo;Random NOT&rdquo; button multiple times
+        and then press the &ldquo;measurement&rdquo; button.
+    </p>
+    <p><small>Note that there is still nothing quantum mechanical about this yet.</small></p>
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="peekingNotButton">Random Not<sub>30%</sub></button>
+            </div>
+            <div>
+                <button id="peekingButton">Measure</button>
+            </div>
+        </div>
+        <div class="qstate">State: <span id="peekingQState">0</span></div>
+        <svg id="peekingSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+</section>
+
+
 <section>
 <h1>Hadamard of 0</h1>
-    <p>The Hadamard is a special <em>quantum</em> operator.</p>
+    <p>The Hadamard is a special <em>quantum</em> operator that can be applied to qubits.</p>
     <p>Initially the Hadamard seems like a Random NOT with 50% chance of success.</p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
@@ -162,6 +207,12 @@
         </div>
         <svg id="hadamard0Svg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
+</section>
+
+<section>
+    <h1>Nothing unusual about that was there?</h1>
+    <p>But you will be surprised by what comes next...</p>
+
 </section>
 
 <section>
@@ -189,6 +240,11 @@
 <section>
 <h1>Phase</h1>
 <p>
+    Confused?
+    You should be if this is all new to you. 
+    Please hang in there for a while longer.
+</p>
+<p>
     The arrow directions represent what physicists call <em>phase</em>:
     <ul>
         <li>it is an abstract concept of quantum mechanics.</li>
@@ -201,7 +257,10 @@
     phases can be manipulated by applying electric and/or
     magnetic fields.
 </p>
-<p>We will see the importance of phase in a moment, but first...</p>
+<p>
+    We will see the importance of phase in a moment,
+    but first let's look at another interesting quantum computing operator...
+</p>
 </section>
 
 <section>
@@ -219,10 +278,13 @@
 
 
 <section>
-<h1>Measurement</h1>
-    <p>Peeking causes the system to collapse to a single state.</p>
-    <p>The larger the blue disk, the more likely the system will collapse to that state.</p>
-    <p>Phases do not effect the outcome of measurements. i.e. measurements are not affected by arrow directions.</p>
+<h1>Measurement Revisted</h1>
+    <p>Recall:</p>
+    <ul>
+        <li>Measurement causes the system to collapse to a single state.</li>
+        <li>The larger the blue disk, the more likely the system will collapse to that state.</li>
+    </ul>
+    <p><b>Important:</b> Phases do not directly effect the outcome of measurements. i.e. measurements are not affected by arrow directions.</p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -239,7 +301,7 @@
 
 <section>
 <h1>Quantum Interference</h1>
-    <p>Apply the Hadamard Operation to a complicated state.</p>
+    <p>Let's apply the Hadamard Operation to a complicated state.</p>
     <p>Now things get extremely weird.</p>
     <p>This is what physicists loose sleep over...</p>
     <p>
@@ -262,44 +324,76 @@
 </section>
 
 <section>
-<h1>BUT THAT IS IMPOSSIBLE!</h1>
+<h1>Feeling a Bit Lost?</h1>
     <p>
         Study the previous animation carefully.
     </p>
     <p>
-        Each state initially splits into two equally sized components...
+        The system starts equally divided between 0 and 1.
+        In other words, it is equally likely to be 0 or 1.
     </p>
     <p>
-        But adding the arrows together results in two states of different sizes.
+        The Hadamard splits each state into two equally sized components.
+        In other words, the Hadamard of 0 is equally likely to be 0 or 1,
+        and the Hadamard of 1 is equally likely to be 0 or 1.
     </p>
     <p>
-        The different paths a system could take to
-        reach its final state all seem to interfere with each other!
+        <b>So we should expect the final result to also be
+        equally divided between 0 and 1.</b>
     </p>
-
+    <p>
+        But adding the arrows together in this particular example
+        results in one state having a much higher probability than the other.
+    </p>
 </section>
 
 <section>
-    <h1>What if I peek?</h1>
+    <h1>Totally confused?</h1>
+    <blockquote>
+        If quantum mechanics hasn't profoundly shocked you, you haven't understood it yet.
+        <br />
+        <em>Neils Bohr</em>
+    </blockquote>
+</section>
 
-    <p>Measuring between each Hadamard would reduce the Hadamard to a simple Random NOT.</p>
+<section>
+    <h1>Please explain?</h1>
 
-    <p>i.e. peeking destroys quantum effects.</p>
-
-    <p>In general, information leackage about intermediate states causes collapse.</p>
+    <p>
+        I am assuming that most of you are still confused,
+        and so let us spend a little more time on the Hadamard example.
+    </p>
+    
+    <p>
+        Suppose you took a peek at the state of the system before
+        each application of the Hadamard operation.
+    </p>
+    
+    <p>
+        Each time you peeked, the system would collapse to being entirely
+        in the 1 state or the 0 state.
+    </p>
+    
+    <p>
+        Regardless of whether the qubit is a 1 or a 0,
+        the Hadamard would then split the state evenly between 0 and 1,
+        with the arrow direction sometimes being flipped.
+    </p>
+    
+    <p>
+        If you measure the qubit again after the Hadamard
+        you would have an equal chance of finding a 1 or a 0.
+        And so, if you measure before each Hadamard, then
+        the Hadamard degenerates into a simple random NOT operator.
+    </p>
 
     <p>
         In the interactive example below,
-        apply the Hadamard multiple times without measurement and note the effects of interference.
+        apply the Hadamard multiple times without measurement
+        and note the effects of interference.
     </p>
     <p>
         Repeat, but measure between each Hadamard.
-    </p>
-
-    <p>
-        Note that the arrow directions (phases) cannot be directly observed,
-        and so, measuring between each Hadamard
-        would seem to simply randomly flip the bit between 0 and 1.
     </p>
 
     <div class="animationBlock">
@@ -314,6 +408,17 @@
         <svg id="interferenceAndMeasurementSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 
+</section>
+
+
+<section>
+    <h1>
+        But it doesn't really get interesting until you have more than one qubit
+    </h1>
+    <p>
+        You can't do anything very interesting with one qubit except perhaps use it to model
+        the <em><a href="http://en.wikipedia.org/wiki/Double-slit_experiment">Double Slit Experiment</a></em>.
+    </p>
 </section>
 
 <section>
