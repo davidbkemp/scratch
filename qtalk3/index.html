@@ -205,6 +205,7 @@
                 <button id="hadamard0ResetButton">Reset</button>
             </div>
         </div>
+        <div class="qstate">State: <span id="hadamard0QState">0</span></div>
         <svg id="hadamard0Svg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
@@ -228,6 +229,7 @@
                 <button id="hadamard1ResetButton">Reset</button>
             </div>
         </div>
+        <div class="qstate">State: <span id="hadamard1QState">0</span></div>
         <svg id="hadamard1Svg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
@@ -265,13 +267,15 @@
 
 <section>
 <h1>T Operator</h1>
-<p>The T operator rotates the phase of 1, but leaves 0 untouched.</p>
+    <p>The T operator rotates the phase of 1, but leaves 0 untouched.</p>
+    <p>Note how it does not affect the probabilities at all.</p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
                 <button id="tButton">Apply T</button>
             </div>
         </div>
+        <div class="qstate">State: 50% chance of being 0 and 50% chance of being 1</div>
         <svg id="tSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
@@ -318,6 +322,7 @@
                     <button id="interferenceExampleButton">Apply Hadamard</button>
                 </div>
             </div>
+            <div class="qstate">State: <span id="interferenceQState"></span></div>
             <svg id="interferenceExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
         </div>
     </p>

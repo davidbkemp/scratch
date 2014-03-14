@@ -25,8 +25,8 @@
             "#peekingNotButton",
             "#na",
             "#peekingButton");
-        manageSimpleHadarmardAnimation(jsqubits("0"), "#hadamard0Svg", "#hadamard0Button", "#hadamard0ResetButton");
-        manageSimpleHadarmardAnimation(jsqubits("1"), "#hadamard1Svg", "#hadamard1Button", "#hadamard1ResetButton");
+        manageSimpleHadarmardAnimation(jsqubits("0"), "#hadamard0Svg", "#hadamard0Button", "#hadamard0ResetButton", "#hadamard0QState");
+        manageSimpleHadarmardAnimation(jsqubits("1"), "#hadamard1Svg", "#hadamard1Button", "#hadamard1ResetButton", "#hadamard1QState");
         manageTAnimation();
         manageMeasurementExampleAnimation();
         manageInterferenceExampleAnimation();

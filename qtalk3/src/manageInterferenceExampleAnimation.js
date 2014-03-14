@@ -9,7 +9,18 @@
     function manageAnimation() {
         var animation,
             svgElement = jQuery("#interferenceExampleSvg"),
+            qstateElement = jQuery("#interferenceQState"),
             tButton = jQuery("#interferenceExampleButton");
+            
+        function displayState(newState) {
+            var newStateText = "";
+            newState.each(function (stateComponent) {
+                if (newStateText !== "") {newStateText += " and ";}
+                var magnitude = stateComponent.amplitude.magnitude();
+                newStateText += (magnitude * magnitude * 100).toFixed() + "% chance of being " + stateComponent.asBitString();
+            });
+            qstateElement.text(newStateText);
+        }
 
         function onClickOperationButton() {
 
@@ -18,6 +29,7 @@
             }
 
             animation.applyOperation(operation)
+                .then(displayState)
                 .then(null, function error(msg) {
                     alert(msg);
                 });
@@ -30,6 +42,7 @@
             animation = animatedQubits(qstate, {maxRadius: 30});
             animation.display(svgElement[0]);
             svgElement.height(animation.getNaturalDimensions().height);
+            displayState(qstate);
         }
 
         reset();
