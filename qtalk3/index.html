@@ -88,13 +88,17 @@
         </span>
     </p>
     <p>For example, performing a NOT operation on the right most bit of the binary number 111 results in 110.</p>
-    <p>In what follows, it will be convenient to represent state of a system by listing all possible states and placing a blue disk next to the current state.</p>
+    <p>In what follows, it will be convenient to represent the state of a system by listing all possible states and placing a blue disk next to the current state.</p>
     <p>
         Click the button labelled &ldquo;<em>Not bit<sub>a</sub>&rdquo;</em>
         to apply the NOT operation to the left bit,
         and click the button labelled &ldquo;<em>Not bit<sub>b</sub>&rdquo;</em>
         to apply the NOT operation to the right bit:
     </p>
+    <p><small>
+        There is nothing quantum mechanical about these first few interactive examples.
+        There main purpose is to get you used to this style of presentation.
+    </small></p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -133,7 +137,10 @@
     <p>The blue disk now splits in two so that we can track the different possible outcomes.</p>
     <p>The probability of being in a state is represented by the radius of the disk.</p>
     <p>Press the &ldquo;Random NOT&rdquo; button multiple times and note how the arrows add head to tail.</p>
-    <p><small>Note that there is still nothing quantum mechanical about this yet.</small></p>
+    <p><small>
+        Still nothing quantum mechanical about any of this.
+        We are still just warming up.
+    </small></p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -176,7 +183,10 @@
         Press the &ldquo;Random NOT&rdquo; button multiple times
         and then press the &ldquo;measurement&rdquo; button.
     </p>
-    <p><small>Note that there is still nothing quantum mechanical about this yet.</small></p>
+    <p><small>
+        Note that there is still nothing quantum mechanical about this yet.
+        That comes next!
+    </small></p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -195,7 +205,13 @@
 <section>
 <h1>Hadamard of 0</h1>
     <p>The Hadamard is a special <em>quantum</em> operator that can be applied to qubits.</p>
-    <p>Initially the Hadamard seems like a Random NOT with 50% chance of success.</p>
+    <p><b>Warning:</b> this first step into quantum operators will be pretty boring.</p>
+    <p>As you will see below, the Hadamard initially seems like a Random NOT with 50% chance of success.</p>
+    <p><small>
+        In this interactive example,
+        I purposely disable the Hadamard button after you press it.
+        Later in this article we will see what happens when you apply the Hadamard twice in a row.
+    </small></p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -220,6 +236,9 @@
 <h1>Hadamard of 1</h1>
     <p>Things start to get weird when look at the Hadamard of 1.</p>
     <p>Look carefully at the arrow directions.</p>
+    <p><small>
+        Once again, for now, the Hadamard button is disabled after you press it
+    </small></p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -334,17 +353,24 @@
         Study the previous animation carefully.
     </p>
     <p>
-        The system starts equally divided between 0 and 1.
-        In other words, it is equally likely to be 0 or 1.
+        The system is initially equally likely to be 0 or 1.
     </p>
     <p>
-        The Hadamard splits each state into two equally sized components.
-        In other words, the Hadamard of 0 is equally likely to be 0 or 1,
+        The Hadamard of 0 is equally likely to be 0 or 1,
         and the Hadamard of 1 is equally likely to be 0 or 1.
     </p>
     <p>
-        <b>So we should expect the final result to also be
-        equally divided between 0 and 1.</b>
+        If this were a conventional bit,
+        then there would be 4 scenarios:
+        <ul>
+            <li>0 &rarr; 0. The initial and final states are both 0.</li>
+            <li>0 &rarr; 1. The initial state is 0, but the final state is 1.</li>
+            <li>1 &rarr; 1. The initial and final states are both 1.</li>
+            <li>1 &rarr; 0. The initial state is 1, but the final state is 0.</li>
+        </ul>
+    </p>
+    <p>
+        <b>So we should expect the final result equally likely to be 0 or 1.</b>
     </p>
     <p>
         But adding the arrows together in this particular example
@@ -362,7 +388,7 @@
 </section>
 
 <section>
-    <h1>Please explain?</h1>
+    <h1>Please explain!</h1>
 
     <p>
         I am assuming that most of you are still confused,
@@ -393,12 +419,13 @@
     </p>
 
     <p>
-        In the interactive example below,
-        apply the Hadamard multiple times without measurement
-        and note the effects of interference.
-    </p>
-    <p>
-        Repeat, but measure between each Hadamard.
+        Try it out.
+        In the interactive example below:
+        <ul>
+            <li>Apply the Hadamard multiple times without measurement
+                and note the effects of interference.</li>
+            <li>Repeat, but measure between each Hadamard.</li>
+        </ul>
     </p>
 
     <div class="animationBlock">
@@ -415,6 +442,37 @@
 
 </section>
 
+<section>
+    <h1>Just in case you still don't get it</h1>
+    <p>
+        If you were, for example, to apply the Hadamard twice to a qubit in a 0 state,
+        then there seem to be four equally likely scenarios:
+    </p>
+    <ul>
+        <li>0 &rarr; 0 &rarr; 0</li>
+        <li>0 &rarr; 0 &rarr; 1</li>
+        <li>0 &rarr; 1 &rarr; 0</li>
+        <li>0 &rarr; 1 &rarr; 1</li>
+    </ul>
+    
+    <p>
+        So the final state should be equally likely to be 0 or 1,
+        and this is exactly what happens if you peek at
+        the intermediate and final states.
+    </p>
+    
+    <p>
+        If you do not peek at the intermediate state then something truely weird happens:
+        <em>
+            the two different scenarios ending in a 1 state have opposite phases
+            and so they seem to <b>cancel each other out</b>.
+        </em>
+    </p>
+    <p>
+        This process of phases causing possible outcomes to cancel or re-enforce
+        is what physicists call <em>interference</em>.
+    </p>
+</section>
 
 <section>
     <h1>
