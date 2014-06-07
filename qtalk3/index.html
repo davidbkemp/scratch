@@ -21,11 +21,11 @@
     <h1>Quantum Computers?</h1>
     <p>You have probably heard of quantum computers.</p>
     <p>You have probably heard that they are faster than conventional computers.</p>
-    <p>Perhaps you have heard of quantum bits, or qubits.</p>
+    <p>Perhaps you have heard of quantum bits (abbreviated to qubits).</p>
     <p>
-        Maybe you have even heard of the puzzling notion that qubits can
-        have the values 0 and 1 both
-        <em>at the same time</em>.
+        Maybe you have even heard of the puzzling notion that
+        <b>qubits can have the values 0 and 1
+        <em>both at the same time</em></b>.
     </p>
     <p>Let me try to explain what this really means.</p>
 </section>
@@ -54,8 +54,8 @@
     <h1>Qubits</h1>
     <p>Just like bits, qubits have a binary state.</p>
     <p>
-        Qubits use quantum phenomenon like
-        the nuclear spin direction of individual atoms.
+        <b>Qubits represent 0 and 1 using quantum phenomenon like
+        the nuclear spin direction of individual atoms</b>.
     </p>
     <p>
         e.g. use &ldquo;clockwise&rdquo; for 0 and &ldquo;anti clockwise&rdquo; for 1.
@@ -87,7 +87,8 @@
             And so, NOT of 1 is 0, and NOT of 0 is 1.
         </span>
     </p>
-    <p>For example, performing a NOT operation on the right most bit of the binary number 111 results in 110.</p>
+    <p>For example, performing a NOT operation on the right most bit of the binary number 111
+    <b>flips the target bit</b> and results in 110.</p>
     <p>In what follows, it will be convenient to represent the state of a system by listing all possible states and placing a blue disk next to the current state.</p>
     <p>
         Click the button labelled &ldquo;<em>Not bit<sub>a</sub>&rdquo;</em>
@@ -97,7 +98,7 @@
     </p>
     <p><small>
         There is nothing quantum mechanical about these first few interactive examples.
-        There main purpose is to get you used to this style of presentation.
+        Their main purpose is to get you used to this style of presentation.
     </small></p>
     <div class="animationBlock">
         <div class="animationBlock_buttons">
@@ -117,7 +118,7 @@
 <section>
     <h1>Random NOT</h1>
     <p><em>Random NOT</em>: A NOT operator that has a specified chance of flipping a bit.</p>
-    <p>Although not very common, it is still just a classical (non-quantum) operator.</p>
+    <p>Although not very common, it is still <b>just a classical (non-quantum) operator</b>.</p>
     <p>
         Consider applying a &ldquo;Random NOT&rdquo; twice to a bit whose initial value is 0,
         where the NOT has, for instance, a 30% chance of flipping the bit.
@@ -136,7 +137,10 @@
     <p>Next we provide an interactive animation of the Random NOT operator.</p>
     <p>The blue disk now splits in two so that we can track the different possible outcomes.</p>
     <p>The probability of being in a state is represented by the radius of the disk.</p>
-    <p>Press the &ldquo;Random NOT&rdquo; button multiple times and note how the arrows add head to tail.</p>
+    <p>
+        Press the &ldquo;Random NOT&rdquo; button multiple times and
+        <b>note how the arrows add head to tail</b>.
+    </p>
     <p><small>
         Still nothing quantum mechanical about any of this.
         We are still just warming up.
@@ -159,11 +163,14 @@
 <section>
 <h1>Measurement</h1>
     <p>
-        When a conventional computer has various probabilities
-        of being in different states,
-        e.g. because of random NOT operations,
-        it is of course in reality in only one of those states.
+        We have seen how a random NOT operator can
+        cause a conventional computer to have various probabilities
+        of being in different states.
+        Of course
+        <b>in reality it is in only one of those states</b>.
         We just don't know which one.
+        Strangely, this is an assumpution about reality that we will need to reconsider
+        later in this article.
     </p>
     <p>
         If you peek at the system to determine its actual state,
@@ -205,7 +212,10 @@
 <section>
 <h1>Hadamard of 0</h1>
     <p>The Hadamard is a special <em>quantum</em> operator that can be applied to qubits.</p>
-    <p><b>Warning:</b> this first step into quantum operators will be pretty boring.</p>
+    <p>
+        <b>Warning:</b> this first look at quantum operators will be pretty boring.
+        I promise it will get exciting soon.
+    </p>
     <p>As you will see below, the Hadamard initially seems like a Random NOT with 50% chance of success.</p>
     <p><small>
         In this interactive example,
@@ -234,7 +244,7 @@
 
 <section>
 <h1>Hadamard of 1</h1>
-    <p>Things start to get weird when look at the Hadamard of 1.</p>
+    <p>Things start to get weird when you look at the Hadamard of 1.</p>
     <p>Look carefully at the arrow directions.</p>
     <p><small>
         Once again, for now, the Hadamard button is disabled after you press it
@@ -269,8 +279,8 @@
     The arrow directions represent what physicists call <em>phase</em>:
     <ul>
         <li>it is an abstract concept of quantum mechanics.</li>
-        <li>it has no real classical interpretation.</li>
-        <li>it can only be measured indirectly.</li>
+        <li>it has no &ldquo;common sense&rdquo; interpretation.</li>
+        <li>it can <b>only be measured indirectly</b>.</li>
     </ul>
 </p>
 <p>
@@ -328,7 +338,7 @@
     <p>Now things get extremely weird.</p>
     <p>This is what physicists loose sleep over...</p>
     <p>
-        The arrows still add head to tail.
+        <b>The arrows still add head to tail</b>.
         <span class="help">
             For the maths to work,
             the arrow lengths now have to represent
@@ -359,6 +369,7 @@
         The Hadamard of 0 is equally likely to be 0 or 1,
         and the Hadamard of 1 is equally likely to be 0 or 1.
     </p>
+    <!--
     <p>
         If this were a conventional bit,
         then there would be 4 scenarios:
@@ -369,8 +380,9 @@
             <li>1 &rarr; 0. The initial state is 1, but the final state is 0.</li>
         </ul>
     </p>
+    -->
     <p>
-        <b>So we should expect the final result equally likely to be 0 or 1.</b>
+        <b>So we should expect the final result to be equally likely to be 0 or 1.</b>
     </p>
     <p>
         But adding the arrows together in this particular example
@@ -391,7 +403,7 @@
     <h1>Please explain!</h1>
 
     <p>
-        I am assuming that most of you are still confused,
+        I am guessing that most of you are still confused,
         and so let us spend a little more time on the Hadamard example.
     </p>
     
@@ -407,15 +419,22 @@
     
     <p>
         Regardless of whether the qubit is a 1 or a 0,
-        the Hadamard would then split the state evenly between 0 and 1,
-        with the arrow direction sometimes being flipped.
+        a subsequent Hadamard would then split the state evenly between 0 and 1.
+        The arrow direction is sometimes flipped,
+        but the arrow direction does not affect the measurement outcome.
     </p>
     
     <p>
         If you measure the qubit again after the Hadamard
-        you would have an equal chance of finding a 1 or a 0.
-        And so, if you measure before each Hadamard, then
-        the Hadamard degenerates into a simple random NOT operator.
+        you would again have an equal chance of finding a 1 or a 0.
+        And so, <b>if you peak at the state before each Hadamard, then
+        the Hadamard degenerates into a simple random NOT operator</b>.
+    </p>
+
+    <p>
+        However, <b>if you do not peek at the intermediate state then something truely weird happens:
+            the two different scenarios ending in a 1 state have opposite phases
+            and so they cancel each other out</b>.
     </p>
 
     <p>
@@ -445,8 +464,9 @@
 <section>
     <h1>Just in case you still don't get it</h1>
     <p>
-        If you were, for example, to apply the Hadamard twice to a qubit in a 0 state,
-        then there seem to be four equally likely scenarios:
+        Consider a qubit that is initially known to definitely be in a 0 state.
+        If you were to apply the Hadamard to it twice in a row,
+        then there are four equally likely scenarios:
     </p>
     <ul>
         <li>0 &rarr; 0 &rarr; 0</li>
@@ -465,13 +485,23 @@
         If you do not peek at the intermediate state then something truely weird happens:
         <em>
             the two different scenarios ending in a 1 state have opposite phases
-            and so they seem to <b>cancel each other out</b>.
+            and so they <b>cancel each other out</b>.
         </em>
     </p>
     <p>
         This process of phases causing possible outcomes to cancel or re-enforce
         is what physicists call <em>interference</em>.
     </p>
+</section>
+
+<section>
+<h1>Superposition</h1>
+<p>
+    Hopefully by now you understand that,
+    when a quantum computer has various probabilities
+    of being in different states,
+    you can no longer assume that it is in reality only in one of those states.
+</p>
 </section>
 
 <section>
@@ -486,8 +516,12 @@
 
 <section>
 <h1>Multiple bits</h1>
-<p><b>Important</b>: The blue disks do <em>not</em> correspond to single qubits.</p>
-<p>Each blue disk corresponds to a distinct state of the entire quantum system.</p>
+<p>
+    <b>Important</b>: There is something really important I feel the need to emphasize
+    as we start dealing with multiple qubits.
+</p>
+<p>The blue disks do <em>not</em> correspond to single qubits.</p>
+<p><b>Each blue disk corresponds to a distinct state of the entire quantum system.</b></p>
 <p>
     The blue disks are technically called state &ldquo;amplitudes&rdquo;
     and are represented using complex numbers.
@@ -496,6 +530,22 @@
 
 <section>
 <h1>Controlled NOT</h1>
+<p>
+    The Controlled NOT operator modifies the state of one qubit (the target qubit)
+    based on state of another qubit (the control qubit).
+</p>
+<p>
+    Specifically, the Controlled NOT operator flips the value of the target qubit
+    if the control qubit had a value of 1.
+</p>
+</section>
+
+<section>
+    <h1>Quantum Entanglement</h1>
+    <p>
+        A combination of the Hadamard followed by a Controlled Not
+        can put two qubits into a state of &ldquo;quantum entanglement&rdquo;.
+    </p>
 </section>
 
 <section>
