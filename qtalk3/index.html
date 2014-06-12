@@ -9,9 +9,11 @@
 <body>
 <section>
     <h1>An Interactive Introduction To Quantum Computing</h1>
+    <img src="animated-qubits.png" class="titleImage" />
     <div class="subtitle">
         Or <em>What Do You Mean They Can Be Both Zero And One At The Same Time!</em>
     </div>
+    <p>This is Part 1 and is continued in <a href="part2.html">Part 2</a></p>
     <p>By David Kemp</p>
     <p>@david_b_kemp</p>
     <p>DRAFT</p>
@@ -358,39 +360,6 @@
 </section>
 
 <section>
-<h1>Feeling a Bit Lost?</h1>
-    <p>
-        Study the previous animation carefully.
-    </p>
-    <p>
-        The system is initially equally likely to be 0 or 1.
-    </p>
-    <p>
-        The Hadamard of 0 is equally likely to be 0 or 1,
-        and the Hadamard of 1 is equally likely to be 0 or 1.
-    </p>
-    <!--
-    <p>
-        If this were a conventional bit,
-        then there would be 4 scenarios:
-        <ul>
-            <li>0 &rarr; 0. The initial and final states are both 0.</li>
-            <li>0 &rarr; 1. The initial state is 0, but the final state is 1.</li>
-            <li>1 &rarr; 1. The initial and final states are both 1.</li>
-            <li>1 &rarr; 0. The initial state is 1, but the final state is 0.</li>
-        </ul>
-    </p>
-    -->
-    <p>
-        <b>So we should expect the final result to be equally likely to be 0 or 1.</b>
-    </p>
-    <p>
-        But adding the arrows together in this particular example
-        results in one state having a much higher probability than the other.
-    </p>
-</section>
-
-<section>
     <h1>Totally confused?</h1>
     <blockquote>
         If quantum mechanics hasn't profoundly shocked you, you haven't understood it yet.
@@ -399,67 +368,6 @@
     </blockquote>
 </section>
 
-<section>
-    <h1>Please explain!</h1>
-
-    <p>
-        I am guessing that most of you are still confused,
-        and so let us spend a little more time on the Hadamard example.
-    </p>
-    
-    <p>
-        Suppose you took a peek at the state of the system before
-        each application of the Hadamard operation.
-    </p>
-    
-    <p>
-        Each time you peeked, the system would collapse to being entirely
-        in the 1 state or the 0 state.
-    </p>
-    
-    <p>
-        Regardless of whether the qubit is a 1 or a 0,
-        a subsequent Hadamard would then split the state evenly between 0 and 1.
-        The arrow direction is sometimes flipped,
-        but the arrow direction does not affect the measurement outcome.
-    </p>
-    
-    <p>
-        If you measure the qubit again after the Hadamard
-        you would again have an equal chance of finding a 1 or a 0.
-        And so, <b>if you peak at the state before each Hadamard, then
-        the Hadamard degenerates into a simple random NOT operator</b>.
-    </p>
-
-    <p>
-        However, <b>if you do not peek at the intermediate state then something truely weird happens:
-            the two different scenarios ending in a 1 state have opposite phases
-            and so they cancel each other out</b>.
-    </p>
-
-    <p>
-        Try it out.
-        In the interactive example below:
-        <ul>
-            <li>Apply the Hadamard multiple times without measurement
-                and note the effects of interference.</li>
-            <li>Repeat, but measure between each Hadamard.</li>
-        </ul>
-    </p>
-
-    <div class="animationBlock">
-        <div class="animationBlock_buttons">
-            <div>
-                <button id="interferenceAndMeasurementHadamardButton">Apply Hadamard</button>
-            </div>
-            <div>
-                <button id="interferenceAndMeasurementMeasurementButton">Measure</button>
-            </div>
-        </div>
-        <svg id="interferenceAndMeasurementSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
-    </div>
-
-</section>
 
 <section>
     <h1>Just in case you still don't get it</h1>
@@ -483,15 +391,26 @@
     
     <p>
         If you do not peek at the intermediate state then something truely weird happens:
-        <em>
+        <b>
             the two different scenarios ending in a 1 state have opposite phases
-            and so they <b>cancel each other out</b>.
-        </em>
+            and so they cancel each other out.
+        </b>
     </p>
     <p>
         This process of phases causing possible outcomes to cancel or re-enforce
         is what physicists call <em>interference</em>.
     </p>
+    
+    <p>Try it out:</p>
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="fullInterferenceExampleButton">Apply Hadamard</button>
+            </div>
+        </div>
+        <div class="qstate">State: <span id="fullInterferenceQState"></span></div>
+        <svg id="fullInterferenceExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
 </section>
 
 <section>
@@ -500,76 +419,36 @@
     Hopefully by now you understand that,
     when a quantum computer has various probabilities
     of being in different states,
-    you can no longer assume that it is in reality only in one of those states.
+    <b>you can no longer assume that it is in reality only in one of those states</b>.
+    The quantum computer is said to be in a <em>superposition</em> of
+    those different states.
 </p>
 </section>
 
 <section>
     <h1>
-        But it doesn't really get interesting until you have more than one qubit
+        It gets even more interesting when you have more than one qubit
     </h1>
     <p>
         You can't do anything very interesting with one qubit except perhaps use it to model
         the <em><a href="http://en.wikipedia.org/wiki/Double-slit_experiment">Double Slit Experiment</a></em>.
     </p>
-</section>
-
-<section>
-<h1>Multiple bits</h1>
-<p>
-    <b>Important</b>: There is something really important I feel the need to emphasize
-    as we start dealing with multiple qubits.
-</p>
-<p>The blue disks do <em>not</em> correspond to single qubits.</p>
-<p><b>Each blue disk corresponds to a distinct state of the entire quantum system.</b></p>
-<p>
-    The blue disks are technically called state &ldquo;amplitudes&rdquo;
-    and are represented using complex numbers.
-</p>
-</section>
-
-<section>
-<h1>Controlled NOT</h1>
-<p>
-    The Controlled NOT operator modifies the state of one qubit (the target qubit)
-    based on state of another qubit (the control qubit).
-</p>
-<p>
-    Specifically, the Controlled NOT operator flips the value of the target qubit
-    if the control qubit had a value of 1.
-</p>
-</section>
-
-<section>
-    <h1>Quantum Entanglement</h1>
     <p>
-        A combination of the Hadamard followed by a Controlled Not
-        can put two qubits into a state of &ldquo;quantum entanglement&rdquo;.
+        The quantum weirdness rises to a whole new level when there are two or more qubits interacting.
+        This is explored in <a href="part2.html">Part 2</a>.
+    </p>
+    <p>
+        If you want to experiment with various single qubit quantum operations first,
+        then have a play with the
+        <em><a href="http://davidbkemp.github.io/quantum-gate-playground/">
+            Quantum Computer Gate Playground
+        </a></em>
     </p>
 </section>
 
-<section>
-<h1>Quantum Algorithms</h1>
-</section>
-
-<section>
-<h1>Quantum Search</h1>
-</section>
-
-<section>
-<h1>Some philosophy</h1>
-</section>
-
-<section>
-<h1>Some maths</h1>
-</section>
-
-<section>
-<h1>Useful links</h1>
-</section>
 
 <footer>
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Introduction To Quantum Computing</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Kemp</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US">Creative Commons Attribution 4.0 International License</a>.</footer>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">An Interactive Introduction To Quantum Computing</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Kemp</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US">Creative Commons Attribution 4.0 International License</a>.</footer>
 
 <script src="http://code.jquery.com/jquery-2.1.0.js"></script>
 <script src="dist/main.js"></script>

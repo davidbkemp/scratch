@@ -11,16 +11,20 @@
     var manageTAnimation = require("./src/manageTAnimation.js");
     var manageInterferenceExampleAnimation = require("./src/manageInterferenceExampleAnimation.js");
     var manageMeasurementExampleAnimation = require("./src/manageMeasurementExampleAnimation.js");
-    var manageHadarmardAndMeasurementAnimation = require("./src/manageHadarmardAndMeasurementAnimation.js");
+    var manageFullInterferenceExampleAnimation = require("./src/manageFullInterferenceExampleAnimation.js");
+    var manageCNotExample = require("./src/manageCNotExample.js");
+    var manageYRotationExample = require("./src/manageYRotationExample.js");
 
     jQuery(function onLoad() {
         manageHelpSections();
         manageClassicalNotAnimation();
-        manageSingleBitRandomNotAnimation("#singleBitRandomNotExampleSvg",
+        manageSingleBitRandomNotAnimation(
+            "#singleBitRandomNotExampleSvg",
             "#singleBitRandomNotExampleQState",
             "#singleBitRandomNotExampleNotButton",
             "#singleBitRandomNotResetButton");
-        manageSingleBitRandomNotAnimation("#peekingSvg",
+        manageSingleBitRandomNotAnimation(
+            "#peekingSvg",
             "#peekingQState",
             "#peekingNotButton",
             "#na",
@@ -30,7 +34,9 @@
         manageTAnimation();
         manageMeasurementExampleAnimation();
         manageInterferenceExampleAnimation();
-        manageHadarmardAndMeasurementAnimation();
+        manageFullInterferenceExampleAnimation();
+        manageCNotExample();
+        manageYRotationExample();
     });
     
 }());

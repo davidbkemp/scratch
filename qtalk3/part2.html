@@ -1,0 +1,211 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>An Interactive Introduction To Quantum Computing Part 2</title>
+<link rel="stylesheet" href="qtalk.css" />
+</head>
+
+<body>
+<section>
+    <h1>An Interactive Introduction To Quantum Computing Part 2</h1>
+    <p>
+        This is Part 2 of a two part series that begins with
+        <a href="index.html">Part 1</a>.
+    </p>
+    <p>DRAFT</p>
+</section>
+
+
+
+<section>
+<h1>Multiple qubits</h1>
+<p>
+    <b>Important</b>: There is something really important I feel the need to emphasize
+    as we start dealing with multiple qubits.
+</p>
+<p>The blue disks introduced in Part 1 do <em>not</em> correspond to single qubits.</p>
+<p><b>Each blue disk corresponds to a distinct state of the entire quantum system.</b></p>
+<p>
+    The blue disks are technically called state &ldquo;amplitudes&rdquo;
+    and are represented mathematically using complex numbers.
+</p>
+</section>
+
+<section>
+<h1>Controlled NOT</h1>
+<p>
+    The <em>Controlled NOT</em> operator is a very simple but powerful
+    two-qubit operator.
+</p>
+<p>
+    The Controlled NOT operator modifies the state of one qubit (the target qubit)
+    based on state of another qubit (the control qubit).
+</p>
+<p>
+    Specifically, <b>the Controlled NOT operator flips the value of the target qubit
+    if the control qubit has a value of 1.</b>
+</p>
+<p>
+    For example: If the initial state is &quot;11&quot;,
+    and if the left qubit is used as the control qubit,
+    and the right qubit is the target,
+    then the result will be &quot;10&quot;.
+</p>
+<p>
+    For the same choice of control and target qubits
+    (left qubit as control qubit and right qubit as target):
+</p>
+<ul>
+    <li>00 &rarr; 00 (i.e. no effect)</li>
+    <li>01 &rarr; 01 (i.e. no effect)</li>
+    <li>10 &rarr; 11 (i.e. target bit flips)</li>
+    <li>11 &rarr; 10 (i.e. target bit flips)</li>
+</ul>
+</section>
+
+<section>
+    <h1>Quantum Entanglement</h1>
+    <p>
+        A combination of the Hadamard followed by a Controlled NOT
+        can put two qubits into a state of &ldquo;quantum entanglement&rdquo;.
+    </p>
+    <p>
+        In what follows, we take a two qubit system in the state &quot;00&quot;,
+        apply the Hadamard operation to the left qubit,
+        and then use that left qubit as the control in a Controlled NOT
+        of the right qubit:
+    </p>
+    <h2>Initial State</h2>
+    <div class="animationBlock">
+        <div class="qstate">State: 100% chance of being 00</div>
+        <svg id="cnot-0" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+    <h2>After applying a Hadamard to the left qubit</h2>
+    <div class="animationBlock">
+        <div class="qstate">State: 50% chance of being 00, and 50% chance of being 10</div>
+        <svg id="cnot-1" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+    <h2>After a Controlled NOT of the right qubit controlled by the left qubit</h2>
+    <div class="animationBlock">
+        <div class="qstate">State: 50% chance of being 00, and 50% chance of being 11</div>
+        <svg id="cnot-2" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+    <p>
+        Note that, if you were to measure the qubits while they are in this state,
+        you will find that they are either both 0 or both 1.
+    </p>
+    <p>
+        To really appreciate quantum entanglement,
+        we need to introduce another single qubit operator...
+    </p>
+</section>
+
+<section>
+<h1>Y Rotations</h1>
+<p>
+    There are three particlar single qubit operators commonly referred to
+    as the X, Y, and Z Rotation operators.
+    Historically, these refer to physical rotations in
+    three dimensional space around the X, Y, and Z axes.
+</p>
+<p>For this article we will only make use of the Y Rotation operator.</p>
+<p>
+    Like all the rotation operators,
+    <b>you need to specify how many degrees of rotation you want applied.</b>
+</p>
+<p>
+    A 90&deg; rotation is a little bit like a Hadamard:
+    It transforms a pure 0 state (or pure 1 state)
+    into an equal super-position of 0 and 1.
+</p>
+<p>
+    A 180&deg; rotation is a little bit like a NOT:
+    it flips a 0 into a 1 and a 1 into 0
+    except that, when flipping from 1 to 0,
+    it also flips the phase.
+</p>
+<p>
+    As expected, two 90&deg; rotations gives a 180&deg; rotation etc.
+    Strangely, a 360&deg; rotation,
+    while leaving a 0 state as 0 (and a 1 state as 1),
+    it actually flips the phase.
+</p>
+<p>Try out the Y Rotation operator below 45&deg; at a time.</p>
+<div class="animationBlock">
+    <div class="animationBlock_buttons">
+        <div>
+            <button id="yRotationButton">Y Rotation By 45&deg;</button>
+        </div>
+    </div>
+    <div class="qstate">State: <span id="yRotationQState"></span></div>
+    <svg id="yRotationSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+</div>
+</section>
+
+<section>
+<h1>Did you notice?</h1>
+<p>
+    Did you notice that a 45&deg; rotation of a 0 state
+    resulted in a state with a 85% chance of 0
+    and 15% chance of 1?
+    This will become important later.
+</p>
+<p>
+    Given that 45&deg; is half of a 90&deg;,
+    and given that a 90&deg; rotation of a 0 state
+    results in a state with a 50% chance of 0 and 50% chance of 1,
+    you might have expected a 45&deg; rotation to take you half way:
+    i.e. 75% chance of a 0 and 25% chance of a 1.
+</p>
+
+<p>
+    But that is not how rotations work.
+    If you rotate a circle by 90&deg;,
+    the bottom of the circle will be rotated to a height halfway up to the top.
+    But if you only rotate it by 45&deg;,
+    the bottom of the circle will be rotated to a height significantly less
+    than a quarter of the height of the circle.
+    <span class="help">
+        The quantum mechanics of Y Rotations actually means that
+        a rotation by &theta; of a 0 state results in a state with
+        a cos<sup>2</sup>(&theta;) chance of remaining 0
+        and a sin<sup>2</sup>(&theta;) of becoming a 1.
+    </span>
+</p>
+
+</section>
+
+<section>
+<h1>Rotating Entangled Qubits</h1>
+</section>
+
+<section>
+<h1>Quantum Algorithms</h1>
+</section>
+
+<section>
+<h1>Quantum Search</h1>
+</section>
+
+<section>
+<h1>Some philosophy</h1>
+</section>
+
+<section>
+<h1>Some maths</h1>
+</section>
+
+<section>
+<h1>Useful links</h1>
+</section>
+
+<footer>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">An Interactive Introduction To Quantum Computing</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Kemp</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US">Creative Commons Attribution 4.0 International License</a>.</footer>
+
+<script src="http://code.jquery.com/jquery-2.1.0.js"></script>
+<script src="dist/main.js"></script>
+<script src="browserSupportDetection.js"></script>
+
+</body>
+</html>
