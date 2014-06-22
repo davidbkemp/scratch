@@ -128,8 +128,18 @@
     </p>
     <p>There are two paths leading to a final state of 0:</p>
     <ul>
-        <li>0 &rarr; 0 &rarr; 0 with probability of 0.7 x 0.7 = 0.49</li>
-        <li>0 &rarr; 1 &rarr; 0 with probability of 0.3 x 0.3 = 0.09</li>
+        <li>
+            0 &rarr; 0 &rarr; 0 with probability of 0.7 x 0.7 = 0.49
+            <span class="help">
+                When I write &ldquo;x &rarr; y &rarr; z&rdquo;,
+                I mean &ldquo;the qubit starts with a value x,
+                the first Random NOT results in the qubit having the value y,
+                and the second Random NOT results in the qubit having the value z&rdquo;.
+            </span>
+        </li>
+        <li>
+            0 &rarr; 1 &rarr; 0 with probability of 0.3 x 0.3 = 0.09
+        </li>
     </ul>
     <p>And so the final state will be 0 with a probability of 49% + 9% = 58%</p>
     <img src="classicalRandomNot.png" width="80%"/>
@@ -370,7 +380,7 @@
 
 
 <section>
-    <h1>Just in case you still don't get it</h1>
+    <h1>What is going on here?</h1>
     <p>
         Consider a qubit that is initially known to definitely be in a 0 state.
         If you were to apply the Hadamard to it twice in a row,
