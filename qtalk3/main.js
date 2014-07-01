@@ -5,18 +5,20 @@
 
     var jsqubits = require("jsqubits").jsqubits;
     var manageHelpSections = require("./src/manageHelpSections.js");
+    var manageStaticExamples = require("./src/manageStaticExamples.js");
+    var manageAnimatedQubitExamples = require("./src/manageAnimatedQubitExamples.js");
     var manageClassicalNotAnimation = require("./src/manageClassicalNotAnimation.js");
     var manageSingleBitRandomNotAnimation = require("./src/manageSingleBitRandomNotAnimation.js");
     var manageSimpleHadarmardAnimation = require("./src/manageSimpleHadarmardAnimation.js");
     var manageTAnimation = require("./src/manageTAnimation.js");
-    var manageInterferenceExampleAnimation = require("./src/manageInterferenceExampleAnimation.js");
     var manageMeasurementExampleAnimation = require("./src/manageMeasurementExampleAnimation.js");
     var manageFullInterferenceExampleAnimation = require("./src/manageFullInterferenceExampleAnimation.js");
-    var manageCNotExample = require("./src/manageCNotExample.js");
     var manageYRotationExample = require("./src/manageYRotationExample.js");
 
     jQuery(function onLoad() {
         manageHelpSections();
+        manageAnimatedQubitExamples();
+        manageStaticExamples();
         manageClassicalNotAnimation();
         manageSingleBitRandomNotAnimation(
             "#singleBitRandomNotExampleSvg",
@@ -33,9 +35,7 @@
         manageSimpleHadarmardAnimation(jsqubits("1"), "#hadamard1Svg", "#hadamard1Button", "#hadamard1ResetButton", "#hadamard1QState");
         manageTAnimation();
         manageMeasurementExampleAnimation();
-        manageInterferenceExampleAnimation();
         manageFullInterferenceExampleAnimation();
-        manageCNotExample();
         manageYRotationExample();
     });
     

@@ -126,16 +126,19 @@
         where the NOT has, for instance, a 30% chance of flipping the bit.
         What is the probability of the final state being 0?
     </p>
+    <p>
+        There are a couple of possible scenarios.
+        For instance, the first Random NOT might flip the bit from 0 to 1,
+        and the second Random NOT might flip the bit back to 0.
+        We represent this as:
+    </p>
+    <p>
+        0 &rarr; 1 &rarr; 0
+    </p>
     <p>There are two paths leading to a final state of 0:</p>
     <ul>
         <li>
             0 &rarr; 0 &rarr; 0 with probability of 0.7 x 0.7 = 0.49
-            <span class="help">
-                When I write &ldquo;x &rarr; y &rarr; z&rdquo;,
-                I mean &ldquo;the qubit starts with a value x,
-                the first Random NOT results in the qubit having the value y,
-                and the second Random NOT results in the qubit having the value z&rdquo;.
-            </span>
         </li>
         <li>
             0 &rarr; 1 &rarr; 0 with probability of 0.3 x 0.3 = 0.09
@@ -328,6 +331,10 @@
     <ul>
         <li>Measurement causes the system to collapse to a single state.</li>
         <li>The larger the blue disk, the more likely the system will collapse to that state.</li>
+        <li>
+            Once the system has collapsed to a particular state,
+            it will remain in that state until another operation is performed.
+        </li>
     </ul>
     <p><b>Important:</b> Phases do not directly affect the outcome of measurements. i.e. measurements are not affected by arrow directions.</p>
     <div class="animationBlock">
@@ -343,30 +350,53 @@
     </div>
 </section>
 
-
 <section>
 <h1>Quantum Interference</h1>
-    <p>Let's apply the Hadamard Operation to a complicated state.</p>
-    <p>Now things get extremely weird.</p>
-    <p>This is what physicists loose sleep over...</p>
+
+    <p>Consider what happens when we apply a Hadamard operation twice.</p>
+
     <p>
-        <b>The arrows still add head to tail</b>.
+        Let's assume that a qubit is initially known to definitely be in a 0 state.
+        If you were to apply the Hadamard to it twice in a row,
+        then there are four equally likely scenarios:
         <span class="help">
-            For the maths to work,
-            the arrow lengths now have to represent
-            the square root of the probabilty.
-            We will briefly cover this in more detail later.
+            Recall that &ldquo;x &rarr; y &rarr; z&rdquo;
+            means &ldquo;the qubit starts with a value x,
+            the first Hadamard results in the qubit having the value y,
+            and the second Hadamard results in the qubit having the value z&rdquo;.
         </span>
-         <div class="animationBlock">
-            <div class="animationBlock_buttons">
-                <div>
-                    <button id="interferenceExampleButton">Apply Hadamard</button>
-                </div>
-            </div>
-            <div class="qstate">State: <span id="interferenceQState"></span></div>
-            <svg id="interferenceExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
-        </div>
     </p>
+    <ul>
+        <li>0 &rarr; 0 &rarr; 0</li>
+        <li>0 &rarr; 0 &rarr; 1</li>
+        <li>0 &rarr; 1 &rarr; 0</li>
+        <li>0 &rarr; 1 &rarr; 1</li>
+    </ul>
+    
+    <p>
+        So the final state should be equally likely to be 0 or 1 but,
+        in reality,
+        applying the Hadamard operator twice in a row
+        always returns the qubit to its original state.
+        In our case, where the qubit is initially 0,
+        two applications of the Hadamard will result in it being 0 again.
+    </p>
+    
+    <p>
+        Try it out.
+        Press the &ldquo;Apply Hadamard&rdquo; button twice
+        and watch it return to being 100% in the 0 state.
+    </p>
+    
+    <div class="animationBlock">
+        <div class="animationBlock_buttons">
+            <div>
+                <button id="fullInterferenceExampleButton">Apply Hadamard</button>
+            </div>
+        </div>
+        <div class="qstate">State: <span id="fullInterferenceQState"></span></div>
+        <svg id="fullInterferenceExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
 </section>
 
 <section>
@@ -378,31 +408,31 @@
     </blockquote>
 </section>
 
-
 <section>
     <h1>What is going on here?</h1>
-    <p>
-        Consider a qubit that is initially known to definitely be in a 0 state.
-        If you were to apply the Hadamard to it twice in a row,
-        then there are four equally likely scenarios:
-    </p>
-    <ul>
-        <li>0 &rarr; 0 &rarr; 0</li>
-        <li>0 &rarr; 0 &rarr; 1</li>
-        <li>0 &rarr; 1 &rarr; 0</li>
-        <li>0 &rarr; 1 &rarr; 1</li>
-    </ul>
     
     <p>
-        So the final state should be equally likely to be 0 or 1,
-        and this is exactly what happens if you peek at
-        the intermediate and final states.
-    </p>
+        The state of the qubit after the first Hadamard
+        is a simple combination of both 0 and 1.
+   </p>
+   <p>
+    The second Hadamard is applied to both the 0 and 1 states
+    and the results are combined.
+   </p>
     
+      <p>
+        <b>The arrows still add head to tail</b>.
+        <span class="help">
+            For the maths to work,
+            the arrow lengths now have to represent
+            the square root of the probabilty.
+            We will briefly cover this in more detail in part 2.
+        </span>
+    </p>
+
     <p>
-        If you do not peek at the intermediate state then something truely weird happens:
         <b>
-            the two different scenarios ending in a 1 state have opposite phases
+            The two different scenarios ending in a 1 state have opposite phases
             and so they cancel each other out.
         </b>
     </p>
@@ -411,17 +441,87 @@
         is what physicists call <em>interference</em>.
     </p>
     
-    <p>Try it out:</p>
+    <p>This is what philosophers of physics loose sleep over...</p>
+
+</section>
+
+<section>
+    <h1>What if I take a peek along the way?</h1>
+        
+    <p>
+        Lets look at what happens if we peek at the qubit after the first Hadamard
+        but before the second.
+    </p>
+    
+    <p>
+        If you peek at the qubit immediately after applying the first Hadamard,
+        then the state of the qubit will collapse to being
+        definitely a 1 or definitely a 0, with each being equally likely.
+        It will remain in that collapsed state until you apply another operation.
+        E.g. if you see a 1, then subsequent measurements will continue to
+        give a 1 until you apply the next Hadamard.
+    </p>
+    
+    <p>
+        Having peeked at the qubit after the first Hadamard,
+        the qubit is now plainly a 0 or a 1, and so,
+        regardless of whether or not it was a 0 or a 1,
+        the second Hadamard should result in a state that is
+        equally likely to be a 0 or a 1.
+    </p>
+    
+    <p><b>Peeking completely destroys the interference effects!</b></p>
+    
+    <h2>Initial State</h2>
+    <div class="animationBlock" id="doubleHadamardWithPeeking-0">
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+  
+        
+    <h2>After First Hadamard</h2>
+    <div class="animationBlock" id="doubleHadamardWithPeeking-1">
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+    
+    <h2>After Peeking</h2>
+    <p>Assume we peek and find it is in a 1 state.</p>
     <div class="animationBlock">
+        <div class="qstate">State: 100% chance of being 1</div>
+        <svg id="doubleHadamardWithPeeking-2" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+
+    <h2>After Second Hadamard</h2>
+    <p>Assuming we saw a 1 when we peeked after the first Hadamard.</p>
+    <div class="animationBlock">
+        <div class="qstate">State: 50% chance of being 0, and 50% chance of being 1</div>
+        <svg id="doubleHadamardWithPeeking-3" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+    
+    <p>
+        Note that peeking destroyed the interference effects
+        and that the final state is equally likely to be a 0 or a 1.
+    </p>
+    
+</section>
+
+<section>
+    <h1>Try it yourself</h1>
+    <div id="interferenceWithMeasureExample" class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
-                <button id="fullInterferenceExampleButton">Apply Hadamard</button>
+                <button class="operator" data-operator="hadamard" data-qubits="0">Apply Hadamard</button>
+            </div>
+            <div>
+                <button class="measure" data-qubits="0">Measure</button>
             </div>
         </div>
-        <div class="qstate">State: <span id="fullInterferenceQState"></span></div>
-        <svg id="fullInterferenceExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
+
 
 <section>
 <h1>Superposition</h1>
