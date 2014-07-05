@@ -53,6 +53,8 @@
     and if the left qubit is used as the control qubit,
     and the right qubit is the target,
     then the result will be &quot;10&quot;.
+    As usual, we represent this as
+    &ldquo;11 &rarr; 10&rdquo;
 </p>
 <p>
     For the same choice of control and target qubits
@@ -117,19 +119,19 @@
     <b>you need to specify how many degrees of rotation you want applied.</b>
 </p>
 <p>
-    A 90&deg; rotation is a little bit like a Hadamard:
+    A 90&deg; Y rotation is a little bit like a Hadamard:
     It transforms a pure 0 state (or pure 1 state)
     into an equal super-position of 0 and 1.
 </p>
 <p>
-    A 180&deg; rotation is a little bit like a NOT:
+    A 180&deg; Y rotation is a little bit like a NOT:
     it flips a 0 into a 1 and a 1 into 0
     except that, when flipping from 1 to 0,
     it also flips the phase.
 </p>
 <p>
-    As expected, two 90&deg; rotations gives a 180&deg; rotation etc.
-    Strangely, a 360&deg; rotation,
+    As expected, two 90&deg; Y rotations gives a 180&deg; Y rotation etc.
+    Strangely, a 360&deg; Y rotation,
     while leaving a 0 state as 0 (and a 1 state as 1),
     it actually flips the phase.
 </p>
@@ -148,16 +150,16 @@
 <section>
 <h1>Did you notice?</h1>
 <p>
-    Did you notice that a 45&deg; rotation of a 0 state
+    Did you notice that a 45&deg; Y rotation of a 0 state
     resulted in a state with a 85% chance of 0
     and 15% chance of 1?
     This will become important later.
 </p>
 <p>
     Given that 45&deg; is half of 90&deg;,
-    and given that a 90&deg; rotation of a 0 state
+    and given that a 90&deg; Y rotation of a 0 state
     results in a state with a 50% chance of 0 and 50% chance of 1,
-    you might have expected a 45&deg; rotation to take you half way:
+    you might have expected a 45&deg; Y rotation to take you half way:
     i.e. 75% chance of a 0 and 25% chance of a 1.
 </p>
 

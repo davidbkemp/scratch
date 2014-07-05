@@ -21,8 +21,8 @@
 
 <section>
     <h1>Quantum Computers?</h1>
-    <p>You have probably heard of quantum computers.</p>
-    <p>You have probably heard that they are faster than conventional computers.</p>
+    <p>Heard of quantum computers?</p>
+    <p>Heard that they are faster than conventional computers?</p>
     <p>Perhaps you have heard of quantum bits (abbreviated to qubits).</p>
     <p>
         Maybe you have even heard of the puzzling notion that
@@ -148,7 +148,7 @@
     <img src="classicalRandomNot.png" width="80%"/>
 </section>    
 <section>
-    <h1>Random NOT (animated)</h1>
+    <h1>Random NOT (your turn)</h1>
     <p>Next we provide an interactive animation of the Random NOT operator.</p>
     <p>The blue disk now splits in two so that we can track the different possible outcomes.</p>
     <p>The probability of being in a state is represented by the radius of the disk.</p>
@@ -441,15 +441,65 @@
         is what physicists call <em>interference</em>.
     </p>
     
-    <p>This is what philosophers of physics loose sleep over...</p>
+    <p>This is what philosophers of physics loose sleep over.</p>
 
 </section>
 
 <section>
-    <h1>What if I take a peek along the way?</h1>
+    <h1>Different kinds of uncertainty</h1>
+    
+    <p>
+        We are actually dealing with two different kinds of uncertainty.
+    </p>
+    
+    <p>
+        It is possible that a bit, and even a qubit,
+        may be in a fixed state of 1 or 0,
+        but that you simply do not know which one it is.
+    </p>
+    <p>
+        However, it is also possible for
+        a qubit to be in what is called &ldquo;superposition&rdquo;
+        of both 1 and 0.
+        <b>Such a qubit is neither 0 nor 1, but is somehow a combination of both.</b>
+    </p>
+    <p>
+        Suppose that you measure a qubit that is in a superposition of 0 and 1,
+        but throw away the outcome of the measurement without looking at it.
+        The qubit has now transitioned from the second kind of uncertainty (superposition)
+        to the first kind of uncertainty (unknown, but definitely 1 or 0).
+    </p>
+    
+    <p>
+        <b>A qubit state can even be a mixture of these two kinds of uncertainty.</b>
+        Consider applying a Hadamard to
+        a qubit that is in a fixed but unknown state of 1 or 0.
+        In both cases, the Hadamard will put it into a superposition of 1 and 0 but,
+        depending on its initial state,
+        the phases of the 1 and 0 states will either point in
+        the same or opposite directions.
+        I.e. it ends up in a &ldquo;mixture&rdquo; of the two different superpositions.
+    </p>
+    
+    <p>
+        Our system of blue disks and red arrows cannot be used to represent
+        these complicated mixtures of the two kinds of uncertainty.
+    </p>
+    
+    <p>
+        <b>
+            From now on, diagrams containing multiple blue disks will only be used
+            to represent superposition.
+        </b>
+    </p>
+</section>
+
+<section>
+    <h1>Peeking between Hadamards</h1>
         
     <p>
-        Lets look at what happens if we peek at the qubit after the first Hadamard
+        Let's revisit the scenario of applying a Hadamard twice to a qubit initially in a 0 state,
+        and look at what happens if we peek at the qubit after the first Hadamard
         but before the second.
     </p>
     
@@ -462,16 +512,16 @@
         give a 1 until you apply the next Hadamard.
     </p>
     
+    <p><b>Peeking completely destroys the interference effects!</b></p>
+        
     <p>
         Having peeked at the qubit after the first Hadamard,
-        the qubit is now plainly a 0 or a 1, and so,
+        the qubit state has collapsed to being definitely a 0 or a 1, and so,
         regardless of whether or not it was a 0 or a 1,
-        the second Hadamard should result in a state that is
+        the second Hadamard should result in a state that is also
         equally likely to be a 0 or a 1.
     </p>
-    
-    <p><b>Peeking completely destroys the interference effects!</b></p>
-    
+
     <h2>Initial State</h2>
     <div class="animationBlock" id="doubleHadamardWithPeeking-0">
         <div class="qstate">State: <span class="qstateValue"></span></div>
@@ -486,14 +536,31 @@
     </div>
     
     <h2>After Peeking</h2>
-    <p>Assume we peek and find it is in a 1 state.</p>
+    <p>
+        After peeking,
+        the qubit state collapses to being definitely a 1 or a 0
+        (not a superposition of the two).
+        Recall that we are now only using multiple blue disks to
+        represent superpositions.
+        So here we arbitrarily pretend that the state has collapsed to 1.
+        <span class="help">
+            I guess we could have drawn two diagrams to capture
+            the two possible outcomes,
+            but I hope you get the idea anyway.
+        </span>
+    </p>
     <div class="animationBlock">
         <div class="qstate">State: 100% chance of being 1</div>
         <svg id="doubleHadamardWithPeeking-2" class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 
     <h2>After Second Hadamard</h2>
-    <p>Assuming we saw a 1 when we peeked after the first Hadamard.</p>
+    <p>
+        Now that you have peeked,
+        the second Hadamard is now being applied to a definite state instead
+        of a superposition of states.
+        And so we get another superposition.
+    </p>
     <div class="animationBlock">
         <div class="qstate">State: 50% chance of being 0, and 50% chance of being 1</div>
         <svg id="doubleHadamardWithPeeking-3" class="qstateSvg qstateSvg__hideBitLabels"></svg>
@@ -502,12 +569,21 @@
     <p>
         Note that peeking destroyed the interference effects
         and that the final state is equally likely to be a 0 or a 1.
+        <span class="help">
+            Don't be distracted by the fact that the arrow direction for the 1 state is
+            in the opposite direction to that of the 0 state.
+            As mentioned earlier,
+            the arrow directions have no direct influence on a measurement,
+            and so this final state really does have a
+            50% chance of being 0, and 50% chance of being 1.
+        </span>
     </p>
     
 </section>
 
 <section>
     <h1>Try it yourself</h1>
+    <p>Try different mixtures of the Hadamard and measurement operators:</p>
     <div id="interferenceWithMeasureExample" class="animationBlock">
         <div class="animationBlock_buttons">
             <div>
@@ -524,25 +600,10 @@
 
 
 <section>
-<h1>Superposition</h1>
-<p>
-    Hopefully by now you understand that,
-    when a quantum computer has various probabilities
-    of being in different states,
-    <b>you can no longer assume that it is in reality only in one of those states</b>.
-    The quantum computer is said to be in a <em>superposition</em> of
-    those different states.
-</p>
-</section>
-
-<section>
     <h1>
         It gets even more interesting when you have more than one qubit
     </h1>
-    <p>
-        You can't do anything very interesting with one qubit except perhaps use it to model
-        the <em><a href="http://en.wikipedia.org/wiki/Double-slit_experiment">Double Slit Experiment</a></em>.
-    </p>
+
     <p>
         The quantum weirdness rises to a whole new level when there are two or more qubits interacting.
         This is explored in <a href="part2.html">Part 2</a>.
