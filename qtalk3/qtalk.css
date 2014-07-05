@@ -36,6 +36,14 @@ h2 {
     float: right;
 }
 
+.largeImage {
+    width: 80%;
+}
+
+.mediumImage {
+    width: 50%;
+}
+
 .labelledImage {
     display: inline-block;
 }
