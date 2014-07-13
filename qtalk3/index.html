@@ -13,10 +13,17 @@
     <div class="subtitle">
         Or <em>What Do You Mean They Can Be Both Zero And One At The Same Time!</em>
     </div>
-    <p>This is Part 1 and is continued in <a href="part2.html">Part 2</a></p>
     <p>By David Kemp</p>
     <p>@david_b_kemp</p>
     <p>DRAFT</p>
+    
+    <p>
+        This is Part 1 of a two part series.
+        It covers some basics of quantum qubits.
+        <a href="part2.html">Part 2</a>
+        actually looks at a simple quantum algorithm in action.
+    </p>
+    
 </section>
 
 <section>
@@ -84,7 +91,7 @@
     <p>
         Consider the conventional NOT (or bit-flip) operator.
         <span class="help">
-            1 and 0 can represent logical <em>true</em> and <em>false</em>.
+            0 and 1 can represent logical <em>true</em> and <em>false</em>.
             NOT <em>true</em> is <em>false</em>, and NOT <em>false</em> is <em>true</em>.
             And so, NOT of 1 is 0, and NOT of 0 is 1.
         </span>
@@ -381,8 +388,8 @@
     <p>
         So the final state should be equally likely to be 0 or 1 but,
         in reality,
-        applying the Hadamard operator twice in a row
-        always returns the qubit to its original state.
+        <b>applying the Hadamard operator twice in a row
+        always returns the qubit to its original state</b>.
         In our case, where the qubit is initially 0,
         two applications of the Hadamard will result in it being 0 again.
     </p>
@@ -454,155 +461,81 @@
     <h1>Different kinds of uncertainty</h1>
     
     <p>
-        We are actually dealing with two different kinds of uncertainty.
+        We are actually dealing with two different kinds of uncertainty:
     </p>
     
-    <p>
-        It is possible that a bit, and even a qubit,
-        may be in a fixed state of 1 or 0,
-        but that you simply do not know which one it is.
-    </p>
-    <p>
-        However, it is also possible for
-        a qubit to be in what is called &ldquo;superposition&rdquo;
-        of both 1 and 0.
-        <b>Such a qubit is neither 0 nor 1, but is somehow a combination of both.</b>
-    </p>
-    <p>
-        Suppose that you measure a qubit that is in a superposition of 0 and 1,
-        but throw away the outcome of the measurement without looking at it.
-        The qubit has now transitioned from the second kind of uncertainty (superposition)
-        to the first kind of uncertainty (unknown, but definitely 1 or 0).
-    </p>
+    <ul>
+        <li>
+            It is possible that a bit, and even a qubit,
+            may be in a fixed state of 0 or 1,
+            but that you simply do not know which one it is.
+        </li>
+        <li>
+            However, it is also possible for
+            a qubit to be in what is called
+            a &ldquo;<b><em>superposition</em></b>&rdquo;
+            of both 0 and 1.
+            <b>Such a qubit is in a strange combination of both 0 and 1.</b>
+        </li>
+    </ul>
+</section>
+
+<section>
+    <h1>Superposition of <b>locations</b></h1>
     
     <p>
-        <b>A qubit state can even be a mixture of these two kinds of uncertainty.</b>
-        Consider applying a Hadamard to
-        a qubit that is in a fixed but unknown state of 1 or 0.
-        In both cases, the Hadamard will put it into a superposition of 1 and 0 but,
-        depending on its initial state,
-        the phases of the 1 and 0 states will either point in
-        the same or opposite directions.
-        I.e. it ends up in a &ldquo;mixture&rdquo; of the two different superpositions.
+        So far, the rather abstract phenomenon of nuclear spin is
+        the only approach that I have mentioned for creating qubits.
     </p>
-    
     <p>
-        Our system of blue disks and red arrows cannot be used to represent
-        these complicated mixtures of the two kinds of uncertainty.
+        The bizarre nature of quantum physics is perhaps more obvious
+        when you discover that particles of light and matter can be
+        in superpositions of different <em>locations</em>.
     </p>
-    
     <p>
+        The photons travelling through an &ldquo;interferometer&rdquo;
+        are in superpositions of locations that can be kilometres apart
+        (as they are in the
+        <a href="http://www.ligo-la.caltech.edu/">LIGO</a>
+        interferometer).
+    </p>
+    <p>
+        A simple interferometer is shown below.
+        Photons are emitted by a &ldquo;coherent light source&rdquo;
+        (i.e. a laser)
+        that is pointing at a
+        &ldquo;half silvered mirror&rdquo;,
+        which reflects some of the light and lets some of the light through.
+    </p>
+    <p>
+        Individual photons end up in a superposition of
+        having been reflected
+        and having been let through.
+        A couple more mirrors are used to bring the split light beam back together
+        at a detector.
+        The positions of the mirrors and the detector all effect the lengths of
+        the two different paths,
+        so that one path can be longer than the other.
+        Like the T operator described earlier,
+        a change in the relative path lengths will alter
+        the relative phases of the two photon states.
+        If the phases are exactly opposite,
+        then they will cancel each other out,
+        and the detector will not detect anything.
         <b>
-            From now on, diagrams containing multiple blue disks will only be used
-            to represent superposition.
+            This interference effect even happens when
+            the light source is slowly emmitting photons
+            one at a time.
         </b>
     </p>
+    <img src="interferometer.jpg" class="mediumImage" alt="Interferometer"/>
+    <p>
+        If detectors are placed on either or both of the two paths,
+        then the act of detecting the presence (or absence) of the photon
+        causes the superposition to collapse to one or the other,
+        and the interference effects disappear.
+    </p>
 </section>
-
-<section>
-    <h1>Peeking between Hadamards</h1>
-        
-    <p>
-        Let's revisit the scenario of applying a Hadamard twice to a qubit initially in a 0 state,
-        and look at what happens if we peek at the qubit after the first Hadamard
-        but before the second.
-    </p>
-    
-    <p>
-        If you peek at the qubit immediately after applying the first Hadamard,
-        then the state of the qubit will collapse to being
-        definitely a 1 or definitely a 0, with each being equally likely.
-        It will remain in that collapsed state until you apply another operation.
-        E.g. if you see a 1, then subsequent measurements will continue to
-        give a 1 until you apply the next Hadamard.
-    </p>
-    
-    <p><b>Peeking completely destroys the interference effects!</b></p>
-        
-    <p>
-        Having peeked at the qubit after the first Hadamard,
-        the qubit state has collapsed to being definitely a 0 or a 1, and so,
-        regardless of whether or not it was a 0 or a 1,
-        the second Hadamard should result in a state that is also
-        equally likely to be a 0 or a 1.
-    </p>
-
-    <h2>Initial State</h2>
-    <div class="animationBlock" id="doubleHadamardWithPeeking-0">
-        <div class="qstate">State: <span class="qstateValue"></span></div>
-        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
-    </div>
-  
-        
-    <h2>After First Hadamard</h2>
-    <div class="animationBlock" id="doubleHadamardWithPeeking-1">
-        <div class="qstate">State: <span class="qstateValue"></span></div>
-        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
-    </div>
-    
-    <h2>After Peeking</h2>
-    <p>
-        After peeking,
-        the qubit state collapses to being definitely a 1 or a 0
-        (not a superposition of the two).
-        Recall that we are now only using multiple blue disks to
-        represent superpositions.
-        So here we arbitrarily pretend that the state has collapsed to 1.
-        <span class="help">
-            I guess we could have drawn two diagrams to capture
-            the two possible outcomes,
-            but I hope you get the idea anyway.
-        </span>
-    </p>
-    <div class="animationBlock">
-        <div class="qstate">State: 100% chance of being 1</div>
-        <svg id="doubleHadamardWithPeeking-2" class="qstateSvg qstateSvg__hideBitLabels"></svg>
-    </div>
-
-    <h2>After Second Hadamard</h2>
-    <p>
-        Now that you have peeked,
-        the second Hadamard is now being applied to a definite state instead
-        of a superposition of states.
-        And so we get another superposition.
-    </p>
-    <div class="animationBlock">
-        <div class="qstate">State: 50% chance of being 0, and 50% chance of being 1</div>
-        <svg id="doubleHadamardWithPeeking-3" class="qstateSvg qstateSvg__hideBitLabels"></svg>
-    </div>
-    
-    <p>
-        Note that peeking destroyed the interference effects
-        and that the final state is equally likely to be a 0 or a 1.
-        <span class="help">
-            Don't be distracted by the fact that the arrow direction for the 1 state is
-            in the opposite direction to that of the 0 state.
-            As mentioned earlier,
-            the arrow directions have no direct influence on a measurement,
-            and so this final state really does have a
-            50% chance of being 0, and 50% chance of being 1.
-        </span>
-    </p>
-    
-</section>
-
-<section>
-    <h1>Try it yourself</h1>
-    <p>Try different mixtures of the Hadamard and measurement operators:</p>
-    <div id="interferenceWithMeasureExample" class="animationBlock">
-        <div class="animationBlock_buttons">
-            <div>
-                <button class="operator" data-operator="hadamard" data-qubits="0">Apply Hadamard</button>
-            </div>
-            <div>
-                <button class="measure" data-qubits="0">Measure</button>
-            </div>
-        </div>
-        <div class="qstate">State: <span class="qstateValue"></span></div>
-        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
-    </div>
-</section>
-
 
 <section>
     <h1>
@@ -622,6 +555,10 @@
     </p>
 </section>
 
+<section>
+    <h1>Attributions</h1>
+    <p>Michelson Interferometer, http://commons.m.wikimedia.org/wiki/File:Michaelson_with_letters.jpg</p>
+</section>
 
 <footer>
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">An Interactive Introduction To Quantum Computing</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">David Kemp</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.en_US">Creative Commons Attribution 4.0 International License</a>.</footer>
