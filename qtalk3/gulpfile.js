@@ -9,7 +9,7 @@ var scripts = ["main.js", "browserSupportDetection.js", "src/**/*.js"];
 gulp.task('browserify', function() {
     gulp.src('main.js')
         .pipe(browserify())
-        .pipe(uglify())
+//        .pipe(uglify())
         .pipe(gulp.dest("dist"));
 });
 

@@ -10,9 +10,6 @@
     var manageClassicalNotAnimation = require("./src/manageClassicalNotAnimation.js");
     var manageSingleBitRandomNotAnimation = require("./src/manageSingleBitRandomNotAnimation.js");
     var manageSimpleHadarmardAnimation = require("./src/manageSimpleHadarmardAnimation.js");
-    var manageTAnimation = require("./src/manageTAnimation.js");
-    var manageMeasurementExampleAnimation = require("./src/manageMeasurementExampleAnimation.js");
-    var manageFullInterferenceExampleAnimation = require("./src/manageFullInterferenceExampleAnimation.js");
     var manageYRotationExample = require("./src/manageYRotationExample.js");
 
     jQuery(function onLoad() {
@@ -33,9 +30,6 @@
             "#peekingButton");
         manageSimpleHadarmardAnimation(jsqubits("0"), "#hadamard0Svg", "#hadamard0Button", "#hadamard0ResetButton", "#hadamard0QState");
         manageSimpleHadarmardAnimation(jsqubits("1"), "#hadamard1Svg", "#hadamard1Button", "#hadamard1ResetButton", "#hadamard1QState");
-        manageTAnimation();
-        manageMeasurementExampleAnimation();
-        manageFullInterferenceExampleAnimation();
         manageYRotationExample();
     });
     

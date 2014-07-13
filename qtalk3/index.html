@@ -324,14 +324,17 @@
 <h1>T Operator</h1>
     <p>The T operator rotates the phase of 1, but leaves 0 untouched.</p>
     <p>Note how it does not affect the probabilities at all.</p>
-    <div class="animationBlock">
+    <div class="animationBlock" id="tExample">
         <div class="animationBlock_buttons">
             <div>
-                <button id="tButton">Apply T</button>
+                <button class="operator" data-operator="t"
+                        data-qubits="0" data-skipInterferenceSteps>
+                    Apply T
+                </button>
             </div>
         </div>
-        <div class="qstate">State: 50% chance of being 0 and 50% chance of being 1</div>
-        <svg id="tSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
 
@@ -349,16 +352,17 @@
     </ul>
     <p><b>Important:</b> Phases do not directly affect the outcome of measurements.
         I.e. measurements are not affected by arrow directions.</p>
-    <div class="animationBlock">
+    <div class="animationBlock" id="measurementExample">
         <div class="animationBlock_buttons">
             <div>
-                <button id="measurementButton">Measure</button>
+                <button class="measure" data-qubits="0,1">Measure</button>
             </div>
             <div>
-                 <button id="measurementResetButton">Reset</button>
+                 <button class="reset">Reset</button>
              </div>
         </div>
-        <svg id="measurementSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
 
@@ -400,14 +404,14 @@
         and watch it return to being 100% in the 0 state.
     </p>
     
-    <div class="animationBlock">
+    <div class="animationBlock" id="fullInterferenceExample">
         <div class="animationBlock_buttons">
             <div>
-                <button id="fullInterferenceExampleButton">Apply Hadamard</button>
+                <button class="operator" data-operator="hadamard" data-qubits="0">Apply Hadamard</button>
             </div>
         </div>
-        <div class="qstate">State: <span id="fullInterferenceQState"></span></div>
-        <svg id="fullInterferenceExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
 

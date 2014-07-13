@@ -25,13 +25,14 @@
         function onOperatorClick(button) {
 
             var operator = button.attr("data-operator"),
-                bits = button.attr("data-qubits").split(",").map(parseInt);
+                skipInterferenceSteps = button.attr("data-skipInterferenceSteps") != null,
+                bits = button.attr("data-qubits").split(",").map(function(x) {return parseInt(x);});
                 
             var operation = function (localQState) {
                 return localQState[operator](bits);
             };
             
-            animation.applyOperation(operation)
+            animation.applyOperation(operation, {skipInterferenceSteps: skipInterferenceSteps})
                 .then(displayState)
                 .then(null, function error(msg) {
                     alert(msg);
@@ -39,7 +40,7 @@
         }
         
         function onMeasureClick(button) {
-            var bits = button.attr("data-qubits").split(",").map(parseInt);
+            var bits = button.attr("data-qubits").split(",").map(function(x) {return parseInt(x);});
             
             animation.measure(bits)
                 .then(displayState)
@@ -66,12 +67,22 @@
             onMeasureClick(jQuery(this));
         });
 
+        section.find(".reset").click(reset);
+
     }
     
     function manageExamples() {
-        manageExample("#interferenceWithMeasureExample", jsqubits("0"));
-        manageExample("#doubleHadamardWithPeeking-0", jsqubits("0"));
-        manageExample("#doubleHadamardWithPeeking-1", jsqubits("0").hadamard(0));
+        manageExample("#tExample", jsqubits("0").hadamard(0));
+
+        var measurementExampleState = new jsqubits.QState(2, [
+            jsqubits.complex(1, 1),
+            jsqubits.complex(-4, 1),
+            jsqubits.complex(-1, -2),
+            jsqubits.complex(1, 3)
+        ]).normalize();
+        manageExample("#measurementExample", measurementExampleState);
+
+        manageExample("#fullInterferenceExample", jsqubits("0"));
     }
 
     module.exports = manageExamples;
