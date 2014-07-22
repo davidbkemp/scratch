@@ -10,12 +10,14 @@
 <section>
     <h1>An Interactive Introduction To Quantum Computing Part 2</h1>
     <p>
-        This is Part 2 of a two part series that begins with
-        <a href="index.html">Part 1</a>.
+        This is Part 2 of a two part series.
+        In <a href="index.html">Part 1</a>
+        I explained some of the basics of what a qubit is
+        including the mysterious notions of phase and quantum interference.
+        Here in Part 2, you will get to see a very simple quantum algorithm.
     </p>
     <p>DRAFT</p>
 </section>
-
 
 
 <section>
@@ -27,9 +29,11 @@
 <p>The blue disks introduced in Part 1 do <em>not</em> correspond to single qubits.</p>
 <p>
     <b>Each blue disk corresponds to a distinct state of the entire quantum system.</b>
+    If you are not sure what I mean by that,
+    then please hang in there,
+    it will hopefully become aparent very soon.
     <span class="help">
-    The blue disks are technically called state &ldquo;amplitudes&rdquo;
-    and are represented mathematically using complex numbers.
+    The blue disks are technically called quantum state &ldquo;amplitudes&rdquo;.
     </span>
 </p>
 </section>
@@ -42,23 +46,28 @@
 </p>
 <p>
     The Controlled NOT operator modifies the state of one qubit (the target qubit)
-    based on state of another qubit (the control qubit).
+    based on the state of another qubit (the control qubit).
 </p>
 <p>
     Specifically, <b>the Controlled NOT operator flips the value of the target qubit
     if the control qubit has a value of 1.</b>
 </p>
 <p>
-    For example: If the initial state is &quot;11&quot;,
-    and if the left qubit is used as the control qubit,
-    and the right qubit is the target,
-    then the result will be &quot;10&quot;.
+    For example:
+    Suppose we have two qubits with
+    an initial state of &ldquo;11&rdquo;.
+    Let&apos;s use the left qubit as the control qubit
+    and the right qubit as the target.
+    Then the result of applying a Controlled NOT
+    will be &ldquo;10&rdquo;.
     As usual, we represent this as
     &ldquo;11 &rarr; 10&rdquo;
 </p>
 <p>
-    For the same choice of control and target qubits
-    (left qubit as control qubit and right qubit as target):
+    Continuing with our choice of left qubit as control qubit
+    and right qubit as target,
+    there are four scenarios to consider for
+    the Controlled NOT operator.
 </p>
 <ul>
     <li>00 &rarr; 00 (i.e. no effect)</li>
@@ -99,97 +108,343 @@
         Note that, if you were to measure the qubits while they are in this state,
         you would find that they are either both 0 or both 1.
     </p>
+</section>
+
+<section>
+    <h1>Toffoli</h1>
     <p>
-        To really appreciate quantum entanglement,
-        we need to introduce another single qubit operator...
+        The Toffoli Operator is a just like the Controlled NOT,
+        only it uses two control qubits instead of one.
+        The target qubit is flipped if and only if
+        both of the control bits are 1&apos;s.
+    </p>
+    <p>
+        For example: If the initial state is &quot;111&quot;,
+        and if the two left qubits are used as the control qubits,
+        and the right qubit is the target,
+        then the result will be &quot;110&quot;.
+        As usual, we represent this as
+        &ldquo;111 &rarr; 110&rdquo;
+    </p>
+<p>
+    Continuing with our choice of the two left qubits as control qubits
+    and right qubit as target,
+    there are eight scenarios to consider for
+    the Toffoli operator.
+</p>
+<ul>
+    <li>000 &rarr; 000 (i.e. no effect)</li>
+    <li>001 &rarr; 001 (i.e. no effect)</li>
+    <li>010 &rarr; 010 (i.e. no effect)</li>
+    <li>011 &rarr; 011 (i.e. no effect)</li>
+    <li>010 &rarr; 010 (i.e. no effect)</li>
+    <li>101 &rarr; 101 (i.e. no effect)</li>
+    <li>110 &rarr; 111 (i.e. target bit flips)</li>
+    <li>111 &rarr; 110 (i.e. target bit flips)</li>
+</ul>
+</section>
+
+<section>
+    <h1>Toffoli (Your Turn)</h1>
+    <p>
+        See how the Toffoli affects a superpostion of all possible states:
+    </p>
+    <div class="animationBlock" id="ToffoliExample">
+        <div class="animationBlock_buttons">
+            <div>
+                <button class="operator" data-operator="cnot"
+                    data-control-qubits="1,2"
+                    data-qubits="0">Apply Toffoli</button>
+            </div>
+        </div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+</section>
+
+<section>
+    <h1>Arbitrary Boolean Functions</h1>
+    <p>
+        In addition to the NOT operator that we have already seen,
+        a quantum computer can implement the standard
+        boolean functions of AND and OR.
+        <span class="help">
+            <span class="math"> x AND y</span> is 1 if and only if
+            both x and y are 1.
+            <span class="math"> x OR y</span> is 1 if either or both
+            of x or y are 1.
+        </span>
+    </p>
+    <p>But there is a catch.</p>
+    <p>
+        <b>Quantum operators must be reversible</b>
+        (except for the measurement operator):
+        i.e. you must be able to derive the input state from the output state.
+        This is a fundamental consequence of how quantum mechanics works.
+    </p>
+    <p>
+        The conventional implementations of AND and OR
+        set the output bit to the result of the operation.
+        The problem with this is that you lose
+        the original value of the output bit
+        and there is no guaranteed way of
+        using the result
+        to derive what its original value was.
+    </p>
+    <p>
+        Reversible versions of AND and OR
+        are obtained by leaving the input bits unchanged,
+        using a separate (third) bit as the output bit and,
+        instead of setting the output bit to the result,
+        you conditionally flip the value of the output bit
+        based on whether or not the result of the operation is a 1.
+        E.g.
+        <b>
+            the Toffoli operation is
+            the way we implement the AND operation
+            in a quantum computer.
+        </b>
+    </p>
+    <p>
+        The OR operator can be implemented using combinations of
+        the AND and NOT operators since
+    </p>
+    <p>x OR y  = NOT (NOT x AND NOT y)</p>
+</section>
+
+<section>
+    <h1>Arbitrary Boolean Functions</h1>
+    <p>
+        Using the AND, OR, and NOT operators,
+        it is possible to implement any arbitrary
+        boolean function that has a fixed number of input and output bits.
+    </p>
+    <p>
+        The key trick with quantum computers is that the output bits
+        are usually a seperate collection of bits to the input bits and,
+        instead of setting the output bits to specific values,
+        their existing values (whatever they were)
+        are either flipped or left as they are
+        depending on whether the operation result
+        is supposed to be a 1 or a 0 respectively.
     </p>
 </section>
 
 <section>
-<h1>Y Rotations</h1>
+<h1>Simple 1-Bit Functions</h1>
 <p>
-    There are three particular single qubit operators commonly referred to
-    as the X, Y, and Z Rotation operators.
-    Historically, these refer to physical rotations in
-    three dimensional space around the X, Y, and Z axes.
-</p>
-<p>For this article we will only make use of the Y Rotation operator.</p>
-<p>
-    Like all the rotation operators,
-    <b>you need to specify how many degrees of rotation you want applied.</b>
+    I am about to describe
+    a really simple quantum computation algorithm,
+    but first we need to explore the four different
+    classical 1-bit functions and how we might implement them
+    in a quantum computer.
 </p>
 <p>
-    A 90&deg; Y rotation is a little bit like a Hadamard:
-    It transforms a pure 0 state (or pure 1 state)
-    into an equal super-position of 0 and 1.
+    There are only four possible one bit functions
+    <span class="math">y=f(x)</span>
+    where x and y are single bit values:
 </p>
+<ul>
+    <li>f(x) = x</li>
+    <li>f(x) = NOT(x)</li>
+    <li>f(x) = 0</li>
+    <li>f(x) = 1</li>
+</ul>
+
 <p>
-    A 180&deg; Y rotation is a little bit like a NOT:
-    it flips a 0 into a 1 and a 1 into 0
-    except that, when flipping from 1 to 0,
-    it also flips the phase.
+    Hopefully it is pretty obvious how you would implement these,
+    but I will spell it out anyway.
 </p>
-<p>
-    As expected, two 90&deg; Y rotations gives a 180&deg; Y rotation etc.
-    Strangely, a 360&deg; Y rotation,
-    while leaving a 0 state as 0 (and a 1 state as 1),
-    it actually flips the phase.
-</p>
-<p>Try out the Y Rotation operator below 45&deg; at a time.</p>
-<div class="animationBlock">
-    <div class="animationBlock_buttons">
-        <div>
-            <button id="yRotationButton">Y Rotation By 45&deg;</button>
-        </div>
+<ul>
+    <li>f(x) = x : Flip the output bit if the input is 1 (ie. a Controlled NOT)</li>
+    <li>f(x) = NOT(x) : Controlled NOT followed by a NOT</li>
+    <li>f(x) = 0 : Do nothing</li>
+    <li>f(x) = 1 : Flip the output bit regardless of the input.</li>
+</ul>
+</section>
+
+<section>
+    <h1>Deutche&apos;s Algorithm</h1>
+    <p>
+        Possibly the simplest quantum computing algorithm is Deutche&apos;s Algorithm.
+    </p>
+    <p>
+        To understand Deutche&apos;s Algorithm, you first must understand
+        the <em>Exclusive OR</em> operator (XOR).
+    </p>
+    <p>
+        <span class="math">x XOR y</span> is 1 if only one of x or y are 1, but not both.
+    </p>
+    <ul>
+        <li><span class="math">0 XOR 0 = 0</span></li>
+        <li><span class="math">0 XOR 1 = 1</span></li>
+        <li><span class="math">1 XOR 0 = 1</span></li>
+        <li><span class="math">1 XOR 1 = 0</span></li>
+    </ul>
+    <p>
+        Imagine you are provided with a piece of circuitry that
+        implements one of
+        the four possible 1-bit functions
+        <span class="math">f</span>
+        described earlier,
+        but you have not been told which one of the four it is.
+    </p>
+    <p>
+        You task is to compute
+        <span class="math">f(0) XOR f(1)</span>.
+    </p>
+    <p>
+        For example, if <span class="math">f(x) = x</span>,
+        then <span class="math">f(0) XOR f(1) = 0 XOR 1 = 1</span>.
+    </p>
+    <p>
+        There are four possibilities:
+    </p>
+    <ul>
+        <li>
+            <b>If</b> <span class="math">f(x) = x</span>
+            <b>then</b> <span class="math">f(0) XOR f(1) = 1</span>
+        </li>
+        <li>
+            <b>If</b> <span class="math">f(x) = NOT(x)</span>
+            <b>then</b> <span class="math">f(0) XOR f(1) = 1</span>
+        </li>
+        <li>
+            <b>If</b> <span class="math">f(x) = 0</span>
+            <b>then</b> <span class="math">f(0) XOR f(1) = 0</span>
+        </li>
+        <li>
+            <b>If</b> <span class="math">f(x) = 1</span>
+            <b>then</b> <span class="math">f(0) XOR f(1) = 0</span>
+        </li>
+    </ul>
+    <p>
+        The obvious approach is to compute both
+        <span class="math">f(0)</span>
+        and
+        <span class="math">f(1)</span>
+        and then compute the XOR of those two results.
+        Indeed,
+        <b>
+            conventional computers cannot compute
+            <span class="math">f(0) XOR f(1)</span>
+            without computing values for both
+            <span class="math">f(0)</span>
+            and
+            <span class="math">f(1)</span>.
+        </b>
+    </p>
+    <p>
+        If <span class="math">f</span>
+        is implemented on a quantum computer, then
+        <b>
+            Deutche&apos;s Algorithm allows you to compute
+            <span class="math">f(0) XOR f(1)</span>
+            with only a single invocation of
+            <span class="math">f</span>.
+        </b>
+    </p>
+    <p>
+        As you will see,
+        Deutche&apos;s Algorithm
+        achieves this by applying
+        <span class="math">f</span>
+        to a superposition of 0 and 1,
+        and using quantum interference to find
+        <span class="math">f(0) XOR f(1)</span>.
+    </p>
+</section>
+
+<section>
+    <h1>Implementing Deutche&apos;s Algorithm</h1>
+    <p>
+        To implement Deutche&apos;s Algorithm we need two qubits.
+        We designate one qubit (the left one) the input qubit
+        and the other (the right one) the output qubit.
+    </p>
+    <p>
+        Here are the steps:
+    </p>
+    <ol>
+        <li>
+            Start with the qubits in a superposition of all possible states:
+            00, 01, 10, and 11.
+        </li>
+        <li>Apply the unknown function <span class="math">f</span> once</li>
+        <li>Apply a Hadamard to the input bit</li>
+        <li>Measure</li>
+    </ol>
+    <p>
+        Recall that,
+        by applying <span class="math">f</span>,
+        we mean that the output bit is flipped from its initial value
+        if and only if the application of <span class="math">f</span>
+        to the input value is 1.
+        So, for example, if
+        <span class="math">f(x) = x</span>
+        and if the initial state of the qubits was &ldquo;11&rdquo;
+        then the result would be &ldquo;10&rdquo;.
+    </p>
+    <p>
+        There are a couple of important details that I have left out.
+    </p>
+    <p>
+        For staters,
+        the initial state cannot be any old superposition of all possible states.
+        It has to be this one:
+        <span class="help">
+            Actually, any superposition that has the same <em>relative</em>
+            phases will work also.
+        </span>
+    </p>
+    <div class="animationBlock" id="DeutchInitialState">
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
-    <div class="qstate">State: <span id="yRotationQState"></span></div>
-    <svg id="yRotationSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
-</div>
+    <p>
+        The other important detail is that the desired result,
+        <span class="math">f(0) XOR f(1)</span>,
+        is obtained by measuring the <em>input</em> qubit.
+        No, that is not a clumsy mistake I just made,
+        the desired result will be the value of the input qubit,
+        not the output qubit.
+    </p>
+    <p>
+        Try it yourself. Select one of the four fuctions,
+        and then Hadamard the input qubit.
+        Ignoring the output qubit,
+        you should find that there is only one possible value
+        for the final state of the input qubit
+        and that value will be
+        <span class="math">f(0) XOR f(1)</span>
+        
+    </p>
+    <div class="animationBlock" id="DeutchExample">
+        <div class="animationBlock_buttons">
+            <div>
+                <button class="operator" data-operator="cnot"
+                    data-control-qubits="1,2"
+                    data-qubits="0">f(x)=x</button>
+                <button class="operator" data-operator="notcnot"
+                    data-control-qubits="1,2"
+                    data-qubits="0">f(x)=NOT(x)</button>
+                <button class="operator"
+                    data-operator="nop">f(x)=0</button>
+                <button class="operator" data-operator="not"
+                    data-qubits="0">f(x)=1</button>
+                <button class="operator hidden" data-operator="hadamard"
+                    data-qubits="0">Hadamard Input Bit</button>
+                <button class="operator hidden" data-operator="measure"
+                    data-qubits="0">Measure Input Bit</button>
+            </div>
+        </div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
 </section>
 
 <section>
-<h1>Did you notice?</h1>
-<p>
-    Did you notice that a 45&deg; Y rotation of a 0 state
-    resulted in a state with a 85% chance of 0
-    and 15% chance of 1?
-    This will become important later.
-</p>
-<p>
-    Given that 45&deg; is half of 90&deg;,
-    and given that a 90&deg; Y rotation of a 0 state
-    results in a state with a 50% chance of 0 and 50% chance of 1,
-    you might have expected a 45&deg; Y rotation to take you half way:
-    i.e. 75% chance of a 0 and 25% chance of a 1.
-</p>
-
-<p>
-    But that is not how rotations work.
-    If you rotate a circle by 90&deg;,
-    the bottom of the circle will be rotated to a height halfway up to the top.
-    But if you only rotate it by 45&deg;,
-    the bottom of the circle will be rotated to a height significantly less
-    than a quarter of the height of the circle.
-    <span class="help">
-        The quantum mechanics of Y Rotations actually means that
-        a rotation by &theta; of a 0 state results in a state with
-        a cos<sup>2</sup>(&theta;) chance of remaining 0
-        and a sin<sup>2</sup>(&theta;) of becoming a 1.
-    </span>
-</p>
-
-</section>
-
-<section>
-<h1>Rotating Entangled Qubits</h1>
-</section>
-
-<section>
-<h1>Quantum Algorithms</h1>
-</section>
-
-<section>
-<h1>Quantum Search</h1>
+    <h1>What&apos;s All The Fuss About</h1>
+    <p>
+        
+    </p>
 </section>
 
 <section>

@@ -99,3 +99,12 @@ h2 {
 #notExampleSvg .animatedQubitsPhaseArrowEnd {
     display: none;
 }
+
+.math {
+    white-space: nowrap;
+    font-style: italic;
+}
+
+.hidden {
+    display: none;
+}
