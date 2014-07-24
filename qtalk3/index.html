@@ -110,19 +110,28 @@
         There is nothing quantum mechanical about these first few interactive examples.
         Their main purpose is to get you used to this style of presentation.
     </small></p>
-    <div class="animationBlock">
+    
+    <div class="animationBlock" id="simpleNotExample"
+        data-bit-labels="bit-a,bit-b">
         <div class="animationBlock_buttons">
             <div>
-                <button id="notExampleNot1Button">Not bit<sub>a</sub></button>
-                <button id="notExampleNot0Button">Not bit<sub>b</sub></button>
+                <button class="operator" data-operator="not" data-qubits="1"
+                    data-skipInterferenceSteps>Not bit<sub>a</sub>
+                </button>
+                <button class="operator" data-operator="not" data-qubits="0"
+                    data-skipInterferenceSteps>Not bit<sub>b</sub>
+                </button>
             </div>
             <div>
-                <button id="notExampleResetButton">Reset</button>
+                <button class="reset">Reset</button>
             </div>
         </div>
-        <div class="qstate">State: <span id="notExampleQState">00</span></div>
-        <svg id="notExampleSvg" class="qstateSvg"></svg>
+        <div class="qstate">State:
+            <span class="qstateValue" data-description="single"></span>
+        </div>
+        <svg class="qstateSvg qstateSvg__hideArrows"></svg>
     </div>
+
 </section>
 
 <section>
@@ -168,17 +177,22 @@
         Still nothing quantum mechanical about any of this.
         We are still just warming up.
     </small></p>
-    <div class="animationBlock">
+    
+    <div class="animationBlock" id="randomNotExample">
         <div class="animationBlock_buttons">
             <div>
-                <button id="singleBitRandomNotExampleNotButton">Random Not<sub>30%</sub></button>
+                <button class="operator" data-operator="randomNot" data-qubits="0">
+                    Random Not<sub>30%</sub>
+                </button>
             </div>
             <div>
-                <button id="singleBitRandomNotResetButton">Reset</button>
+                <button class="reset">Reset</button>
             </div>
         </div>
-        <div class="qstate">State: <span id="singleBitRandomNotExampleQState">0</span></div>
-        <svg id="singleBitRandomNotExampleSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        <div class="qstate">State:
+            <span class="qstateValue" data-description="classical"></span>
+        </div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
 
@@ -217,17 +231,22 @@
         Note that there is still nothing quantum mechanical about this yet.
         That comes next!
     </small></p>
-    <div class="animationBlock">
+    
+    <div class="animationBlock" id="classicalMeasurementExample">
         <div class="animationBlock_buttons">
             <div>
-                <button id="peekingNotButton">Random Not<sub>30%</sub></button>
+                <button class="operator" data-operator="randomNot" data-qubits="0">
+                    Random Not<sub>30%</sub>
+                </button>
             </div>
             <div>
-                <button id="peekingButton">Measure</button>
+                <button class="measure" data-qubits="0">Measure</button>
             </div>
         </div>
-        <div class="qstate">State: <span id="peekingQState">0</span></div>
-        <svg id="peekingSvg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        <div class="qstate">State:
+            <span class="qstateValue" data-description="classical"></span>
+        </div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
 
@@ -245,17 +264,22 @@
         I purposely disable the Hadamard button after you press it.
         Later in this article we will see what happens when you apply the Hadamard twice in a row.
     </small></p>
-    <div class="animationBlock">
+    
+        
+    <div class="animationBlock" id="hadamardOf0Example">
         <div class="animationBlock_buttons">
             <div>
-                <button id="hadamard0Button">Apply Hadamard</button>
+                <button class="operator" data-operator="hadamard"
+                        data-qubits="0" data-disable-after-use>
+                    Apply Hadamard
+                </button>
             </div>
             <div>
-                <button id="hadamard0ResetButton">Reset</button>
+                 <button class="reset">Reset</button>
             </div>
         </div>
-        <div class="qstate">State: <span id="hadamard0QState">0</span></div>
-        <svg id="hadamard0Svg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
 
@@ -272,17 +296,21 @@
     <p><small>
         Once again, for now, the Hadamard button is disabled after you press it
     </small></p>
-    <div class="animationBlock">
+    
+    <div class="animationBlock" id="hadamardOf1Example">
         <div class="animationBlock_buttons">
             <div>
-                <button id="hadamard1Button">Apply Hadamard</button>
+                <button class="operator" data-operator="hadamard"
+                        data-qubits="0" data-disable-after-use>
+                    Apply Hadamard
+                </button>
             </div>
             <div>
-                <button id="hadamard1ResetButton">Reset</button>
+                 <button class="reset">Reset</button>
             </div>
         </div>
-        <div class="qstate">State: <span id="hadamard1QState">0</span></div>
-        <svg id="hadamard1Svg" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
 </section>
 
@@ -359,7 +387,7 @@
             </div>
             <div>
                  <button class="reset">Reset</button>
-             </div>
+            </div>
         </div>
         <div class="qstate">State: <span class="qstateValue"></span></div>
         <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>

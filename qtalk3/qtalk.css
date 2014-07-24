@@ -70,7 +70,8 @@ h2 {
 }
 
 .qstate {
-    margin: 1em 0;
+    margin: 1em 0 0.2em 0;
+    min-height: 2.5em;
 }
 
 .qstateSvg {
@@ -91,14 +92,15 @@ h2 {
     display: none;;
 }
 
-#notExampleSvg .animatedQubitsBitLabels {
+[data-bit-labels] .animatedQubitsBitLabels {
     font-size: 65%;
 }
 
-#notExampleSvg .animatedQubitsPhaseArrow,
-#notExampleSvg .animatedQubitsPhaseArrowEnd {
+.qstateSvg__hideArrows .animatedQubitsPhaseArrow,
+.qstateSvg__hideArrows .animatedQubitsPhaseArrowEnd {
     display: none;
 }
+
 
 .math {
     white-space: nowrap;

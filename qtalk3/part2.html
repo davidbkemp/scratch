@@ -90,19 +90,20 @@
         of the right qubit:
     </p>
     <h2>Initial State</h2>
-    <div class="animationBlock">
-        <div class="qstate">State: 100% chance of being 00</div>
-        <svg id="cnot-0" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    <div class="animationBlock" id="cnot-0">
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
+    
     <h2>After applying a Hadamard to the left qubit</h2>
-    <div class="animationBlock">
-        <div class="qstate">State: 50% chance of being 00, and 50% chance of being 10</div>
-        <svg id="cnot-1" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    <div class="animationBlock" id="cnot-1">
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
     <h2>After a Controlled NOT of the right qubit controlled by the left qubit</h2>
-    <div class="animationBlock">
-        <div class="qstate">State: 50% chance of being 00, and 50% chance of being 11</div>
-        <svg id="cnot-2" class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    <div class="animationBlock" id="cnot-2">
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
     <p>
         Note that, if you were to measure the qubits while they are in this state,
@@ -153,8 +154,8 @@
         <div class="animationBlock_buttons">
             <div>
                 <button class="operator" data-operator="cnot"
-                    data-control-qubits="1,2"
-                    data-qubits="0">Apply Toffoli</button>
+                    data-control-qubits="1,2" data-qubits="0"
+                    data-skipInterferenceSteps>Apply Toffoli</button>
             </div>
         </div>
         <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>

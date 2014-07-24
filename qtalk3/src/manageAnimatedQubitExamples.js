@@ -12,28 +12,77 @@
             svgElement = section.find(".qstateSvg"),
             qstateElement = section.find(".qstateValue");
 
-        function displayState(qstate) {
+        function updateStateDescription(qstate, stateDescriber) {
             var newStateText = "";
             qstate.each(function (stateComponent) {
                 if (newStateText !== "") {newStateText += " and ";}
-                var magnitude = stateComponent.amplitude.magnitude();
-                newStateText += (magnitude * magnitude * 100).toFixed() + "% chance of being " + stateComponent.asBitString();
+                newStateText += stateDescriber(stateComponent);
             });
             qstateElement.text(newStateText);
+        }
+        
+        function singleStateDescription(stateComponent) {
+            return stateComponent.asBitString();
+        }
+        
+        function classicalSateDescription(stateComponent) {
+            return (stateComponent.amplitude.multiply(100).format({decimalPlaces: 1})) +
+                "% chance of being " + stateComponent.asBitString();
+        }
+        
+        function qstateDescription(stateComponent) {
+            var magnitude = stateComponent.amplitude.magnitude();
+            return (magnitude * magnitude * 100).toFixed() +
+                "% chance of being " + stateComponent.asBitString();
+        }
+        
+        function updateStateDescriptions(qstate) {
+            var descriptionFunctionName =
+                    qstateElement.attr("data-description") || "quantum";
+            
+            var descriptionFunction = {
+                quantum: qstateDescription,
+                single: singleStateDescription,
+                classical: classicalSateDescription
+            }[descriptionFunctionName];
+            
+            updateStateDescription(qstate, descriptionFunction);
+        }
+        
+        function updateBitLabelsIfRequired() {
+            var bitLabels,
+                bitNumber = 0,
+                bitLabelsString = section.attr("data-bit-labels");
+            if (bitLabelsString) {
+                bitLabels = bitLabelsString.split(",");
+                svgElement.find(".animatedQubitsBitLabels text").each(function () {
+                    jQuery(this).text(bitLabels[bitNumber++]);
+                });
+            }
+        }
+        
+        function parseBitList(bitListString) {
+            if (bitListString == null) { return null; }
+            return bitListString.split(",").map(function(x) {return parseInt(x);});
         }
         
         function onOperatorClick(button) {
 
             var operator = button.attr("data-operator"),
                 skipInterferenceSteps = button.attr("data-skipInterferenceSteps") != null,
-                bits = button.attr("data-qubits").split(",").map(function(x) {return parseInt(x);});
+                bits = parseBitList(button.attr("data-qubits")),
+                controlBits = parseBitList(button.attr("data-control-qubits"));
                 
             var operation = function (localQState) {
-                return localQState[operator](bits);
+                if (controlBits) {
+                    return localQState[operator](controlBits, bits);
+                } else {
+                    return localQState[operator](bits);
+                }
             };
             
             animation.applyOperation(operation, {skipInterferenceSteps: skipInterferenceSteps})
-                .then(displayState)
+                .then(updateStateDescriptions)
                 .then(null, function error(msg) {
                     alert(msg);
                 });
@@ -43,7 +92,7 @@
             var bits = button.attr("data-qubits").split(",").map(function(x) {return parseInt(x);});
             
             animation.measure(bits)
-                .then(displayState)
+                .then(updateStateDescriptions)
                 .then(null, function error(msg) {
                     alert(msg);
                 });
@@ -54,7 +103,9 @@
             animation = animatedQubits(initialQState, {maxRadius: 30});
             animation.display(svgElement[0]);
             svgElement.height(animation.getNaturalDimensions().height);
-            displayState(initialQState);
+            updateStateDescriptions(initialQState);
+            section.find("[data-disable-after-use]").removeAttr("disabled");
+            updateBitLabelsIfRequired();
         }
 
         reset();
@@ -68,10 +119,19 @@
         });
 
         section.find(".reset").click(reset);
+        
+        section.find("[data-disable-after-use]").click(function () {
+            jQuery(this).attr("disabled", true);
+        });
 
     }
     
     function manageExamples() {
+        manageExample("#simpleNotExample", jsqubits("00"));
+        manageExample("#randomNotExample", jsqubits("0"));
+        manageExample("#classicalMeasurementExample", jsqubits("0"));
+        manageExample("#hadamardOf0Example", jsqubits("0"));
+        manageExample("#hadamardOf1Example", jsqubits("1"));
         manageExample("#tExample", jsqubits("0").hadamard(0));
 
         var measurementExampleState = new jsqubits.QState(2, [
@@ -83,7 +143,21 @@
         manageExample("#measurementExample", measurementExampleState);
 
         manageExample("#fullInterferenceExample", jsqubits("0"));
+        
+        var toffoliExampleState = jsqubits("111")
+            .hadamard(jsqubits.ALL)
+            .t(jsqubits.ALL);
+        manageExample("#ToffoliExample", toffoliExampleState);
+        
+        manageExample("#cnot-0", jsqubits("00"));
+        manageExample("#cnot-1", jsqubits("00").hadamard(1));
+        manageExample("#cnot-2", jsqubits("00").hadamard(1).cnot(1,0));
     }
+
+    jsqubits.QState.prototype.randomNot = function randomNot(bit) {
+        var complementState = this.not(bit).multiply(0.3);
+        return this.multiply(0.7).add(complementState);
+    };
 
     module.exports = manageExamples;
     
