@@ -15,10 +15,10 @@
     "animated-qubits": "0.0.8",
     "q": "~1.0.0",
     "jsqubits": "~0.2.0",
-    "gulp": "~3.5.2",
-    "gulp-util": "~2.2.14",
-    "gulp-browserify": "~0.4.6",
-    "gulp-uglify": "~0.2.1",
-    "gulp-jshint": "~1.4.2"
+    "gulp": "~3.8.6",
+    "gulp-util": "~3.0.0",
+    "gulp-browserify": "~0.5.0",
+    "gulp-uglify": "~0.3.1",
+    "gulp-jshint": "~1.7.1"
   }
 }

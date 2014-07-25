@@ -210,10 +210,6 @@
         the AND and NOT operators since
     </p>
     <p>x OR y  = NOT (NOT x AND NOT y)</p>
-</section>
-
-<section>
-    <h1>Arbitrary Boolean Functions</h1>
     <p>
         Using the AND, OR, and NOT operators,
         it is possible to implement any arbitrary
@@ -255,6 +251,17 @@
     Hopefully it is pretty obvious how you would implement these,
     but I will spell it out anyway.
 </p>
+    <p>
+        Recall that,
+        by applying <span class="math">f</span>,
+        we mean that the output bit is flipped from its initial value
+        if and only if the application of <span class="math">f</span>
+        to the input value is 1.
+        So, for example, if
+        <span class="math">f(x) = x</span>
+        and if the initial state of the qubits was &ldquo;11&rdquo;
+        then the result would be &ldquo;10&rdquo;.
+    </p>
 <ul>
     <li>f(x) = x : Flip the output bit if the input is 1 (ie. a Controlled NOT)</li>
     <li>f(x) = NOT(x) : Controlled NOT followed by a NOT</li>
@@ -264,16 +271,54 @@
 </section>
 
 <section>
+    <h1>Simple 1-Bit Functions (Your Turn)</h1>
+    <p>
+        Try out each of the 1-bit functions on
+        a superposition of all states.
+    </p>
+    <p>
+        In the interactive example below,
+        the left qubit is the input bit (x),
+        and the right qubit is the output bit f(x)
+        -- but don&apos;t forget, we are flipping bits instead of setting them!
+    </p>
+    <div class="animationBlock" id="1bitFunctions">
+        <div class="animationBlock_buttons">
+            <button class="operator" data-operator="cnot"
+                data-control-qubits="1"
+                data-qubits="0">f(x)=x</button>
+            <button class="operator" data-operator="notCNot"
+                data-control-qubits="1"
+                data-qubits="0">f(x)=NOT(x)</button>
+            <button class="operator"
+                data-operator="nop">f(x)=0</button>
+            <button class="operator" data-operator="not"
+                data-qubits="0">f(x)=1</button>
+        </div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+</section>
+
+<section>
     <h1>Deutche&apos;s Algorithm</h1>
     <p>
         Possibly the simplest quantum computing algorithm is Deutche&apos;s Algorithm.
     </p>
     <p>
-        To understand Deutche&apos;s Algorithm, you first must understand
-        the <em>Exclusive OR</em> operator (XOR).
+        Imagine you are provided with a piece of circuitry that
+        implements one of
+        the four possible 1-bit functions
+        <span class="math">f</span>
+        just described,
+        but you have not been told which one of the four it is.
     </p>
+    
     <p>
+        Your task is to compute
+        <span class="math">f(0) XOR f(1)</span>,
+        where
         <span class="math">x XOR y</span> is 1 if only one of x or y are 1, but not both.
+        I.e.
     </p>
     <ul>
         <li><span class="math">0 XOR 0 = 0</span></li>
@@ -281,18 +326,6 @@
         <li><span class="math">1 XOR 0 = 1</span></li>
         <li><span class="math">1 XOR 1 = 0</span></li>
     </ul>
-    <p>
-        Imagine you are provided with a piece of circuitry that
-        implements one of
-        the four possible 1-bit functions
-        <span class="math">f</span>
-        described earlier,
-        but you have not been told which one of the four it is.
-    </p>
-    <p>
-        You task is to compute
-        <span class="math">f(0) XOR f(1)</span>.
-    </p>
     <p>
         For example, if <span class="math">f(x) = x</span>,
         then <span class="math">f(0) XOR f(1) = 0 XOR 1 = 1</span>.
@@ -303,19 +336,19 @@
     <ul>
         <li>
             <b>If</b> <span class="math">f(x) = x</span>
-            <b>then</b> <span class="math">f(0) XOR f(1) = 1</span>
+            <b>then</b> <span class="math">f(0) XOR f(1) = 0 XOR 1 = 1</span>
         </li>
         <li>
             <b>If</b> <span class="math">f(x) = NOT(x)</span>
-            <b>then</b> <span class="math">f(0) XOR f(1) = 1</span>
+            <b>then</b> <span class="math">f(0) XOR f(1) = 1 XOR 0 = 1</span>
         </li>
         <li>
             <b>If</b> <span class="math">f(x) = 0</span>
-            <b>then</b> <span class="math">f(0) XOR f(1) = 0</span>
+            <b>then</b> <span class="math">f(0) XOR f(1) = 0 XOR 0 = 0</span>
         </li>
         <li>
             <b>If</b> <span class="math">f(x) = 1</span>
-            <b>then</b> <span class="math">f(0) XOR f(1) = 0</span>
+            <b>then</b> <span class="math">f(0) XOR f(1) = 1 XOR 1 = 0</span>
         </li>
     </ul>
     <p>
@@ -370,21 +403,11 @@
             Start with the qubits in a superposition of all possible states:
             00, 01, 10, and 11.
         </li>
-        <li>Apply the unknown function <span class="math">f</span> once</li>
-        <li>Apply a Hadamard to the input bit</li>
-        <li>Measure</li>
+        <li>Apply the unknown function <span class="math">f</span> once only.</li>
+        <li>Apply a Hadamard to the input qubit.</li>
+        <li>Measure.</li>
     </ol>
-    <p>
-        Recall that,
-        by applying <span class="math">f</span>,
-        we mean that the output bit is flipped from its initial value
-        if and only if the application of <span class="math">f</span>
-        to the input value is 1.
-        So, for example, if
-        <span class="math">f(x) = x</span>
-        and if the initial state of the qubits was &ldquo;11&rdquo;
-        then the result would be &ldquo;10&rdquo;.
-    </p>
+
     <p>
         There are a couple of important details that I have left out.
     </p>
@@ -394,7 +417,9 @@
         It has to be this one:
         <span class="help">
             Actually, any superposition that has the same <em>relative</em>
-            phases will work also.
+            phases will also work.
+            This particular superposition
+            can be created by applying Hadamards to the state &ldquo;01&rdquo;.
         </span>
     </p>
     <div class="animationBlock" id="DeutchInitialState">
@@ -411,30 +436,56 @@
     <p>
         Try it yourself. Select one of the four fuctions,
         and then Hadamard the input qubit.
-        Ignoring the output qubit,
-        you should find that there is only one possible value
-        for the final state of the input qubit
-        and that value will be
-        <span class="math">f(0) XOR f(1)</span>
-        
+    </p>
+     <p>
+        Once again, the left qubit is the input to f and
+        the right qubit is flipped if <span class="math">f(x) = 1</span>.
+    </p>
+    <p>
+        Notice how the interfence results in
+        the four different states combining
+        to produce just two states,
+        both of which are either at the top
+        (&ldquo;00&rdquo; and &ldquo;01&rdquo;)
+        or at the bottom
+        (&ldquo;10&rdquo; and &ldquo;11&rdquo;).
+    </p>
+    <p>
+        If both states are at the top
+        then the input bit is guaranteed to be 0,
+        and this implies that
+        <span class="math">f(0) XOR f(1) = 0</span>
+        If they are both at the bottom
+        then the input bit is guaranteed to be 1,
+        and this implies that
+        <span class="math">f(0) XOR f(1) = 0</span>.
+        The output bit can be safely ignored.
     </p>
     <div class="animationBlock" id="DeutchExample">
         <div class="animationBlock_buttons">
             <div>
-                <button class="operator" data-operator="cnot"
-                    data-control-qubits="1,2"
-                    data-qubits="0">f(x)=x</button>
-                <button class="operator" data-operator="notcnot"
-                    data-control-qubits="1,2"
-                    data-qubits="0">f(x)=NOT(x)</button>
-                <button class="operator"
-                    data-operator="nop">f(x)=0</button>
-                <button class="operator" data-operator="not"
-                    data-qubits="0">f(x)=1</button>
-                <button class="operator hidden" data-operator="hadamard"
-                    data-qubits="0">Hadamard Input Bit</button>
-                <button class="operator hidden" data-operator="measure"
-                    data-qubits="0">Measure Input Bit</button>
+                <div data-step="1">
+                    <button class="operator" data-operator="cnot"
+                        data-control-qubits="1"
+                        data-qubits="0">f(x)=x</button>
+                    <button class="operator" data-operator="notCNot"
+                        data-control-qubits="1"
+                        data-qubits="0">f(x)=NOT(x)</button>
+                    <button class="operator"
+                        data-operator="nop">f(x)=0</button>
+                    <button class="operator" data-operator="not"
+                        data-qubits="0">f(x)=1</button>
+                </div>
+                
+                <div>
+                    <button class="operator" data-operator="hadamard"
+                        data-qubits="1" data-step="2">Hadamard Input Bit</button>
+                        
+                    <button class="measure"
+                        data-qubits="0,1" data-step="3">Measure</button>
+                        
+                    <button class="reset" data-step="4">Reset</button>
+                </div>
             </div>
         </div>
         <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>

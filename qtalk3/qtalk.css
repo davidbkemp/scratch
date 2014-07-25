@@ -110,3 +110,11 @@ h2 {
 .hidden {
     display: none;
 }
+
+button[data-step], [data-step] button{
+    font-weight: bold;
+}
+
+[data-step][disabled], [data-step] [disabled] {
+    font-weight: lighter;
+}

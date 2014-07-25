@@ -8,6 +8,7 @@
     
     function manageExample(selector, initialQState) {
         var animation,
+            step = 1,
             section = jQuery(selector),
             svgElement = section.find(".qstateSvg"),
             qstateElement = section.find(".qstateValue");
@@ -98,6 +99,20 @@
                 });
         }
     
+        function showHideSteps() {
+            section.find("[data-step]").each(function showHideStep() {
+                var element = jQuery(this);
+                var thisStep = parseInt(element.attr("data-step"));
+                if (thisStep === step) {
+                    element.removeAttr("disabled");
+                    element.find("button,input").removeAttr("disabled");
+                } else {
+                    element.attr("disabled", true);
+                    element.find("button,input").attr("disabled", true);
+                }
+            });
+        }
+        
         function reset() {
             svgElement.empty();
             animation = animatedQubits(initialQState, {maxRadius: 30});
@@ -106,15 +121,21 @@
             updateStateDescriptions(initialQState);
             section.find("[data-disable-after-use]").removeAttr("disabled");
             updateBitLabelsIfRequired();
+            step = 1;
+            showHideSteps();
         }
 
         reset();
         
         section.find(".operator").click(function () {
+            step++;
+            showHideSteps();
             onOperatorClick(jQuery(this));
         });
         
         section.find(".measure").click(function () {
+            step++;
+            showHideSteps();
             onMeasureClick(jQuery(this));
         });
 
@@ -146,17 +167,30 @@
         
         var toffoliExampleState = jsqubits("111")
             .hadamard(jsqubits.ALL)
-            .t(jsqubits.ALL);
+            .t(jsqubits.ALL)
+            .t(1);
         manageExample("#ToffoliExample", toffoliExampleState);
         
         manageExample("#cnot-0", jsqubits("00"));
         manageExample("#cnot-1", jsqubits("00").hadamard(1));
         manageExample("#cnot-2", jsqubits("00").hadamard(1).cnot(1,0));
+        
+        manageExample("#1bitFunctions", jsqubits("11").hadamard([0,1]).t([0,1]).t(1));
+        manageExample("#DeutchInitialState", jsqubits("01").hadamard([0,1]));
+        manageExample("#DeutchExample", jsqubits("01").hadamard([0,1]));
     }
 
     jsqubits.QState.prototype.randomNot = function randomNot(bit) {
         var complementState = this.not(bit).multiply(0.3);
         return this.multiply(0.7).add(complementState);
+    };
+    
+    jsqubits.QState.prototype.nop = function nop() {
+        return this;
+    };
+
+    jsqubits.QState.prototype.notCNot = function notCNot(controlBits, targetBits) {
+        return this.cnot(controlBits, targetBits).not(targetBits);
     };
 
     module.exports = manageExamples;
