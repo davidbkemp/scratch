@@ -178,6 +178,7 @@
         manageExample("#1bitFunctions", jsqubits("11").hadamard([0,1]).t([0,1]).t(1));
         manageExample("#DeutchInitialState", jsqubits("01").hadamard([0,1]));
         manageExample("#DeutchExample", jsqubits("01").hadamard([0,1]));
+        manageExample("#SimpleSearchExample", jsqubits("001").hadamard(jsqubits.ALL));
     }
 
     jsqubits.QState.prototype.randomNot = function randomNot(bit) {
@@ -192,7 +193,29 @@
     jsqubits.QState.prototype.notCNot = function notCNot(controlBits, targetBits) {
         return this.cnot(controlBits, targetBits).not(targetBits);
     };
-
+    
+    jsqubits.QState.prototype.f00 = function f00(controlBits, targetBits) {
+        return this.not(controlBits).cnot(controlBits, targetBits).not(controlBits);
+    };
+    
+    jsqubits.QState.prototype.f01 = function f01(controlBits, targetBits) {
+        return this.not(controlBits[0]).cnot(controlBits, targetBits).not(controlBits[0]);
+    };
+    
+    jsqubits.QState.prototype.f10 = function f10(controlBits, targetBits) {
+        return this.not(controlBits[1]).cnot(controlBits, targetBits).not(controlBits[1]);
+    };
+    
+    jsqubits.QState.prototype.f11 = function f11(controlBits, targetBits) {
+        return this.cnot(controlBits, targetBits);
+    };
+    
+    jsqubits.QState.prototype.simpleSearch = function (inputBits) {
+        return this.hadamard(inputBits)
+            .z(inputBits)
+            .controlledZ(inputBits[0], inputBits[1])
+            .hadamard(inputBits);
+    };
     module.exports = manageExamples;
     
 }());

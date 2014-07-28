@@ -21,7 +21,7 @@
         This is Part 1 of a two part series.
         It covers some basics of quantum qubits.
         <a href="part2.html">Part 2</a>
-        actually looks at a simple quantum algorithm in action.
+        actually looks at a couple of simple quantum algorithms in action.
     </p>
     
 </section>
@@ -185,9 +185,6 @@
                     Random Not<sub>30%</sub>
                 </button>
             </div>
-            <div>
-                <button class="reset">Reset</button>
-            </div>
         </div>
         <div class="qstate">State:
             <span class="qstateValue" data-description="classical"></span>
@@ -256,7 +253,7 @@
     <p>The Hadamard is a special <em>quantum</em> operator that can be applied to qubits.</p>
     <p>
         <b>Warning:</b> this first look at quantum operators will be pretty boring.
-        I promise it will get exciting soon.
+        I promise it will get exciting soon!
     </p>
     <p>As you will see below, the Hadamard initially seems like a Random NOT with 50% chance of success.</p>
     <p><small>
@@ -293,10 +290,6 @@
 <h1>Hadamard of 1</h1>
     <p>Things start to get weird when you look at the Hadamard of 1.</p>
     <p>Look carefully at the arrow directions.</p>
-    <p><small>
-        Once again, for now, the Hadamard button is disabled after you press it
-    </small></p>
-    
     <div class="animationBlock" id="hadamardOf1Example">
         <div class="animationBlock_buttons">
             <div>
@@ -371,7 +364,7 @@
 <h1>Measurement Revisited</h1>
     <p>Recall:</p>
     <ul>
-        <li>Measurement causes the system to collapse to a single state.</li>
+        <li>Measurement causes the system to collapse to the observed state.</li>
         <li>The larger the blue disk, the more likely the system will collapse to that state.</li>
         <li>
             Once the system has collapsed to a particular state,
@@ -457,21 +450,16 @@
     
     <p>
         The state of the qubit after the first Hadamard
-        is a simple combination of both 0 and 1.
+        seems to have a 50% chance of being 0
+        and a 50% chance of being 1.
    </p>
    <p>
     The second Hadamard is applied to both the 0 and 1 states
     and the results are combined.
    </p>
     
-      <p>
+    <p>
         <b>The arrows still add head to tail</b>.
-        <span class="help">
-            For the maths to work,
-            the arrow lengths now have to represent
-            the square root of the probability.
-            We will briefly cover this in more detail in part 2.
-        </span>
     </p>
 
     <p>
@@ -486,6 +474,18 @@
     </p>
     
     <p>This is what philosophers of physics loose sleep over.</p>
+    
+    <p>
+        By the way,
+        the mathematically inclined may be worried about
+        all the probabilities not adding up to 1 any more.
+        The trick is that
+        the arrow lengths now have to represent
+        the square roots of the probabilities.
+        We will briefly cover this in more detail in the section entitled
+        <a href="part2.html#maths">Some Maths</a>
+        in Part 2.
+    </p>
 
 </section>
 
@@ -520,8 +520,8 @@
         the only approach that I have mentioned for creating qubits.
     </p>
     <p>
-        The bizarre nature of quantum physics is perhaps more obvious
-        when you discover that particles of light and matter can be
+        Quantum physics seems even more bizarre
+        when you discover that physical objects can be
         in superpositions of different <em>locations</em>.
     </p>
     <p>

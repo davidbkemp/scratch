@@ -14,7 +14,7 @@
         In <a href="index.html">Part 1</a>
         I explained some of the basics of what a qubit is
         including the mysterious notions of phase and quantum interference.
-        Here in Part 2, you will get to see a very simple quantum algorithm.
+        Here in Part 2, you will get to see a couple of basic quantum algorithms in action.
     </p>
     <p>DRAFT</p>
 </section>
@@ -32,9 +32,6 @@
     If you are not sure what I mean by that,
     then please hang in there,
     it will hopefully become aparent very soon.
-    <span class="help">
-    The blue disks are technically called quantum state &ldquo;amplitudes&rdquo;.
-    </span>
 </p>
 </section>
 
@@ -84,7 +81,7 @@
         can put two qubits into a state of &ldquo;quantum entanglement&rdquo;.
     </p>
     <p>
-        In what follows, we take a two qubit system in the state &quot;00&quot;,
+        In what follows, we take a two qubit system in the state &ldquo;00&rdquo;,
         apply the Hadamard operation to the left qubit,
         and then use that left qubit as the control in a Controlled NOT
         of the right qubit:
@@ -96,11 +93,28 @@
     </div>
     
     <h2>After applying a Hadamard to the left qubit</h2>
+    <p>
+        When you apply a Hadamard to the left qubit,
+        that qubit goes into
+        a superposition of 0 and 1.
+        The right qubit is not touched and continues to have the value 0.
+        So the pair of qubits goes into
+        a superposition of 00 and 10.
+    </p>
     <div class="animationBlock" id="cnot-1">
         <div class="qstate">State: <span class="qstateValue"></span></div>
         <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
     <h2>After a Controlled NOT of the right qubit controlled by the left qubit</h2>
+    <p>
+        The Controlled NOT will leave the 00 state unchanged as the control qubit (left qubit) is 0.
+    </p>
+    <p>
+        When acting on the 10 state, the control qubit is 1,
+        and so the target bit is flipped resulting in 11.
+        So the pair of qubits goes into
+        a superposition of 00 and 11.
+    </p>
     <div class="animationBlock" id="cnot-2">
         <div class="qstate">State: <span class="qstateValue"></span></div>
         <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
@@ -108,6 +122,9 @@
     <p>
         Note that, if you were to measure the qubits while they are in this state,
         you would find that they are either both 0 or both 1.
+        This sort of correllation between qubit values
+        within a superposition is called
+        &ldquo;quantum entanglement&rdquo;.
     </p>
 </section>
 
@@ -148,7 +165,11 @@
 <section>
     <h1>Toffoli (Your Turn)</h1>
     <p>
-        See how the Toffoli affects a superpostion of all possible states:
+        See how the Toffoli affects a superpostion of all possible states
+        (ignore the arrow directions,
+        I have simply set them to random angles
+        in an attempt to highlight the effect of the Toffoli)
+        :
     </p>
     <div class="animationBlock" id="ToffoliExample">
         <div class="animationBlock_buttons">
@@ -412,14 +433,11 @@
         There are a couple of important details that I have left out.
     </p>
     <p>
-        For staters,
+        For starters,
         the initial state cannot be any old superposition of all possible states.
         It has to be this one:
         <span class="help">
-            Actually, any superposition that has the same <em>relative</em>
-            phases will also work.
-            This particular superposition
-            can be created by applying Hadamards to the state &ldquo;01&rdquo;.
+            It can be created by applying Hadamards to the state &ldquo;01&rdquo;.
         </span>
     </p>
     <div class="animationBlock" id="DeutchInitialState">
@@ -434,7 +452,8 @@
         not the output qubit.
     </p>
     <p>
-        Try it yourself. Select one of the four fuctions,
+        You can try it yourself below.
+        Select one of the four fuctions,
         and then Hadamard the input qubit.
     </p>
      <p>
@@ -442,8 +461,8 @@
         the right qubit is flipped if <span class="math">f(x) = 1</span>.
     </p>
     <p>
-        Notice how the interfence results in
-        the four different states combining
+        Notice how the interference causes
+        the four different states to combine
         to produce just two states,
         both of which are either at the top
         (&ldquo;00&rdquo; and &ldquo;01&rdquo;)
@@ -465,6 +484,7 @@
         <div class="animationBlock_buttons">
             <div>
                 <div data-step="1">
+                    Choose one:
                     <button class="operator" data-operator="cnot"
                         data-control-qubits="1"
                         data-qubits="0">f(x)=x</button>
@@ -493,22 +513,400 @@
 </section>
 
 <section>
-    <h1>What&apos;s All The Fuss About</h1>
+    <h1>Quantum Search</h1>
     <p>
-        
+         Before wrapping up with some philosophy and mathematics,
+         I want to demonstrate a more impressive quantum algorithm:
+         Quantum Search.
+    </p>
+    <p>
+        Imagine that you have been provided with a function f
+        that has an n-bit input and
+        its one bit output is equal to 1
+        for only one of
+        the 2<sup>n</sup> possible inputs.
+    </p>
+    <p>
+        Your task is to find which of those 2<sup>n</sup> possible inputs
+        results in a 1.
+    </p>
+    <p>
+        This is a classic needle in a haystack search problem that
+        requires you to try every possible value until you find the answer.
+    </p>
+    <p>
+        A conventional computer will need to evaluate f,
+        on average,
+        <span class="math">2<sup>n-1</sup></span> times.
+    </p>
+    <p>
+        A quantum computer needs to evaluate f only
+        <span class="math">2<sup>&radic;n</sup></span> times.
+    </p>
+    <p>
+        Even if a conventional computer can compute f in a nanosecond,
+        if the input was 64 bits long,
+        then it would probably take hundreds of years to find the answer.
+    </p>
+    <p>
+        A quantum computer would take less than a second,
+        even if it was a million times slower at computing f.
+        <span class="help">
+            A conventional computer would have to evaluate f an average of
+            <span class="math">2<sup>63</sup></span> times,
+            compared to only 256 times for a quantum computer.
+        </span>
+    </p>
+    <p>
+        For the special case where the input is only 2 bits,
+        there are four possible answers.
+        A conventional computer may need to test up to three
+        of those possible values.
+        (If it hasn&apos;t found it by the third attempt,
+        it can infer the answer will be the only value left
+        that it has yet to try.)
+        As you will see below,
+        a quantum computer can find the answer
+        using a single invocation of f.
+    </p>
+    <p>
+        Try it yourself.
+        Choose one of the four functions.
+        The two left most qubits will be treated as
+        the inputs to the function,
+        and the right most qubit will be flipped if
+        <span class="math">f(x) = 1</span>.
+    </p>
+    <p>
+        The button labelled &ldquo;Quantum Search&rdquo;
+        uses quantum interference
+        to ensure that the input qubits
+        end up with the desired value.
+        The details are beyond the scope of this article,
+        but it can be implemented as a combination
+        of Hadamard, Z, and Controlled-Z operations.
+        If you are interested,
+        you can look at how to
+        <a href="https://github.com/davidbkemp/jsqubits/wiki/Simple-Search">
+            implement the simple quantum search
+            using jsqubits
+        </a>.
+    </p>
+    <p>
+        Rembember: After the measurement step,
+        the two left most qubits have the answer.
+        Ignore the output qubit.
+    </p>
+    <div class="animationBlock" id="SimpleSearchExample">
+        <div class="animationBlock_buttons">
+            <div>
+                <div data-step="1">
+                    Choose one:
+                    <button class="operator" data-operator="f00"
+                        data-control-qubits="2,1"
+                        data-skipInterferenceSteps
+                        data-qubits="0">f(00)=1</button>
+                    <button class="operator" data-operator="f01"
+                        data-control-qubits="2,1"
+                        data-skipInterferenceSteps
+                        data-qubits="0">f(01)=1</button>
+                    <button class="operator" data-operator="f10"
+                        data-control-qubits="2,1"
+                        data-skipInterferenceSteps
+                        data-qubits="0">f(10)=1</button>
+                    <button class="operator" data-operator="f11"
+                        data-control-qubits="2,1"
+                        data-skipInterferenceSteps
+                        data-qubits="0">f(11)=1</button>
+                </div>
+                
+                <div>
+                    <button class="operator" data-operator="simpleSearch"
+                        data-qubits="2,1" data-step="2">Quantum Search</button>
+                        
+                    <button class="measure"
+                        data-qubits="0,1,2" data-step="3">Measure</button>
+                        
+                    <button class="reset" data-step="4">Reset</button>
+                </div>
+            </div>
+        </div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
+</section>
+
+<section>
+    <h1>Beyond Quantum Search</h1>
+    <p>
+        While general quantum search techniques may seem quite impressive,
+        even <span class="math">2<sup>&radic;n</sup></span> gets very large very quickly.
+    </p>
+    <p>
+        For example, security experts already recommend the use of
+        encryption keys thousands of bits long.
+        Using a general quantum search to crack
+        a 4096 bit key would require on average
+        <span class="math">2<sup>64</sup></span>
+        iterations of the search process.
+        While this is still vastly smaller than
+        the <span class="math">2<sup>4095</sup></span>
+        attempts that a conventional computer would typically require,
+        a quantum computer would still take hundreds of years,
+        even if it could perform each iteration within a nanosecond.
+    </p>
+    <p>
+        However,
+        encryption keys
+        commonly used for securing internet traffic
+        (<a href="http://en.m.wikipedia.org/wiki/RSA_(algorithm)">RSA</a> keys)
+        can be broken using a special purpose quantum algorithm.
+        These encryption schemes rely on the difficulty of
+        factoring very large numbers,
+        something that can be easily done on a quantum computer using
+        <a href="http://en.m.wikipedia.org/wiki/Shor's_algorithm">Shor&apos;s Algorithm</a>.
+    </p>
+    <p>
+        Shor&apos;s Algorithm has a &ldquo;complexity&rdquo; of
+        <span class="math">O((log N)<sup>3</sup>)</span>.
+        I won&apos;t try to explain
+        the exact meaning of this statement,
+        but it is quite possible that
+        current encryption keys could be broken in subsecond time frames.
+        Also, simply doubling the length of the key would have a barely noticable
+        effect on the time taken.
+        The limiting factor is likely to be the number of qubits required
+        since you need at least as many qubits as the key length.
     </p>
 </section>
 
 <section>
-<h1>Some philosophy</h1>
+    <h1>Some philosophy</h1>
+    <p>
+        Describing quantum computing
+        in terms of superpositions of states
+        that &ldquo;collapse&rdquo;
+        to the observed state
+        upon &ldquo;measurement&rdquo;
+        is a very conventional approach
+        to explaining the physics
+        behind quantum computing.
+        However, there are some serious
+        deficiencies with this approach.
+    </p>
+    <p>
+        Probably the most fundamental problem is:
+        <b>
+        What is so special about measurement that it causes
+        quantum superpositions to collapse?
+        </b>
+    </p>
+    <p>
+        The measuring equipment itself is made of the same stuff
+        as the qubits being measured
+        (protons, neutrons, electrons, and photons).
+    </p>
+    <p>
+        When measuring a qubit that is in a superposition of
+        two different states,
+        there is nothing in quantum physics that says why
+        the measuring equipment
+        might cause the superposition to collapse to a single state
+        instead of the measuring equipment
+        becoming entangled with the qubit.
+        Instead of the quantum state collapsing,
+        the result could be a superpositon of the following two states:
+</p>
+    <ul>
+        <li>the qubit being 0 and the measuring equipment detecting 0</li>
+        <li>the qubit being 1 and the measuring equipment detecting 1</li>
+    </ul>
+    <p>
+        If you consider your conscious awareness to be
+        nothing more than patterns of activity in your brain
+        all under the control of the laws of physics,
+        then there is nothing in quantum physics that says why,
+        when you look at the measurement outcome,
+        you yourself does not become entangled with
+        the quantum qubit and
+        the measuring equipment.
+        The result would be a superpositon of the following two states:
+    </p>
+    <ul>
+        <li>the qubit being 0, the measuring equipment detecting 0,
+            and you being conscious of the measurment being 0</li>
+        <li>the qubit being 1, the measuring equipment detecting 1,
+            and you being conscious of the measurment being 1</li>
+    </ul>
+    <p>
+        <b>Think of it as the entire universe splitting in two.</b>
+        In one universe the qubit is a 0
+        and in the other the qubit is a 1.
+        Quantum interference is the only ways that these universes interact.
+    </p>
+    <p>
+        Variations on this interpretation of quantum physics
+        are taken quite seriously
+        by many physicists and physics philosophers, and is
+        commonly referred to as the &ldquo;Many Worlds&rdquo;
+        interpretation of quantum physics.
+        Much has been written on the topic,
+        and an internet search will point you to
+        many good (and not so good) articles.
+    </p>
+    <p>
+        Quantum computing
+        provides a nice way of looking at some of these issues.
+        It may even provide a way of simulating ideas by,
+        for example,
+        representing different states of an observer using qubits.
+    </p>
+    
+    <p>
+        This article has already covered more topics than I originally planned.
+        However, I feel the need to include a little bit of
+        a mathematical explanation to some of the material.
+        For those that aren&apos;t interested in the maths,
+        feel free to skip to the
+        <a href="#usefulLinks">Useful Links Section</a>
+        at the end.
+    </p>
 </section>
 
-<section>
+<section id="maths">
 <h1>Some maths</h1>
+    <p>
+        In this article
+        I used little blue disks with red arrows
+        to represent the probabilities
+        of a set of bits or qubits
+        being in different states.
+        It is likely that I caused some confusion
+        by quietly using the disks in subtly different ways
+        when describing
+        two quite different types of uncertainty.
+    </p>
+    <p>
+        When describing ordinary non-quantum bits,
+        the system is in a definite state,
+        but which state that is may be unknown.
+        In this situation,
+        it is most convenient if
+        the arrow lengths are proportional to the probabilities
+        of the respective states
+        so that they can be added head to tail.
+        If there were two scenarios, S1 and S2, both ending in the same state,
+        where S1 has a probability of p1
+        and S2 has a probability of p2,
+        then the probability of that final state is
+        <span class="math">p1 + p2</span>.
+    </p>
+    <p>
+        When descibing qubits
+        in a superposition of different states,
+        it is no longer simply a case of not knowing which state it is in,
+        the system actually seems to be in multiple states at once.
+        In this situation,
+        it is most convenient if
+        the arrow lengths are proportional to the square roots of the probabilities
+        of the respective states
+        (the disk areas now effectively represent probabilities
+        except for a factor of &pi;).
+        The arrows also have directions representing their phases.
+        When two scenarios end in the same state,
+        you need to add the arrows like vectors.
+    </p>
+    <p>
+        <b>The arrows represent what physicists call &ldquo;amplitudes&rdquo;</b>.
+    </p>
+    <p>
+        Conventionally, an amplitude is represented using a complex number
+        whose value on the complex number plane co-incides with the end of our arrow.
+        If our arrow has a length r and a phase &theta;,
+        then it is represented as the complex number:
+    </p>
+    <p>
+        <span class="math">r (cos(&theta;) + i sin(&theta;))</span>
+    </p>
+    <p>
+        Due to a truly beautiful piece of maths,
+        this can also be written very conveniently as:
+    </p>
+    <p>
+        <span class="math">re<sup>i&theta;</sup></span>
+    </p>
+    <p>
+        If a state had this amplitude,
+        then the probability of that state being the outcome
+        of a measurement is <span class="math">r<sup>2</sup></span>.
+    </p>
+    <p>
+        Given that the probabilites of all possible outcomes have to add up to 1,
+        it follows that the sum of the squares of the amplitude magnitudes
+        also have to add up to 1.
+        All quantum operators preserve this property.
+    </p>
+    <p>
+        If the amplitudes for the 0 and 1 states of a qubit are
+        the (possibly comlex) numbers
+        <span class="math">a<sub>0</sub></span>
+        and
+        <span class="math">a<sub>1</sub></span>
+        respectively,
+        then applying a Hadamard results in
+        the amplitudes of 0 and 1 becoming
+        <span class="math">(1/&radic;2)(a<sub>0</sub> + a<sub>1</sub>)</span>
+        and
+        <span class="math">(1/&radic;2)(a<sub>0</sub> - a<sub>1</sub>)</span>
+        respectively.
+    </p>
+    <p>
+        For the simple case of a qubit being 100% in
+        the 1 state with a phase of 0,
+        applying a Hadamard results in
+        the amplitudes of 0 and 1 being
+        1/&radic;2 and -1/&radic;2 respectively.
+        Notice that if you square and add these together that you get 1.
+    </p>
+    <p>
+        That is really as much maths as I wanted to cover in this article.
+        For more, see some of the useful links listed in the next section.
+    </p>
 </section>
 
 <section>
-<h1>Useful links</h1>
+    <h1 id="usefulLinks">Useful links</h1>
+
+    <ul>
+        <li>
+            A excellent learning resource is
+            <a href="https://cs.uwaterloo.ca/~watrous/CPSC519/LectureNotes/all.pdf">
+                John Watrous&apos; Introduction to Quantum Computing Lecture Notes
+            </a>.
+        </li>
+        <li>
+            Vazirani&apos;s online course:
+            <a href="https://www.edx.org/course/uc-berkeleyx/uc-berkeleyx-cs-191x-quantum-mechanics-1033#.U9SrqtoaySM">Quantum Mechanics and Quantum Computation</a>
+            is also excellent.
+        </li>
+        <li>
+            If you want to experiment with the various qubit operators,
+            then have a play with the
+            <em><a href="http://davidbkemp.github.io/quantum-gate-playground/">
+                Quantum Computer Gate Playground
+            </a></em>.
+        </li>
+        <li>
+            Try doing some quantum programming using
+            the <a href="http://davidbkemp.github.io/jsqubits/jsqubitsRunner.html">
+                jsqubits runner
+            </a>,
+            or the
+            <a href="http://qcplayground.withgoogle.com/#/home">
+                Quantum Computing Playground
+            </a>
+        </li>
+    </ul>
+
 </section>
 
 <footer>
