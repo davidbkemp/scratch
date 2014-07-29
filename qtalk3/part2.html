@@ -171,6 +171,14 @@
         in an attempt to highlight the effect of the Toffoli)
         :
     </p>
+    
+    <p>
+        <small>
+            Using the left two qubits as the control qubits,
+            and the right qubit the target.
+        </small>
+    </p>
+    
     <div class="animationBlock" id="ToffoliExample">
         <div class="animationBlock_buttons">
             <div>
@@ -229,8 +237,8 @@
     <p>
         The OR operator can be implemented using combinations of
         the AND and NOT operators since
+        <span class="math">x OR y  = NOT (NOT x AND NOT y)</span>
     </p>
-    <p>x OR y  = NOT (NOT x AND NOT y)</p>
     <p>
         Using the AND, OR, and NOT operators,
         it is possible to implement any arbitrary
@@ -279,15 +287,21 @@
         if and only if the application of <span class="math">f</span>
         to the input value is 1.
         So, for example, if
-        <span class="math">f(x) = x</span>
-        and if the initial state of the qubits was &ldquo;11&rdquo;
+        <span class="math">f(x) = x</span>,
+        and the initial state of the qubits was &ldquo;11&rdquo;,
+        and the left qubit is used as the control and the right qubit the target,
         then the result would be &ldquo;10&rdquo;.
+    </p>
+    <p>
+        Here is how you could implement them using NOT and Controlled NOT:
     </p>
 <ul>
     <li>f(x) = x : Flip the output bit if the input is 1 (ie. a Controlled NOT)</li>
     <li>f(x) = NOT(x) : Controlled NOT followed by a NOT</li>
     <li>f(x) = 0 : Do nothing</li>
-    <li>f(x) = 1 : Flip the output bit regardless of the input.</li>
+    <li>f(x) = 1 : Flip the output bit regardless of the input
+        (ie. a simple NOT).
+    </li>
 </ul>
 </section>
 
@@ -318,6 +332,13 @@
         </div>
         <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
+    <p>
+        By the way,
+        the effect of applying a function is
+        being animated one state at a time.
+        In reality, all the states are changing at the same time.
+        That is where the power of quantum computing comes from!
+    </p>
 </section>
 
 <section>
@@ -510,6 +531,12 @@
         </div>
         <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
+    
+    <p>
+        Don&apos;t forget,
+        unlike what happens in the animation,
+        all the states change simultaneously.
+    </p>
 </section>
 
 <section>
@@ -540,7 +567,9 @@
         <span class="math">2<sup>n-1</sup></span> times.
     </p>
     <p>
-        A quantum computer needs to evaluate f only
+        By using
+        <a href="http://wikipedia.org/wiki/Grover's_algorithm">Grover&apos;s algorithm</a>,
+        a quantum computer needs to evaluate f only
         <span class="math">2<sup>&radic;n</sup></span> times.
     </p>
     <p>
@@ -658,12 +687,12 @@
         However,
         encryption keys
         commonly used for securing internet traffic
-        (<a href="http://en.m.wikipedia.org/wiki/RSA_(algorithm)">RSA</a> keys)
+        (<a href="http://wikipedia.org/wiki/RSA_(algorithm)">RSA</a> keys)
         can be broken using a special purpose quantum algorithm.
         These encryption schemes rely on the difficulty of
         factoring very large numbers,
         something that can be easily done on a quantum computer using
-        <a href="http://en.m.wikipedia.org/wiki/Shor's_algorithm">Shor&apos;s Algorithm</a>.
+        <a href="http://wikipedia.org/wiki/Shor's_algorithm">Shor&apos;s Algorithm</a>.
     </p>
     <p>
         Shor&apos;s Algorithm has a &ldquo;complexity&rdquo; of

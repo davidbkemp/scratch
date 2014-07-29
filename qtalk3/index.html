@@ -17,13 +17,13 @@
     <p>@david_b_kemp</p>
     <p>DRAFT</p>
     
-    <p>
+    <small>
         This is Part 1 of a two part series.
-        It covers some basics of quantum qubits.
+        It covers some basics of quantum computing,
+        such as qubits, state phases, and quantum interference.
         <a href="part2.html">Part 2</a>
-        actually looks at a couple of simple quantum algorithms in action.
-    </p>
-    
+        goes on to look at a couple of simple quantum algorithms in action.
+    </small>
 </section>
 
 <section>
@@ -53,7 +53,9 @@
     <p>
         Conventional bits are represented using many different approaches:
         e.g. using two different voltages on a wire,
-        points on a magnetic disk magnetized in different directions,
+        different magnetic field directions
+        at different points 
+        on a magnetic disk,
         pulses of light on a glass fibre,
         etc. etc.
     </p>
@@ -67,12 +69,7 @@
         the nuclear spin direction of individual atoms</b>.
     </p>
     <p>
-        e.g. use &ldquo;clockwise&rdquo; for 0 and &ldquo;anti clockwise&rdquo; for 1.
-        <span class="help">
-            Conventionally called &ldquo;spin up&rdquo; and &ldquo;spin down&rdquo;.
-            Quantum spin is a bit like spinning things in the classical world,
-            but has some very important differences we will touch on in a moment.
-        </span>
+        E.g. use &ldquo;clockwise&rdquo; for 0 and &ldquo;anti clockwise&rdquo; for 1.
     </p>
     <figure>
         <div class="labelledImage">
@@ -108,7 +105,8 @@
     </p>
     <p><small>
         There is nothing quantum mechanical about these first few interactive examples.
-        Their main purpose is to get you used to this style of presentation.
+        Their main purpose is to familiarise you with
+        interactive animations I use in this article.
     </small></p>
     
     <div class="animationBlock" id="simpleNotExample"
@@ -121,9 +119,6 @@
                 <button class="operator" data-operator="not" data-qubits="0"
                     data-skipInterferenceSteps>Not bit<sub>b</sub>
                 </button>
-            </div>
-            <div>
-                <button class="reset">Reset</button>
             </div>
         </div>
         <div class="qstate">State:
@@ -561,21 +556,40 @@
         and dark concentric rings like those shown below.
     </p>
     
-    <img src="interferencePattern.jpg" class="mediumImage" alt="Interference Pattern"/>
+      
+    <p>
+        This interference effect even happens when
+        the light source is slowly emmitting photons
+        one at a time.
+    </p>
     
-    <p> 
-        <b>
-            This interference effect even happens when
-            the light source is slowly emmitting photons
-            one at a time.
-        </b>
+    
+    <img src="interferencePattern.png" class="mediumImage" alt="Interference Pattern"/>
+    
+    <p>
+        It is tempting to think that the half silvered mirror
+        is splitting each photon in two,
+        and that the interference effects are caused by the two photons
+        interacting with each other.
+    </p>
+    <p>
+        If detectors are placed on the two paths,
+        and the light source is slowly emmitting photons
+        one at a time,
+        then the detectors only ever detect a photon
+        on one path or the other.
+        <b>They never detect two photons at once!</b>
+        (Well they very occassinally do due to the light source
+        very occassionally emitting two at once,
+        but the frequency that this should happen is easily predicted.)
     </p>
    
     <p>
-        If detectors are placed on either or both of the two paths,
+        <b>If detectors are placed on either or both of the two paths,
         then the act of detecting the presence (or absence) of the photon
         causes the superposition to collapse to one or the other,
-        and the interference effects disappear.
+        and the interference effects disappear,
+        even if the detector lets the photon continue on.</b>
     </p>
 </section>
 
@@ -599,7 +613,8 @@
 
 <section>
     <h1>Attributions</h1>
-    <p>Michelson Interferometer, http://commons.m.wikimedia.org/wiki/File:Michaelson_with_letters.jpg</p>
+    <p>Michelson Interferometer: http://commons.wikimedia.org/wiki/File:Michaelson_with_letters.jpg</p>
+    <p>Interference Pattern: http://commons.wikimedia.org/wiki/File:Zonenplatte_Cosinus.png</p>
 </section>
 
 <footer>
