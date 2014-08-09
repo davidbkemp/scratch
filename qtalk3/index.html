@@ -18,8 +18,12 @@
     <p>DRAFT</p>
     
     <small>
-        This is Part 1 of a two part series.
-        It covers some basics of quantum computing,
+        This is Part 1 of a two part series
+        for those that want to
+        learn a little about quantum computing,
+        but lack the quantum physics background required
+        by most serious introductions.
+        It covers some of the basics of quantum computing,
         such as qubits, state phases, and quantum interference.
         <a href="part2.html">Part 2</a>
         goes on to look at a couple of simple quantum algorithms in action.
@@ -41,21 +45,15 @@
 
 <section>
     <h1>Conventional Bits</h1>
-    <p>I assume you know what binary bits are.</p>
     <p>
-        For instance, 110 is binary for six.
+        I assume you know what good old conventional binary bits are.
         <span class="help">
-            See
-            <a href="http://en.wikipedia.org/wiki/Binary_number">Wikipedia</a>
-            for more about binary numbers.
+            Sorry, I but cannot assume you know nothing at all!
         </span>
     </p>
     <p>
-        Conventional bits are represented using many different approaches:
-        e.g. using two different voltages on a wire,
-        different magnetic field directions
-        at different points 
-        on a magnetic disk,
+        Conventional bits are implemented using many different approaches:
+        e.g. voltages on a wire,
         pulses of light on a glass fibre,
         etc. etc.
     </p>
@@ -132,10 +130,14 @@
 <section>
     <h1>Random NOT</h1>
     <p><em>Random NOT</em>: A NOT operator that has a specified chance of flipping a bit.</p>
-    <p>Although not very common, it is still <b>just a classical (non-quantum) operator</b>.</p>
     <p>
-        Consider applying a &ldquo;Random NOT&rdquo; twice to a bit whose initial value is 0,
-        where the NOT has, for instance, a 30% chance of flipping the bit.
+        Although not very common,
+        the &ldquo;Random NOT&rdquo; is still <b>just a classical (non-quantum) operator</b>,
+        but it will help me explain the workings of some quantum operators.
+    </p>
+    <p>
+        Consider applying a Random NOT twice to a bit whose initial value is 0,
+        where the operator has, for instance, a 30% chance of flipping the bit.
         What is the probability of the final state being 0?
     </p>
     <p>
@@ -199,13 +201,14 @@
         <b>in reality it is in only one of those states</b>.
         We just don't know which one.
         Strangely, this is an assumption about reality that we will need to reconsider
-        later in this article.
+        when we look at qubits.
     </p>
     <p>
         If you peek at the system to determine its actual state,
         then the probabilities all <em>collapse</em>
-        so that one state has a probability of 1,
-        and all the others have a probability of 0.
+        so that one state (the observed state)
+        is deemed to now have a probability of 1,
+        and all the others are deemed to have a probability of 0.
     </p>
     <p>
         Remember, the larger the blue disk,
@@ -245,12 +248,15 @@
 
 <section>
 <h1>Hadamard of 0</h1>
-    <p>The Hadamard is a special <em>quantum</em> operator that can be applied to qubits.</p>
+    <p>
+        The &ldquo;Hadamard operator&rdquo; is
+        a special <em>quantum</em> operator that can be applied to qubits.
+    </p>
     <p>
         <b>Warning:</b> this first look at quantum operators will be pretty boring.
-        I promise it will get exciting soon!
+        I promise it will get interesting soon!
     </p>
-    <p>As you will see below, the Hadamard initially seems like a Random NOT with 50% chance of success.</p>
+    <p>As you will see below, the Hadamard initially acts like a Random NOT with 50% chance of success.</p>
     <p><small>
         In this interactive example,
         I purposely disable the Hadamard button after you press it.
@@ -310,7 +316,7 @@
 <section>
 <h1>Phase</h1>
 <p>
-    Confused?
+    Puzzled?
     You should be if this is all new to you. 
     Please hang in there for a while longer.
 </p>
@@ -366,8 +372,13 @@
             it will remain in that state until another operation is performed.
         </li>
     </ul>
-    <p><b>Important:</b> Phases do not directly affect the outcome of measurements.
-        I.e. measurements are not affected by arrow directions.</p>
+    <p>
+        <b>Important:</b>
+        The likelyhood of a state being observed
+        is wholely determined by the <em>size</em> of the blue disk,
+        and is completely unaffected
+        by the <em>direction</em> of the arrow.
+    </p>
     <div class="animationBlock" id="measurementExample">
         <div class="animationBlock_buttons">
             <div>
@@ -385,18 +396,16 @@
 <section>
 <h1>Quantum Interference</h1>
 
-    <p>Consider what happens when we apply a Hadamard operation twice.</p>
+    <p>Consider what happens when we apply a Hadamard operation twice in a row.</p>
 
     <p>
-        Let's assume that a qubit is initially known to definitely be in a 0 state.
+        Let's assume that a qubit is initially known to definitely have the value 0.
         If you were to apply the Hadamard to it twice in a row,
-        then there are four equally likely scenarios:
-        <span class="help">
-            Recall that &ldquo;x &rarr; y &rarr; z&rdquo;
-            means &ldquo;the qubit starts with a value x,
-            the first Hadamard results in the qubit having the value y,
-            and the second Hadamard results in the qubit having the value z&rdquo;.
-        </span>
+        then there are four equally likely scenarios
+        (Recall that <span class="math">&ldquo;x &rarr; y &rarr; z&rdquo;</span>
+        means &ldquo;the qubit starts with a value x,
+        the first Hadamard results in the qubit having the value y,
+        and the second Hadamard results in the qubit having the value z&rdquo;):
     </p>
     <ul>
         <li>0 &rarr; 0 &rarr; 0</li>
@@ -406,10 +415,10 @@
     </ul>
     
     <p>
-        So the final state should be equally likely to be 0 or 1 but,
+        So the final value should be equally likely to be 0 or 1 but,
         in reality,
         <b>applying the Hadamard operator twice in a row
-        always returns the qubit to its original state</b>.
+        always returns the qubit to its original value</b>.
         In our case, where the qubit is initially 0,
         two applications of the Hadamard will result in it being 0 again.
     </p>
@@ -417,7 +426,7 @@
     <p>
         Try it out.
         Press the &ldquo;Apply Hadamard&rdquo; button twice
-        and watch it return to being 100% in the 0 state.
+        and watch it return to having a 100% likelyhood of having the value 0.
     </p>
     
     <div class="animationBlock" id="fullInterferenceExample">
@@ -470,6 +479,8 @@
     
     <p>This is what philosophers of physics loose sleep over.</p>
     
+    <img src="doubleHadamardOf0.png" class="largeImage" alt="Paths for applying Hadamard twice to 0."/>
+    
     <p>
         By the way,
         the mathematically inclined may be worried about
@@ -478,10 +489,28 @@
         the arrow lengths now have to represent
         the square roots of the probabilities.
         We will briefly cover this in more detail in the section entitled
-        <a href="part2.html#maths">Some Maths</a>
+        <a href="part2.html#maths">Some mathematics</a>
         in Part 2.
     </p>
 
+</section>
+
+<section>
+    <h1>Hadamard of 1 (revisited)</h1>
+    <p> 
+        It is instructive to observe the effects of applying
+        a Hadamard twice in a row when the initial value is 1.
+        This time, the qubit returns to 1:
+    </p>
+    <div class="animationBlock" id="doubleHadamardOf1">
+        <div class="animationBlock_buttons">
+            <div>
+                <button class="operator" data-operator="hadamard" data-qubits="0">Apply Hadamard</button>
+            </div>
+        </div>
+        <div class="qstate">State: <span class="qstateValue"></span></div>
+        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
+    </div>
 </section>
 
 <section>
@@ -508,7 +537,7 @@
 </section>
 
 <section>
-    <h1>Superposition of <b>locations</b></h1>
+    <h1>Small Diversion: Superposition of <em>Locations</em></h1>
     
     <p>
         So far, the rather abstract phenomenon of nuclear spin is
@@ -528,8 +557,8 @@
     </p>
     <p>
         A simple interferometer is shown below.
-        Photons are emitted by a &ldquo;coherent light source&rdquo;
-        (i.e. a laser)
+        Photons are emitted by a light source
+        (e.g. a laser)
         that is pointing at a
         &ldquo;half silvered mirror&rdquo;,
         which reflects some of the light and lets some of the light through.
@@ -568,7 +597,7 @@
     
     <p>
         It is tempting to think that the half silvered mirror
-        is splitting each photon in two,
+        is splitting each photon in two
         and that the interference effects are caused by the two photons
         interacting with each other.
     </p>
@@ -579,7 +608,7 @@
         then the detectors only ever detect a photon
         on one path or the other.
         <b>They never detect two photons at once!</b>
-        (Well they very occassinally do due to the light source
+        (Well, they very occassinally do due to the light source
         very occassionally emitting two at once,
         but the frequency that this should happen is easily predicted.)
     </p>

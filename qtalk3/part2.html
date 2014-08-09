@@ -9,12 +9,15 @@
 <body>
 <section>
     <h1>An Interactive Introduction To Quantum Computing Part 2</h1>
+    <div class="subtitle">
+        <b>Quantum Search</b>
+    </div>
     <p>
         This is Part 2 of a two part series.
         In <a href="index.html">Part 1</a>
-        I explained some of the basics of what a qubit is
+        I explained some of the basics of qubits,
         including the mysterious notions of phase and quantum interference.
-        Here in Part 2, you will get to see a couple of basic quantum algorithms in action.
+        Here in Part 2, you will learn about Quantum Search.
     </p>
     <p>DRAFT</p>
 </section>
@@ -42,8 +45,8 @@
     two-qubit operator.
 </p>
 <p>
-    The Controlled NOT operator modifies the state of one qubit (the target qubit)
-    based on the state of another qubit (the control qubit).
+    The Controlled NOT operator modifies the value of one qubit (the target qubit)
+    based on the value of another qubit (the control qubit).
 </p>
 <p>
     Specifically, <b>the Controlled NOT operator flips the value of the target qubit
@@ -52,7 +55,7 @@
 <p>
     For example:
     Suppose we have two qubits with
-    an initial state of &ldquo;11&rdquo;.
+    an initial value of &ldquo;11&rdquo;.
     Let&apos;s use the left qubit as the control qubit
     and the right qubit as the target.
     Then the result of applying a Controlled NOT
@@ -126,411 +129,232 @@
         within a superposition is called
         &ldquo;quantum entanglement&rdquo;.
     </p>
+    <p>
+        Why quantum entanglement is so special deserves an entire article of its own.
+        For now, I am simply using entanglement to
+        emphasise how quantum superposition can apply to
+        the combined state of a number of qubits.
+    </p>
 </section>
 
 <section>
-    <h1>Toffoli</h1>
+    <h1>Arbitrary Logic Functions</h1>
     <p>
-        The Toffoli Operator is a just like the Controlled NOT,
-        only it uses two control qubits instead of one.
-        The target qubit is flipped if and only if
-        both of the control bits are 1&apos;s.
+        In addition to the NOT operator that we have already seen,
+        a quantum computer can implement the standard
+        logic functions of AND and OR.
+        From these, one can compute any function over a fixed number of bits.
+    </p> 
+    <p>
+        The details are surprisingly fascinating
+        and not as straight forward as you might expect.
+        However,
+        for the purposes of this article,
+        I want you to trust me when I say it can be done.
+        This will allow us to move more quickly to
+        the even more fascinating topic of quantum search.
     </p>
     <p>
-        For example: If the initial state is &quot;111&quot;,
-        and if the two left qubits are used as the control qubits,
-        and the right qubit is the target,
-        then the result will be &quot;110&quot;.
-        As usual, we represent this as
-        &ldquo;111 &rarr; 110&rdquo;
+        Before we can cover quantum search,
+        there is one more quantum operator I need to introduce.
     </p>
-<p>
-    Continuing with our choice of the two left qubits as control qubits
-    and right qubit as target,
-    there are eight scenarios to consider for
-    the Toffoli operator.
-</p>
-<ul>
-    <li>000 &rarr; 000 (i.e. no effect)</li>
-    <li>001 &rarr; 001 (i.e. no effect)</li>
-    <li>010 &rarr; 010 (i.e. no effect)</li>
-    <li>011 &rarr; 011 (i.e. no effect)</li>
-    <li>010 &rarr; 010 (i.e. no effect)</li>
-    <li>101 &rarr; 101 (i.e. no effect)</li>
-    <li>110 &rarr; 111 (i.e. target bit flips)</li>
-    <li>111 &rarr; 110 (i.e. target bit flips)</li>
-</ul>
 </section>
 
 <section>
-    <h1>Toffoli (Your Turn)</h1>
+    <h1>Controlled Phase Flip</h1>
     <p>
-        See how the Toffoli affects a superpostion of all possible states
-        (ignore the arrow directions,
-        I have simply set them to random angles
-        in an attempt to highlight the effect of the Toffoli)
-        :
+        Recall that the term <em>phase</em>,
+        introduced in <a href="index.html">Part 1</a>,
+        refers to the arrow direction of a state.
+    </p>
+    <p>
+        The controlled phase flip is a multi qubit operator.
+        It flips the phase of the states where
+        all of the specified qubits have the value of 1.
+    </p>
+
+    <p>
+        More useful to us,
+        is a generalised form of the controlled phase flip.
+        It will flip the phase of the states where the target qubits
+        have any specified combination of 1's and 0's.
     </p>
     
-    <p>
-        <small>
-            Using the left two qubits as the control qubits,
-            and the right qubit the target.
-        </small>
-    </p>
+    <p>Try it yourself:</p>
     
-    <div class="animationBlock" id="ToffoliExample">
+        <div class="animationBlock" id="generalisedControlledPhaseFlipExample">
         <div class="animationBlock_buttons">
             <div>
-                <button class="operator" data-operator="cnot"
-                    data-control-qubits="1,2" data-qubits="0"
-                    data-skipInterferenceSteps>Apply Toffoli</button>
+                <button class="operator" data-operator="f00"
+                    data-skipInterferenceSteps
+                    data-qubits="0">Flip Phase of 00</button>
+                <button class="operator" data-operator="f01"
+                    data-skipInterferenceSteps
+                    data-qubits="0">Flip Phase of 01</button>
+                <button class="operator" data-operator="f10"
+                    data-skipInterferenceSteps
+                    data-qubits="0">Flip Phase of 10</button>
+                <button class="operator" data-operator="f11"
+                    data-skipInterferenceSteps
+                    data-qubits="0">Flip Phase of 11</button>
             </div>
         </div>
         <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
+
+    
 </section>
 
 <section>
-    <h1>Arbitrary Boolean Functions</h1>
+    <h1>Quantum Search</h1>
     <p>
-        In addition to the NOT operator that we have already seen,
-        a quantum computer can implement the standard
-        boolean functions of AND and OR.
+        Imagine you are trying to crack an n-bit encryption key by brute force:
+        i.e. by trying every one of the 2<sup>n</sup> possible values.
+    </p>
+    <p>
+        This is a classic needle in a haystack search problem.
+    </p>
+    <p>
+        You need to construct a function,
+        <span class="math">f</span>,
+        that takes a candidate value as input
+        and returns true or false depending
+        on whether or not the candidate is the correct key.
+    </p>
+    <p>
+        A conventional computer will need to evaluate <span class="math">f</span>,
+        on average,
+        <span class="math">2<sup>n-1</sup></span> times.
+    </p>
+    <p>
+        By using
+        <a href="http://wikipedia.org/wiki/Grover's_algorithm">Grover&apos;s algorithm</a>,
+        a quantum computer needs to evaluate <span class="math">f</span> only
+        <span class="math">2<sup>&radic;n</sup></span> times.
+    </p>
+    <p>
+        Even if a conventional computer can compute <span class="math">f</span> in a nanosecond,
+        if the input was 64 bits long,
+        then it would probably take hundreds of years to find the answer.
+    </p>
+    <p>
+        A quantum computer would take less than a second,
+        even if it was a million times slower at computing <span class="math">f</span>.
         <span class="help">
-            <span class="math"> x AND y</span> is 1 if and only if
-            both x and y are 1.
-            <span class="math"> x OR y</span> is 1 if either or both
-            of x or y are 1.
+            A conventional computer would have to evaluate <span class="math">f</span> an average of
+            <span class="math">2<sup>63</sup></span> times,
+            compared to only 256 times for a quantum computer.
         </span>
     </p>
-    <p>But there is a catch.</p>
     <p>
-        <b>Quantum operators must be reversible</b>
-        (except for the measurement operator):
-        i.e. you must be able to derive the input state from the output state.
-        This is a fundamental consequence of how quantum mechanics works.
-    </p>
-    <p>
-        The conventional implementations of AND and OR
-        set the output bit to the result of the operation.
-        The problem with this is that you lose
-        the original value of the output bit
-        and there is no guaranteed way of
-        using the result
-        to derive what its original value was.
-    </p>
-    <p>
-        Reversible versions of AND and OR
-        are obtained by leaving the input bits unchanged,
-        using a separate (third) bit as the output bit and,
-        instead of setting the output bit to the result,
-        you conditionally flip the value of the output bit
-        based on whether or not the result of the operation is a 1.
-        E.g.
-        <b>
-            the Toffoli operation is
-            the way we implement the AND operation
-            in a quantum computer.
-        </b>
-    </p>
-    <p>
-        The OR operator can be implemented using combinations of
-        the AND and NOT operators since
-        <span class="math">x OR y  = NOT (NOT x AND NOT y)</span>
-    </p>
-    <p>
-        Using the AND, OR, and NOT operators,
-        it is possible to implement any arbitrary
-        boolean function that has a fixed number of input and output bits.
-    </p>
-    <p>
-        The key trick with quantum computers is that the output bits
-        are usually a seperate collection of bits to the input bits and,
-        instead of setting the output bits to specific values,
-        their existing values (whatever they were)
-        are either flipped or left as they are
-        depending on whether the operation result
-        is supposed to be a 1 or a 0 respectively.
+        For the extremely simple special case where the input is only 2 bits,
+        there are four possible answers.
+        A conventional computer may need to test up to three
+        of those possible values.
+        (If it isn&apos;t the first three,
+        then you can infer it must be fourth one without testing it.)
+        As you will see below,
+        a quantum computer can find the answer
+        using a single invocation of <span class="math">f</span>.
     </p>
 </section>
 
 <section>
-<h1>Simple 1-Bit Functions</h1>
-<p>
-    I am about to describe
-    a really simple quantum computation algorithm,
-    but first we need to explore the four different
-    classical 1-bit functions and how we might implement them
-    in a quantum computer.
-</p>
-<p>
-    There are only four possible one bit functions
-    <span class="math">y=f(x)</span>
-    where x and y are single bit values:
-</p>
-<ul>
-    <li>f(x) = x</li>
-    <li>f(x) = NOT(x)</li>
-    <li>f(x) = 0</li>
-    <li>f(x) = 1</li>
-</ul>
-
-<p>
-    Hopefully it is pretty obvious how you would implement these,
-    but I will spell it out anyway.
-</p>
+    <h1>Quatum Search over 2 Qubits</h1>
+    
     <p>
-        Recall that,
-        by applying <span class="math">f</span>,
-        we mean that the output bit is flipped from its initial value
-        if and only if the application of <span class="math">f</span>
-        to the input value is 1.
-        So, for example, if
-        <span class="math">f(x) = x</span>,
-        and the initial state of the qubits was &ldquo;11&rdquo;,
-        and the left qubit is used as the control and the right qubit the target,
-        then the result would be &ldquo;10&rdquo;.
-    </p>
-    <p>
-        Here is how you could implement them using NOT and Controlled NOT:
-    </p>
-<ul>
-    <li>f(x) = x : Flip the output bit if the input is 1 (ie. a Controlled NOT)</li>
-    <li>f(x) = NOT(x) : Controlled NOT followed by a NOT</li>
-    <li>f(x) = 0 : Do nothing</li>
-    <li>f(x) = 1 : Flip the output bit regardless of the input
-        (ie. a simple NOT).
-    </li>
-</ul>
-</section>
-
-<section>
-    <h1>Simple 1-Bit Functions (Your Turn)</h1>
-    <p>
-        Try out each of the 1-bit functions on
-        a superposition of all states.
-    </p>
-    <p>
-        In the interactive example below,
-        the left qubit is the input bit (x),
-        and the right qubit is the output bit f(x)
-        -- but don&apos;t forget, we are flipping bits instead of setting them!
-    </p>
-    <div class="animationBlock" id="1bitFunctions">
-        <div class="animationBlock_buttons">
-            <button class="operator" data-operator="cnot"
-                data-control-qubits="1"
-                data-qubits="0">f(x)=x</button>
-            <button class="operator" data-operator="notCNot"
-                data-control-qubits="1"
-                data-qubits="0">f(x)=NOT(x)</button>
-            <button class="operator"
-                data-operator="nop">f(x)=0</button>
-            <button class="operator" data-operator="not"
-                data-qubits="0">f(x)=1</button>
-        </div>
-        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
-    </div>
-    <p>
-        By the way,
-        the effect of applying a function is
-        being animated one state at a time.
-        In reality, all the states are changing at the same time.
-        That is where the power of quantum computing comes from!
-    </p>
-</section>
-
-<section>
-    <h1>Deutche&apos;s Algorithm</h1>
-    <p>
-        Possibly the simplest quantum computing algorithm is Deutche&apos;s Algorithm.
-    </p>
-    <p>
-        Imagine you are provided with a piece of circuitry that
-        implements one of
-        the four possible 1-bit functions
-        <span class="math">f</span>
-        just described,
-        but you have not been told which one of the four it is.
+        First recall that
+        the objective is to find the value of <span class="math">x</span>
+        for which <span class="math">f(x)</span> is true.
+        For Gover&apos;s Search Algorithm to work,
+        it is essential that <span class="math">f(x)</span> is true
+        for only one value of <span class="math">x</span>.
     </p>
     
     <p>
-        Your task is to compute
-        <span class="math">f(0) XOR f(1)</span>,
-        where
-        <span class="math">x XOR y</span> is 1 if only one of x or y are 1, but not both.
-        I.e.
+        In the conventional descriptions of Gover&apos;s Search Algorithm,
+        it is assumed that the result of applying <span class="math">f(x)</span>
+        is to flip the value of an &ldquo;output&rdquo; qubit
+        when <span class="math">f(x)</span> is true.
+        It is a lot more convenient if we can instead assume that
+        the result of applying <span class="math">f(x)</span>
+        is to flip the phase of the state for which
+        <span class="math">f(x)</span> is true. 
     </p>
-    <ul>
-        <li><span class="math">0 XOR 0 = 0</span></li>
-        <li><span class="math">0 XOR 1 = 1</span></li>
-        <li><span class="math">1 XOR 0 = 1</span></li>
-        <li><span class="math">1 XOR 1 = 0</span></li>
-    </ul>
+    
     <p>
-        For example, if <span class="math">f(x) = x</span>,
-        then <span class="math">f(0) XOR f(1) = 0 XOR 1 = 1</span>.
+        Here are the steps to Gover&apos;s Search Algorithm
+        for the simple special case of two bits.
     </p>
-    <p>
-        There are four possibilities:
-    </p>
-    <ul>
-        <li>
-            <b>If</b> <span class="math">f(x) = x</span>
-            <b>then</b> <span class="math">f(0) XOR f(1) = 0 XOR 1 = 1</span>
-        </li>
-        <li>
-            <b>If</b> <span class="math">f(x) = NOT(x)</span>
-            <b>then</b> <span class="math">f(0) XOR f(1) = 1 XOR 0 = 1</span>
-        </li>
-        <li>
-            <b>If</b> <span class="math">f(x) = 0</span>
-            <b>then</b> <span class="math">f(0) XOR f(1) = 0 XOR 0 = 0</span>
-        </li>
-        <li>
-            <b>If</b> <span class="math">f(x) = 1</span>
-            <b>then</b> <span class="math">f(0) XOR f(1) = 1 XOR 1 = 0</span>
-        </li>
-    </ul>
-    <p>
-        The obvious approach is to compute both
-        <span class="math">f(0)</span>
-        and
-        <span class="math">f(1)</span>
-        and then compute the XOR of those two results.
-        Indeed,
-        <b>
-            conventional computers cannot compute
-            <span class="math">f(0) XOR f(1)</span>
-            without computing values for both
-            <span class="math">f(0)</span>
-            and
-            <span class="math">f(1)</span>.
-        </b>
-    </p>
-    <p>
-        If <span class="math">f</span>
-        is implemented on a quantum computer, then
-        <b>
-            Deutche&apos;s Algorithm allows you to compute
-            <span class="math">f(0) XOR f(1)</span>
-            with only a single invocation of
-            <span class="math">f</span>.
-        </b>
-    </p>
-    <p>
-        As you will see,
-        Deutche&apos;s Algorithm
-        achieves this by applying
-        <span class="math">f</span>
-        to a superposition of 0 and 1,
-        and using quantum interference to find
-        <span class="math">f(0) XOR f(1)</span>.
-    </p>
-</section>
-
-<section>
-    <h1>Implementing Deutche&apos;s Algorithm</h1>
-    <p>
-        To implement Deutche&apos;s Algorithm we need two qubits.
-        We designate one qubit (the left one) the input qubit
-        and the other (the right one) the output qubit.
-    </p>
-    <p>
-        Here are the steps:
-    </p>
+    
     <ol>
         <li>
             Start with the qubits in a superposition of all possible states:
             00, 01, 10, and 11.
         </li>
-        <li>Apply the unknown function <span class="math">f</span> once only.</li>
-        <li>Apply a Hadamard to the input qubit.</li>
-        <li>Measure.</li>
+        <li>Apply the function <span class="math">f</span> once only.</li>
+        <li>Apply Hadamard operations to both qubits.</li>
+        <li>
+            The resulting state is your desired answer.
+        </li>
     </ol>
 
     <p>
-        There are a couple of important details that I have left out.
-    </p>
-    <p>
-        For starters,
-        the initial state cannot be any old superposition of all possible states.
+        There is an important detail that I have left out.
+        The initial state cannot be any old superposition of all possible states.
         It has to be this one:
-        <span class="help">
-            It can be created by applying Hadamards to the state &ldquo;01&rdquo;.
-        </span>
     </p>
-    <div class="animationBlock" id="DeutchInitialState">
+    <div class="animationBlock" id="GroverInitialState">
         <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
     </div>
     <p>
-        The other important detail is that the desired result,
-        <span class="math">f(0) XOR f(1)</span>,
-        is obtained by measuring the <em>input</em> qubit.
-        No, that is not a clumsy mistake I just made,
-        the desired result will be the value of the input qubit,
-        not the output qubit.
-    </p>
-    <p>
         You can try it yourself below.
         Select one of the four fuctions,
-        and then Hadamard the input qubit.
-    </p>
-     <p>
-        Once again, the left qubit is the input to f and
-        the right qubit is flipped if <span class="math">f(x) = 1</span>.
+        and then Hadamard both qubits.
     </p>
     <p>
-        Notice how the interference causes
-        the four different states to combine
-        to produce just two states,
-        both of which are either at the top
-        (&ldquo;00&rdquo; and &ldquo;01&rdquo;)
-        or at the bottom
-        (&ldquo;10&rdquo; and &ldquo;11&rdquo;).
+        The four possible functions are labelled as
+        <span class="math">f<sub>x</sub></span>,
+        indicating that <span class="math">f</span> is
+        true for the value <span class="math">x</span>.
     </p>
-    <p>
-        If both states are at the top
-        then the input bit is guaranteed to be 0,
-        and this implies that
-        <span class="math">f(0) XOR f(1) = 0</span>
-        If they are both at the bottom
-        then the input bit is guaranteed to be 1,
-        and this implies that
-        <span class="math">f(0) XOR f(1) = 0</span>.
-        The output bit can be safely ignored.
-    </p>
-    <div class="animationBlock" id="DeutchExample">
+    <div class="animationBlock" id="SimpleSearchExample"
+        data-bit-labels="bit-a,bit-b">
         <div class="animationBlock_buttons">
             <div>
                 <div data-step="1">
                     Choose one:
-                    <button class="operator" data-operator="cnot"
-                        data-control-qubits="1"
-                        data-qubits="0">f(x)=x</button>
-                    <button class="operator" data-operator="notCNot"
-                        data-control-qubits="1"
-                        data-qubits="0">f(x)=NOT(x)</button>
-                    <button class="operator"
-                        data-operator="nop">f(x)=0</button>
-                    <button class="operator" data-operator="not"
-                        data-qubits="0">f(x)=1</button>
+                    <button class="operator" data-operator="f00"
+                        data-skipInterferenceSteps
+                        data-qubits="0"><span class="math">f<sub>00</sub></span></button>
+                    <button class="operator" data-operator="f01"
+                        data-skipInterferenceSteps
+                        data-qubits="0"><span class="math">f<sub>01</sub></span></button>
+                    <button class="operator" data-operator="f10"
+                        data-skipInterferenceSteps
+                        data-qubits="0"><span class="math">f<sub>10</sub></span></button>
+                    <button class="operator" data-operator="f11"
+                        data-skipInterferenceSteps
+                        data-qubits="0"><span class="math">f<sub>11</sub></span></button>
                 </div>
                 
                 <div>
                     <button class="operator" data-operator="hadamard"
-                        data-qubits="1" data-step="2">Hadamard Input Bit</button>
+                        data-qubits="0,1" data-step="2">Hadamard qubit a &amp; b</button>
                         
-                    <button class="measure"
-                        data-qubits="0,1" data-step="3">Measure</button>
+                    <button class="operator" data-operator="f00" data-skipInterferenceSteps
+                        data-qubits="0" data-step="3">Phase flip 00</button>
+
+                    <button class="operator" data-operator="hadamard"
+                        data-qubits="0,1" data-step="4">Hadamard qubit a &amp; b</button>
                         
-                    <button class="reset" data-step="4">Reset</button>
+                    <button class="reset" data-step="5">Reset</button>
                 </div>
             </div>
         </div>
-        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
+        <svg class="qstateSvg"></svg>
     </div>
+    
     
     <p>
         Don&apos;t forget,
@@ -539,130 +363,6 @@
     </p>
 </section>
 
-<section>
-    <h1>Quantum Search</h1>
-    <p>
-         Before wrapping up with some philosophy and mathematics,
-         I want to demonstrate a more impressive quantum algorithm:
-         Quantum Search.
-    </p>
-    <p>
-        Imagine that you have been provided with a function f
-        that has an n-bit input and
-        its one bit output is equal to 1
-        for only one of
-        the 2<sup>n</sup> possible inputs.
-    </p>
-    <p>
-        Your task is to find which of those 2<sup>n</sup> possible inputs
-        results in a 1.
-    </p>
-    <p>
-        This is a classic needle in a haystack search problem that
-        requires you to try every possible value until you find the answer.
-    </p>
-    <p>
-        A conventional computer will need to evaluate f,
-        on average,
-        <span class="math">2<sup>n-1</sup></span> times.
-    </p>
-    <p>
-        By using
-        <a href="http://wikipedia.org/wiki/Grover's_algorithm">Grover&apos;s algorithm</a>,
-        a quantum computer needs to evaluate f only
-        <span class="math">2<sup>&radic;n</sup></span> times.
-    </p>
-    <p>
-        Even if a conventional computer can compute f in a nanosecond,
-        if the input was 64 bits long,
-        then it would probably take hundreds of years to find the answer.
-    </p>
-    <p>
-        A quantum computer would take less than a second,
-        even if it was a million times slower at computing f.
-        <span class="help">
-            A conventional computer would have to evaluate f an average of
-            <span class="math">2<sup>63</sup></span> times,
-            compared to only 256 times for a quantum computer.
-        </span>
-    </p>
-    <p>
-        For the special case where the input is only 2 bits,
-        there are four possible answers.
-        A conventional computer may need to test up to three
-        of those possible values.
-        (If it hasn&apos;t found it by the third attempt,
-        it can infer the answer will be the only value left
-        that it has yet to try.)
-        As you will see below,
-        a quantum computer can find the answer
-        using a single invocation of f.
-    </p>
-    <p>
-        Try it yourself.
-        Choose one of the four functions.
-        The two left most qubits will be treated as
-        the inputs to the function,
-        and the right most qubit will be flipped if
-        <span class="math">f(x) = 1</span>.
-    </p>
-    <p>
-        The button labelled &ldquo;Quantum Search&rdquo;
-        uses quantum interference
-        to ensure that the input qubits
-        end up with the desired value.
-        The details are beyond the scope of this article,
-        but it can be implemented as a combination
-        of Hadamard, Z, and Controlled-Z operations.
-        If you are interested,
-        you can look at how to
-        <a href="https://github.com/davidbkemp/jsqubits/wiki/Simple-Search">
-            implement the simple quantum search
-            using jsqubits
-        </a>.
-    </p>
-    <p>
-        Rembember: After the measurement step,
-        the two left most qubits have the answer.
-        Ignore the output qubit.
-    </p>
-    <div class="animationBlock" id="SimpleSearchExample">
-        <div class="animationBlock_buttons">
-            <div>
-                <div data-step="1">
-                    Choose one:
-                    <button class="operator" data-operator="f00"
-                        data-control-qubits="2,1"
-                        data-skipInterferenceSteps
-                        data-qubits="0">f(00)=1</button>
-                    <button class="operator" data-operator="f01"
-                        data-control-qubits="2,1"
-                        data-skipInterferenceSteps
-                        data-qubits="0">f(01)=1</button>
-                    <button class="operator" data-operator="f10"
-                        data-control-qubits="2,1"
-                        data-skipInterferenceSteps
-                        data-qubits="0">f(10)=1</button>
-                    <button class="operator" data-operator="f11"
-                        data-control-qubits="2,1"
-                        data-skipInterferenceSteps
-                        data-qubits="0">f(11)=1</button>
-                </div>
-                
-                <div>
-                    <button class="operator" data-operator="simpleSearch"
-                        data-qubits="2,1" data-step="2">Quantum Search</button>
-                        
-                    <button class="measure"
-                        data-qubits="0,1,2" data-step="3">Measure</button>
-                        
-                    <button class="reset" data-step="4">Reset</button>
-                </div>
-            </div>
-        </div>
-        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
-    </div>
-</section>
 
 <section>
     <h1>Beyond Quantum Search</h1>
@@ -739,9 +439,7 @@
         or they may need to figure out how to make
         more effective use of their existing qubits,
         before they can start out performing conventional computers.
-        It is not clear whether they will achieve this
-        before the required break throughs are made to enable
-        quantum gate computers to beat them to it.
+        It may not be long before we start seeing impressive results.
     </p>
 </section>
 
@@ -788,8 +486,8 @@
     </ul>
     <p>
         If you consider your conscious awareness to be
-        nothing more than patterns of activity in your brain
-        all under the control of the laws of physics,
+        nothing more than patterns of activity in your brain,
+        and that your brain is governed by the laws of physics,
         then there is nothing in quantum physics that says why,
         when you look at the measurement outcome,
         you yourself does not become entangled with
@@ -804,10 +502,10 @@
             and you being conscious of the measurment being 1</li>
     </ul>
     <p>
-        <b>Think of it as the entire universe splitting in two.</b>
-        In one universe the qubit is a 0
-        and in the other the qubit is a 1.
-        Quantum interference is the only ways that these universes interact.
+        <b>Think of it as two alternative realities existing.</b>
+        In one reality you see a 0,
+        and in the other you see a 1.
+        Quantum interference is the only ways that these realities interact.
     </p>
     <p>
         Variations on this interpretation of quantum physics
@@ -831,7 +529,7 @@
         This article has already covered more topics than I originally planned.
         However, I feel the need to include a little bit of
         a mathematical explanation to some of the material.
-        For those that aren&apos;t interested in the maths,
+        For those that aren&apos;t interested in the mathematics,
         feel free to skip to the
         <a href="#usefulLinks">Useful Links Section</a>
         at the end.
@@ -839,7 +537,7 @@
 </section>
 
 <section id="maths">
-<h1>Some maths</h1>
+<h1>Some mathematics</h1>
     <p>
         In this article
         I used little blue disks with red arrows
@@ -875,9 +573,9 @@
         it is most convenient if
         the arrow lengths are proportional to the square roots of the probabilities
         of the respective states
-        (the disk areas now effectively represent probabilities
+        (the disk <em>areas</em> now effectively represent probabilities
         except for a factor of &pi;).
-        The arrows also have directions representing their phases.
+        The arrows directions represent their phases.
         When two scenarios end in the same state,
         you need to add the arrows like vectors.
     </p>
@@ -894,16 +592,14 @@
         <span class="math">r (cos(&theta;) + i sin(&theta;))</span>
     </p>
     <p>
-        Due to a truly beautiful piece of maths,
-        this can also be written very conveniently as:
-    </p>
-    <p>
-        <span class="math">re<sup>i&theta;</sup></span>
-    </p>
-    <p>
         If a state had this amplitude,
         then the probability of that state being the outcome
         of a measurement is <span class="math">r<sup>2</sup></span>.
+    </p>
+    <p>
+        When we talk of &ldquo;adding arrows head to tail&rdquo;,
+        we can simply add the corresponding complex numbers using
+        ordinary complex number arithmetic.
     </p>
     <p>
         Given that the probabilites of all possible outcomes have to add up to 1,
@@ -934,7 +630,7 @@
         Notice that if you square and add these together that you get 1.
     </p>
     <p>
-        That is really as much maths as I wanted to cover in this article.
+        That is already more mathematics as I wanted to cover in this article.
         For more, see some of the useful links listed in the next section.
     </p>
 </section>
