@@ -17,7 +17,9 @@
         In <a href="index.html">Part 1</a>
         I explained some of the basics of qubits,
         including the mysterious notions of phase and quantum interference.
-        Here in Part 2, you will learn about Quantum Search.
+        Here in Part 2, you will learn
+        how quantum computers may one day be able to solve search problems
+        faster than conventional computers.
     </p>
     <p>DRAFT</p>
 </section>
@@ -125,7 +127,7 @@
     <p>
         Note that, if you were to measure the qubits while they are in this state,
         you would find that they are either both 0 or both 1.
-        This sort of correllation between qubit values
+        This sort of correlation between qubit values
         within a superposition is called
         &ldquo;quantum entanglement&rdquo;.
     </p>
@@ -174,7 +176,7 @@
     </p>
 
     <p>
-        More useful to us,
+        More useful to us, however,
         is a generalised form of the controlled phase flip.
         It will flip the phase of the states where the target qubits
         have any specified combination of 1's and 0's.
@@ -288,7 +290,7 @@
     
     <p>
         Here are the steps to Gover&apos;s Search Algorithm
-        for the simple special case of two bits.
+        for the very simple case of two bits.
     </p>
     
     <ol>
@@ -340,15 +342,22 @@
                 
                 <div>
                     <button class="operator" data-operator="hadamard"
-                        data-qubits="0,1" data-step="2">Hadamard qubit a &amp; b</button>
-                        
-                    <button class="operator" data-operator="f00" data-skipInterferenceSteps
-                        data-qubits="0" data-step="3">Phase flip 00</button>
-
+                        data-qubits="1" data-step="2">Hadamard qubit-a</button>
                     <button class="operator" data-operator="hadamard"
-                        data-qubits="0,1" data-step="4">Hadamard qubit a &amp; b</button>
-                        
-                    <button class="reset" data-step="5">Reset</button>
+                        data-qubits="0" data-step="3">Hadamard qubit-b</button>
+                </div>
+                <div>
+                    <button class="operator" data-operator="f00" data-skipInterferenceSteps
+                        data-qubits="0" data-step="4">Phase flip 00</button>
+                </div>
+                <div>
+                    <button class="operator" data-operator="hadamard"
+                        data-qubits="1" data-step="5">Hadamard qubit-a</button>
+                    <button class="operator" data-operator="hadamard"
+                        data-qubits="0" data-step="6">Hadamard qubit-b</button>
+                </div>
+                <div>
+                    <button class="reset" data-step="7">Reset</button>
                 </div>
             </div>
         </div>
@@ -386,7 +395,7 @@
         a quantum computer would need to evaluate the oracle function
         almost as many times as a conventional computer does
         over a 64 bit search space.
-        Even at one evaluation per nano second,
+        Even at one evaluation per nanosecond,
         it would take hundreds of years to crack
         a 128 bit encryption key.
     </p>
@@ -402,13 +411,13 @@
         <a href="http://wikipedia.org/wiki/Shor's_algorithm">Shor&apos;s Algorithm</a>.
     </p>
     <p>
-        Shor&apos;s Algorithm has a &ldquo;complexity&rdquo; of
+        Shor&apos;s Algorithm has a &ldquo;asymptotic&rdquo; behaviour of
         <span class="math">O((log N)<sup>3</sup>)</span>.
         I won&apos;t try to explain
         the exact meaning of this statement,
         but it is quite possible that
-        current encryption keys could be broken in subsecond time frames.
-        Also, simply doubling the length of the key would have a barely noticable
+        current encryption keys could be broken in sub-second time frames.
+        Also, simply doubling the length of the key would have a barely noticeable
         effect on the time taken.
         The limiting factor is likely to be the number of qubits required
         since you need at least as many qubits as the key length.
@@ -424,7 +433,7 @@
     </p>
     <p>
         These are currently the only commercially available quantum computers.
-        They are building quantum computers containing 512 qubits,
+        D-Wave are building quantum computers containing 512 qubits,
         which in theory could be in a super position of
         <span class="math">2<sup>512</sup></span> states.
     </p>
@@ -442,11 +451,13 @@
         (already long) article.
     </p>
     <p>
-        Currently, it seems that D-Wave may need more qubits,
-        or they may need to figure out how to make
-        more effective use of their existing qubits,
-        before they can start out performing conventional computers.
-        It may not be long before we start seeing impressive results.
+        Before they can start out performing conventional computers,
+        it is possible that D-Wave simply needs to use more qubits,
+        or perhaps they may need to figure out how to make
+        more effective use of their existing qubits.
+        However,
+        it quite possibly will not be long before
+        we start seeing impressive results.
     </p>
 </section>
 
@@ -485,7 +496,7 @@
         instead of the measuring equipment
         becoming entangled with the qubit.
         Instead of the quantum state collapsing,
-        the result could be a superpositon of the following two states:
+        the result could be a superposition of the following two states:
 </p>
     <ul>
         <li>the qubit being 0 and the measuring equipment detecting 0</li>
@@ -500,13 +511,13 @@
         you yourself does not become entangled with
         the quantum qubit and
         the measuring equipment.
-        The result would be a superpositon of the following two states:
+        The result would be a superposition of the following two states:
     </p>
     <ul>
         <li>the qubit being 0, the measuring equipment detecting 0,
-            and you being conscious of the measurment being 0</li>
+            and you being conscious of the measurement being 0</li>
         <li>the qubit being 1, the measuring equipment detecting 1,
-            and you being conscious of the measurment being 1</li>
+            and you being conscious of the measurement being 1</li>
     </ul>
     <p>
         <b>Think of it as two alternative realities existing.</b>
@@ -536,7 +547,7 @@
         This article has already covered more topics than I originally planned.
         However, I feel the need to include a little bit of
         a mathematical explanation to some of the material.
-        For those that aren&apos;t interested in the mathematics,
+        For those that are not interested in the mathematics,
         feel free to skip to the
         <a href="#usefulLinks">Useful Links Section</a>
         at the end.
@@ -572,26 +583,26 @@
         <span class="math">p1 + p2</span>.
     </p>
     <p>
-        When descibing qubits
+        When describing qubits
         in a superposition of different states,
-        it is no longer simply a case of not knowing which state it is in,
+        it is no longer simply a case of not knowing which state they are in,
         the system actually seems to be in multiple states at once.
         In this situation,
         it is most convenient if
-        the arrow lengths are proportional to the square roots of the probabilities
+        the arrow lengths are proportional to the <em>square roots</em> of the probabilities
         of the respective states
         (the disk <em>areas</em> now effectively represent probabilities
         except for a factor of &pi;).
-        The arrows directions represent their phases.
+        The arrow directions represent their phases.
         When two scenarios end in the same state,
-        you need to add the arrows like vectors.
+        you need to use vector addition to add the arrows.
     </p>
     <p>
         <b>The arrows represent what physicists call &ldquo;amplitudes&rdquo;</b>.
     </p>
     <p>
         Conventionally, an amplitude is represented using a complex number
-        whose value on the complex number plane co-incides with the end of our arrow.
+        whose value on the complex number plane coincides with the end of our arrow.
         If our arrow has a length r and a phase &theta;,
         then it is represented as the complex number:
     </p>
@@ -609,7 +620,7 @@
         ordinary complex number arithmetic.
     </p>
     <p>
-        Given that the probabilites of all possible outcomes have to add up to 1,
+        Given that the probabilities of all possible outcomes have to add up to 1,
         it follows that the sum of the squares of the amplitude magnitudes
         also have to add up to 1.
         All quantum operators preserve this property.
