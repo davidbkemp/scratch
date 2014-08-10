@@ -80,12 +80,16 @@ h2 {
 
 .animationBlock {
     border: 1px solid #999;
-    width: 26em;
+    width: 28em;
     padding: 0.5em;
 }
 
 .animationBlock_buttons {
     margin: 0.5em 0;
+}
+
+.animationBlock_buttons button {
+    margin: 2px;
 }
 
 .qstateSvg__hideBitLabels .animatedQubitsBitLabels {
