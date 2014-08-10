@@ -216,38 +216,43 @@
     </p>
     <p>
         You need to construct a function,
-        <span class="math">f</span>,
+        called the <em>oracle</em> function,
         that takes a candidate value as input
         and returns true or false depending
         on whether or not the candidate is the correct key.
     </p>
     <p>
-        A conventional computer will need to evaluate <span class="math">f</span>,
+        A conventional computer will need to evaluate the oracle function,
         on average,
         <span class="math">2<sup>n-1</sup></span> times.
     </p>
     <p>
         By using
         <a href="http://wikipedia.org/wiki/Grover's_algorithm">Grover&apos;s algorithm</a>,
-        a quantum computer needs to evaluate <span class="math">f</span> only
-        <span class="math">2<sup>&radic;n</sup></span> times.
+        a quantum computer only needs to evaluate the oracle function less than
+        <span class="math">&radic;(2<sup>n</sup>)</span> times.
     </p>
     <p>
-        Even if a conventional computer can compute <span class="math">f</span> in a nanosecond,
+        Even if a conventional computer can compute the oracle function in a nanosecond,
         if the input was 64 bits long,
-        then it would probably take hundreds of years to find the answer.
-    </p>
-    <p>
-        A quantum computer would take less than a second,
-        even if it was a million times slower at computing <span class="math">f</span>.
+        then it would probably take hundreds of years
+        for that conventional computer
+        to find the answer.
+        A quantum computer might possibly take just a few seconds.
         <span class="help">
-            A conventional computer would have to evaluate <span class="math">f</span> an average of
+            A conventional computer would have to evaluate the oracle function an average of
             <span class="math">2<sup>63</sup></span> times,
-            compared to only 256 times for a quantum computer.
+            compared to just over four billion times for a quantum computer.
+            It is likely however,
+            at least in the early days of quantum computing,
+            that individual operations on a quantum computer may be vastly slower
+            than on a conventional computer.
+            It may take a while before quantum computers ever get
+            to solve a problem any faster than conventional computers.
         </span>
     </p>
     <p>
-        For the extremely simple special case where the input is only 2 bits,
+        For the extremely simple case where the input is only 2 bits,
         there are four possible answers.
         A conventional computer may need to test up to three
         of those possible values.
@@ -255,7 +260,7 @@
         then you can infer it must be fourth one without testing it.)
         As you will see below,
         a quantum computer can find the answer
-        using a single invocation of <span class="math">f</span>.
+        using a single invocation of the oracle function.
     </p>
 </section>
 
@@ -265,21 +270,20 @@
     <p>
         First recall that
         the objective is to find the value of <span class="math">x</span>
-        for which <span class="math">f(x)</span> is true.
+        for which the oracle function is true.
         For Gover&apos;s Search Algorithm to work,
-        it is essential that <span class="math">f(x)</span> is true
+        it is essential that the oracle function is true
         for only one value of <span class="math">x</span>.
     </p>
     
     <p>
         In the conventional descriptions of Gover&apos;s Search Algorithm,
-        it is assumed that the result of applying <span class="math">f(x)</span>
-        is to flip the value of an &ldquo;output&rdquo; qubit
-        when <span class="math">f(x)</span> is true.
-        It is a lot more convenient if we can instead assume that
-        the result of applying <span class="math">f(x)</span>
-        is to flip the phase of the state for which
-        <span class="math">f(x)</span> is true. 
+        it is assumed that the the oracle function
+        will flip the value of an &ldquo;output&rdquo; qubit
+        when the input matches the desired result.
+        It is a lot more convenient if we do away with the output bit,
+        and instead flip the <em>phase</em>
+        when the input matches the desired result. 
     </p>
     
     <p>
@@ -290,34 +294,30 @@
     <ol>
         <li>
             Start with the qubits in a superposition of all possible states:
-            00, 01, 10, and 11.
+            00, 01, 10, and 11 (all with the same phase).
         </li>
-        <li>Apply the function <span class="math">f</span> once only.</li>
-        <li>Apply Hadamard operations to both qubits.</li>
+        <li>Apply the oracle function once only.</li>
+        <li>Apply a Hadamard operation to both qubits.</li>
+        <li>Flip the phase of the 00 state.</li>
+        <li>Apply a Hadamard operation to both qubits again.</li>
         <li>
-            The resulting state is your desired answer.
+            The resulting state is your desired answer
+            (except that it&apos;s phase will be 180 degrees which you can safely ignore).
         </li>
     </ol>
-
-    <p>
-        There is an important detail that I have left out.
-        The initial state cannot be any old superposition of all possible states.
-        It has to be this one:
-    </p>
-    <div class="animationBlock" id="GroverInitialState">
-        <svg class="qstateSvg qstateSvg__hideBitLabels"></svg>
-    </div>
+    
     <p>
         You can try it yourself below.
-        Select one of the four fuctions,
-        and then Hadamard both qubits.
-    </p>
-    <p>
-        The four possible functions are labelled as
+        The four possible oracle functions are labelled as
         <span class="math">f<sub>x</sub></span>,
         indicating that <span class="math">f</span> is
         true for the value <span class="math">x</span>.
     </p>
+    
+    <p>
+        Don&apos;t forget, you can safely ignore the final phase.
+    </p>
+    
     <div class="animationBlock" id="SimpleSearchExample"
         data-bit-labels="bit-a,bit-b">
         <div class="animationBlock_buttons">
@@ -367,21 +367,28 @@
 <section>
     <h1>Beyond Quantum Search</h1>
     <p>
-        While general quantum search techniques may seem quite impressive,
-        even <span class="math">2<sup>&radic;n</sup></span> gets very large very quickly.
+        The two bit search is a bit of a special case
+        where the oracle function only needs to be invoked once.
+        As the number of bits increases,
+        it becomes necessary to invoke the oracle function multiple times.
+        In fact it needs to be invoked
+        <span class="math">&frac14;&pi;&radic;(2<sup>n</sup>)</span>
+        times.
     </p>
     <p>
-        For example, security experts already recommend the use of
-        encryption keys thousands of bits long.
-        Using a general quantum search to crack
-        a 4096 bit key would require on average
-        <span class="math">2<sup>64</sup></span>
-        iterations of the search process.
-        While this is still vastly smaller than
-        the <span class="math">2<sup>4095</sup></span>
-        attempts that a conventional computer would typically require,
-        a quantum computer would still take hundreds of years,
-        even if it could perform each iteration within a nanosecond.
+        While general quantum search techniques may seem quite impressive,
+        even <span class="math">&frac14;&pi;&radic;(2<sup>n</sup>)</span> gets very large very quickly.
+    </p>
+    <p>
+        All you have to do is double the number of bits to wipe out any advantages.
+        For example,
+        over a 128 bit search space,
+        a quantum computer would need to evaluate the oracle function
+        almost as many times as a conventional computer does
+        over a 64 bit search space.
+        Even at one evaluation per nano second,
+        it would take hundreds of years to crack
+        a 128 bit encryption key.
     </p>
     <p>
         However,
