@@ -56,6 +56,10 @@ h2 {
     text-align: center;
 }
 
+.attributions {
+    font-size: 80%;
+}
+
 .animatedQubitsAmplitudeCircle {
     fill: hsla(195, 53%, 60%, 0.5);
 }
