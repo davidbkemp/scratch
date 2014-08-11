@@ -1,11 +1,21 @@
 body {
     max-width: 960px;
-    font-size: large;
+    font-size: 16pt;
     margin: 1em;
+}
+
+button {
+    font-size: 10pt;
 }
 
 footer {
     margin-top: 1em;
+    padding-top: 1em;
+    font-size: 80%;
+    border-top: 1px grey solid;
+}
+
+.attributions {
     font-size: 80%;
 }
 
@@ -48,8 +58,8 @@ h2 {
     display: inline-block;
 }
 
-.nuclearSpin, .nuclearSpinLabel {
-    width: 5em;
+.nuclearSpinLabel {
+    width: 140px;
 }
 
 .nuclearSpinLabel {
