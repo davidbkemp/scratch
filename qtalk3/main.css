@@ -44,7 +44,7 @@ h2 {
 
 .titleImage {
     float: right;
-    margin-left: 3em;
+    margin: 1em 0 1em 3em;
 }
 
 .largeImage {
@@ -91,7 +91,8 @@ h2 {
 
 .animationBlock {
     border: 1px solid #999;
-    width: 26em;
+    max-width: 26em;
+    min-width: 10em;
     padding: 0.5em;
 }
 
