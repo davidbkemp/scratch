@@ -150,13 +150,12 @@
         From these, one can compute any function over a fixed number of bits.
     </p> 
     <p>
-        The details are surprisingly fascinating
-        and not as straight forward as you might expect.
+        The details are not as straight forward as you might expect.
         However,
         for the purposes of this article,
         just trust that it can be done.
         This will allow us to move more quickly to
-        the even more fascinating topic of quantum search.
+        the more fascinating topic of quantum search.
     </p>
     <p>
         Before we can cover quantum search,
@@ -173,7 +172,8 @@
     </p>
     <p>
         The controlled phase flip is a multi qubit operator.
-        It flips the phase of those states where
+        It flips (i.e. rotates by 180&deg;) the phase
+        of those states where
         all of the specified qubits have the value of 1.
     </p>
 
@@ -381,13 +381,14 @@
 
     <h2>Beyond Quantum Search</h2>
     <p>
-        The two bit search is a bit of a special case
+        The two bit search is a special case
         where the oracle function only needs to be invoked once.
         As the number of bits increases,
         it becomes necessary to invoke the oracle function multiple times.
         In fact it needs to be invoked
         <span class="math">&frac14;&pi;&radic;(2<sup>n</sup>)</span>
-        times.
+        times,
+        where <span class="math">n</span> is the number of bits.
     </p>
     <p>
         While general quantum search techniques may seem quite impressive,
@@ -440,7 +441,7 @@
     <p>
         These are currently the only commercially available quantum computers.
         D-Wave are building quantum computers containing 512 qubits,
-        which in theory could be in a super position of
+        which in theory could be in a superposition of
         <span class="math">2<sup>512</sup></span> different states.
     </p>
     <p>
