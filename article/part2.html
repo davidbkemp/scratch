@@ -21,7 +21,7 @@
         including the mysterious notions of phase and quantum interference.
         Here in Part 2, you will learn
         how quantum computers may one day be able to solve search problems
-        faster than conventional computers.
+        much faster than conventional computers.
     </p>
     <p>DRAFT</p>
 
@@ -58,7 +58,7 @@
 </p>
 <p>
     For example:
-    Suppose we have two qubits with
+    Suppose we have a two qubit system with
     an initial value of &ldquo;11&rdquo;.
     Let&apos;s use the left qubit as the control qubit
     and the right qubit as the target.
@@ -74,10 +74,10 @@
     the Controlled NOT operator.
 </p>
 <ul>
-    <li>00 &rarr; 00 (i.e. no effect)</li>
-    <li>01 &rarr; 01 (i.e. no effect)</li>
-    <li>10 &rarr; 11 (i.e. target bit flips)</li>
-    <li>11 &rarr; 10 (i.e. target bit flips)</li>
+    <li>00 &rarr; 00 (i.e. no effect as the control is 0)</li>
+    <li>01 &rarr; 01 (i.e. no effect as the control is 0)</li>
+    <li>10 &rarr; 11 (i.e. target bit flips as the control is 1)</li>
+    <li>11 &rarr; 10 (i.e. target bit flips as the control is 1)</li>
 </ul>
 
 
@@ -105,7 +105,7 @@
         that qubit goes into
         a superposition of 0 and 1.
         The right qubit is not touched and continues to have the value 0.
-        So the pair of qubits goes into
+        So the two qubit system goes into
         a superposition of 00 and 10.
     </p>
     <div class="animationBlock" id="cnot-1">
@@ -119,7 +119,7 @@
     <p>
         When acting on the 10 state, the control qubit is 1,
         and so the target bit is flipped resulting in 11.
-        So the pair of qubits goes into
+        So the two qubit system goes into
         a superposition of 00 and 11.
     </p>
     <div class="animationBlock" id="cnot-2">
@@ -154,7 +154,7 @@
         and not as straight forward as you might expect.
         However,
         for the purposes of this article,
-        I want you to trust me when I say it can be done.
+        just trust that it can be done.
         This will allow us to move more quickly to
         the even more fascinating topic of quantum search.
     </p>
@@ -173,14 +173,14 @@
     </p>
     <p>
         The controlled phase flip is a multi qubit operator.
-        It flips the phase of the states where
+        It flips the phase of those states where
         all of the specified qubits have the value of 1.
     </p>
 
     <p>
         More useful to us, however,
         is a generalised form of the controlled phase flip.
-        It will flip the phase of the states where the target qubits
+        It will flip the phase of those states where the target qubits
         have any specified combination of 1's and 0's.
     </p>
     
@@ -256,7 +256,7 @@
         </span>
     </p>
     <p>
-        For the extremely simple case where the input is only 2 bits,
+        For the extremely simple case where the search is on only 2 bits,
         there are four possible answers.
         A conventional computer may need to test up to three
         of those possible values.
@@ -269,19 +269,19 @@
 
 
 
-    <h2>Quatum Search over 2 Qubits</h2>
+    <h2>Grover&apos;s Search Algorithm</h2>
     
     <p>
         First recall that
         the objective is to find the value of <span class="math">x</span>
         for which the oracle function is true.
-        For Gover&apos;s Search Algorithm to work,
+        For Gover&apos;s search algorithm to work,
         it is essential that the oracle function is true
         for only one value of <span class="math">x</span>.
     </p>
     
     <p>
-        In the conventional descriptions of Gover&apos;s Search Algorithm,
+        In the conventional descriptions of Gover&apos;s search algorithm,
         it is assumed that the the oracle function
         will flip the value of an &ldquo;output&rdquo; qubit
         when the input matches the desired result.
@@ -291,8 +291,11 @@
     </p>
     
     <p>
-        Here are the steps to Gover&apos;s Search Algorithm
+        Here are the steps to Gover&apos;s search algorithm
         for the very simple case of two bits.
+        Note that, although I am providing the details of how it is implemented,
+        explaining <em>why</em> it works is beyond the scope of
+        this little article.
     </p>
     
     <ol>
@@ -398,7 +401,8 @@
         almost as many times as a conventional computer does
         over a 64 bit search space.
         Even at one evaluation per nanosecond,
-        it would take hundreds of years to crack
+        using Grover&apos;s search on a quantum computer
+        would take hundreds of years to crack
         a 128 bit encryption key.
     </p>
     <p>
@@ -437,7 +441,7 @@
         These are currently the only commercially available quantum computers.
         D-Wave are building quantum computers containing 512 qubits,
         which in theory could be in a super position of
-        <span class="math">2<sup>512</sup></span> states.
+        <span class="math">2<sup>512</sup></span> different states.
     </p>
     <p>
         Despite having such a large number of qubits,
@@ -453,7 +457,7 @@
         (already long) article.
     </p>
     <p>
-        Before they can start out performing conventional computers,
+        Before they can start out-performing conventional computers,
         it is possible that D-Wave simply needs to use more qubits,
         or perhaps they may need to figure out how to make
         more effective use of their existing qubits.
@@ -522,7 +526,7 @@
             and you being conscious of the measurement being 1</li>
     </ul>
     <p>
-        <b>Think of it as two alternative realities existing.</b>
+        <b>Think of it as two alternative realities both existing at the same time.</b>
         In one reality you see a 0,
         and in the other you see a 1.
         Quantum interference is the only ways that these realities interact.
@@ -530,7 +534,7 @@
     <p>
         Variations on this interpretation of quantum physics
         are taken quite seriously
-        by many physicists and physics philosophers, and is
+        by many physicists, and is
         commonly referred to as the &ldquo;Many Worlds&rdquo;
         interpretation of quantum physics.
         Much has been written on the topic,
@@ -539,12 +543,13 @@
     </p>
     <p>
         Quantum computing
-        provides a nice way of looking at some of these issues.
+        provides a nice way of thinking about some of these issues.
         It may even provide a way of simulating ideas by,
         for example,
         representing different states of an observer using qubits.
     </p>
-    
+
+<h2 id="maths">Some mathematics</h2>
     <p>
         This article has already covered more topics than I originally planned.
         However, I feel the need to include a little bit of
@@ -555,8 +560,6 @@
         at the end.
     </p>
 
-
-<h2 id="maths">Some mathematics</h2>
     <p>
         In this article
         I used little blue disks with red arrows
@@ -573,7 +576,7 @@
         the system is in a definite state,
         but which state that is may be unknown.
         In this situation,
-        it is most convenient if
+        it is convenient if
         the arrow lengths are proportional to the probabilities
         of the respective states
         so that they can be added head to tail.
@@ -589,7 +592,7 @@
         it is no longer simply a case of not knowing which state they are in,
         the system actually seems to be in multiple states at once.
         In this situation,
-        it is most convenient if
+        it is convenient if
         the arrow lengths are proportional to the <em>square roots</em> of the probabilities
         of the respective states
         (the disk <em>areas</em> now effectively represent probabilities
@@ -635,9 +638,9 @@
         respectively,
         then applying a Hadamard results in
         the amplitudes of 0 and 1 becoming
-        <span class="math">(1/&radic;2)(a<sub>0</sub> + a<sub>1</sub>)</span>
+        <span class="math">(&radic;&frac12;)(a<sub>0</sub> + a<sub>1</sub>)</span>
         and
-        <span class="math">(1/&radic;2)(a<sub>0</sub> - a<sub>1</sub>)</span>
+        <span class="math">(&radic;&frac12;)(a<sub>0</sub> - a<sub>1</sub>)</span>
         respectively.
     </p>
     <p>
@@ -645,7 +648,7 @@
         the 1 state with a phase of 0,
         applying a Hadamard results in
         the amplitudes of 0 and 1 being
-        1/&radic;2 and -1/&radic;2 respectively.
+        &radic;&frac12; and -&radic;&frac12; respectively.
         Notice that if you square and add these together that you get 1.
     </p>
     <p>

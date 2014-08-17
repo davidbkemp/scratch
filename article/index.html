@@ -45,7 +45,7 @@
 
     <h2>Qubits</h2>
     <p>
-        I assume you know what plain old ordinary binary bits are.
+        I assume you know what plain old binary bits are.
         <span class="help">
             Sorry, I but cannot assume you know nothing at all!
         </span>
@@ -77,9 +77,12 @@
 
 
 
-    <h2>The NOT operator</h2>
+    <h2>Visualising the System State</h2>
     <p>
-        Consider the conventional NOT (or bit-flip) operator.
+        To help introduce the approach I am taking to
+        visualising the system state,
+        let&apos;s
+        consider the conventional NOT (or bit-flip) operator.
         <span class="help">
             0 and 1 can represent logical <em>true</em> and <em>false</em>.
             NOT <em>true</em> is <em>false</em>, and NOT <em>false</em> is <em>true</em>.
@@ -124,15 +127,29 @@
 
 
     <h2>Random NOT</h2>
-    <p><em>Random NOT</em>: A NOT operator that has a specified chance of flipping a bit.</p>
+    <p>
+        <em>Random NOT</em> is like a NOT operator,
+        but it only has a specified chance of flipping a bit.
+    </p>
     <p>
         Although not very common,
-        the &ldquo;Random NOT&rdquo; is still <b>just a classical (non-quantum) operator</b>,
+        the Random NOT is still <b>just a classical (non-quantum) operator</b>,
         but it will help me explain the workings of some quantum operators.
     </p>
     <p>
-        Consider applying a Random NOT twice to a bit whose initial value is 0,
-        where the operator has, for instance, a 30% chance of flipping the bit.
+        Let&apos;s also assume that our particular Random NOT operator
+        has a 30% chance of flipping the bit.
+        I.e. Regardless of whether the bit is 0 or 1,
+        it has a 30% chance of flipping it to the opposite value,
+        and a 70% chance of leaving it with its current value.
+    </p>
+    <p>
+        Consider what happens when we apply a Random NOT twice in a row.
+    </p>
+    <p>
+        Let&apos;s assume that the bit has an initial value of 0.
+    </p>
+    <p>
         What is the probability of the final state being 0?
     </p>
     <p>
